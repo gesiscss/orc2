@@ -1,3 +1,10 @@
+# mapping to create a variable, which is used to decide if a request must be logged or not
+# this mapping is used to disable access logging for all static files from different services
+map $request_uri $loggable {
+    default                                             1;
+    ~^/(hub|services/binder|binder|gallery)/static/ 0;
+}
+
 # HTTP server to redirect notebooks.gesis.org 80 traffic to SSL/HTTPS
 server {
     listen 80;
