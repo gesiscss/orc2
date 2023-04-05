@@ -1,0 +1,129 @@
+# HTTP server to redirect notebooks.gesis.org 80 traffic to SSL/HTTPS
+server {
+    listen 80;
+    listen [::]:80;
+    server_name notebooks.gesis.org;
+    access_log off;  # turn off access log
+    # Tell all requests to port 80 to be 301 (permanently) redirected to HTTPS
+    return 301 https://$host$request_uri;
+}
+
+# HTTPS server for notebooks.gesis.org
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+    server_name notebooks.gesis.org;
+    ssl_certificate /etc/letsencrypt/live/notebooks.gesis.org/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/notebooks.gesis.org/privkey.pem;
+    include snippets/ssl.conf;
+
+    include snippets/optimization.conf;
+
+    access_log /var/log/nginx/access.log combined if=$loggable;
+
+    location = /favicon.ico { access_log off; log_not_found off; }
+
+    # binder gallery
+    location /gallery/ {
+        error_page 503 /static/retired.html;
+        return 503;
+
+        #  proxy_pass http://gallery;
+        #  include snippets/flask.conf;
+    }
+
+     # Grafana UI
+    location /grafana/ {
+        error_page 503 /static/retired.html;
+        return 503;
+
+        # proxy_pass http://grafana/;
+        # include snippets/headers.conf;
+    }
+
+     # Prometheus
+    location /prometheus/ {
+        error_page 503 /static/retired.html;
+        return 503;
+
+        # auth_basic "Administrator's Area";
+        # auth_basic_user_file /etc/letsencrypt/.htpasswd_prometheus;
+        # # https://github.com/prometheus/prometheus/issues/2193
+        # proxy_set_header Accept-Encoding "";
+        # proxy_pass http://prometheus/;
+        # include snippets/headers.conf;
+
+        # #sub_filter_types text/html;
+        # sub_filter_once off;
+        # sub_filter '="/' '="/prometheus/';
+        # sub_filter 'var PATH_PREFIX = "";' 'var PATH_PREFIX = "/prometheus";';
+        # rewrite ^/prometheus/?$ /prometheus/graph redirect;
+        # rewrite ^/prometheus/(.*)$ /$1 break;
+    }
+
+    # Managing literal requests to the BinderHub
+    location /binder/ {
+        error_page 503 /static/maintenance.html;
+        return 503;
+
+        # proxy_buffering off;
+        # proxy_pass http://bhub;
+        # include snippets/headers.conf;
+        # proxy_set_header X-Scheme $scheme;
+        # proxy_set_header X-Frame-Options "SAMEORIGIN";
+    }
+
+    # For JupyterHub of binder
+    location /binder/jupyter/ {
+        error_page 503 /static/maintenance.html;
+        return 503;
+
+        # proxy_pass http://bjhub;
+        # include snippets/headers.conf;
+        # include snippets/websocket_headers.conf;
+    }
+
+    # redirect from old location
+    rewrite ^/jupyter/(.*)$ /$1 permanent;
+
+    # Managing literal requests to the JupyterHub
+    location / {
+        ## maintenance page
+        error_page 503 /static/maintenance.html;
+        return 503;
+
+        # Redirect to binder deployment
+        # return 301 /binder/;
+    }
+
+    include snippets/ignore_fonts.conf;
+
+    location /static/ {
+        access_log off;
+        root /var/www/prod;
+    }
+
+    location = /robots.txt {
+       root /var/www/prod/static/;
+    }
+
+    location = /sitemap.xml {
+        root /var/www/prod/static/;
+    }
+
+    location /usertakeout/ {
+        proxy_pass http://usertakeout;
+    }
+    
+    location = /terms.html {
+        root /var/www/prod/static/;
+    }
+    location = /faq.html {
+        root /var/www/prod/static/;
+    }
+    location = /about.html {
+        root /var/www/prod/static/;
+    }
+
+    include snippets/_secret.conf;
+}
