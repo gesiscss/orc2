@@ -8,6 +8,9 @@ book:
     - Raniere Silva
   chapters:
     - index.qmd
+    - part: "General"
+      chapters: 
+      - where-to-ask-questions.qmd
 
 format:
   html:

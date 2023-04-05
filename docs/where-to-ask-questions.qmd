@@ -1,0 +1,28 @@
+# Where to ask questions
+
+Before ask questions, check the official documentation:
+
+- [BinderHub Federation](https://mybinder.readthedocs.io/en/latest/)
+- [BinderHub](https://binderhub.readthedocs.io/en/latest/)
+- [repo2docker](https://repo2docker.readthedocs.io/en/latest/)
+- [JupyterHub with Kubernetes](https://z2jh.jupyter.org/en/stable/)
+- [JupyterHub](https://jupyterhub.readthedocs.io/en/stable/)
+
+## Instant messaging
+
+- <https://gitter.im/jupyterhub/jupyterhub>
+- <https://gitter.im/jupyterhub/binder>
+- <https://gitter.im/jupyterhub/mybinder.org-deploy> (**only for operations of mybinder federation*)
+
+## Forum
+
+- <http://discourse.jupyter.org>
+- <http://discourse.pangeo.io>
+
+## Bug issues
+
+- <https://github.com/jupyterhub/jupyterhub>
+- <https://github.com/jupyterhub/repo2docker>
+- <https://github.com/jupyterhub/zero-to-jupyterhub-k8s>
+- <https://github.com/jupyterhub/binderhub>
+- <https://github.com/jupyterhub/mybinder.org-deploy>
