@@ -5,6 +5,7 @@ pages:
   script:
     - quarto check
     - quarto render docs -t html --output-dir public
+    - mv docs/public .
   artifacts:
     paths:
       - public
