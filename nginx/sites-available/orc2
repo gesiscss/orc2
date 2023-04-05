@@ -111,10 +111,10 @@ server {
         root /var/www/prod/static/;
     }
 
-    location /usertakeout/ {
-        proxy_pass http://usertakeout;
-    }
-    
+    # location /usertakeout/ {
+    #     proxy_pass http://usertakeout;
+    # }
+
     location = /terms.html {
         root /var/www/prod/static/;
     }
