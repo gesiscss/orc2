@@ -11,6 +11,12 @@ book:
     - part: "General"
       chapters: 
       - where-to-ask-questions.qmd
+    - part: "Production Environment"
+      chapters: 
+      - production-hardware.qmd
+      - production-software.qmd
+      - production-k8s-cluster.qmd
+      - production-nginx.qmd
 
 format:
   html:

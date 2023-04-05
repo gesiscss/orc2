@@ -1,0 +1,51 @@
+# Hardware
+
+:::{.callout-note}
+
+The production infrastructure is accessible at <http://notebooks.gesis.org>. Change to the DNS must be communicated to IT.
+
+:::
+
+:::{.callout-note}
+
+The production infrastructure can also be accessible at <https://gesis.mybinder.org/>. Changes must be communicated to <https://github.com/jupyterhub/mybinder.org-deploy>.
+
+:::
+
+Open Research Computing has the following production machines:
+
+IP           Title            Processor (CPU)                           CPU Core  Memory  Storage
+------------ ---------------- ----------------------------------------- --------- ------- --------
+194.95.75.9  svko-css-app01   Intel(R) Xeon(R) CPU E5-2670 0 @ 2.60GHz  8         31Gi    6TB
+194.95.75.10 svko-ilcm03      Intel(R) Xeon(R) Gold 6132 CPU @ 2.60GHz  4         15Gi    80GB
+194.95.75.12 spko-css-app03   Intel(R) Xeon(R) Gold 6140 CPU @ 2.30GHz  18        754Gi   2TB
+
+:::{.callout-note}
+
+Users and passwords of the machines are stored in KeePassXC.
+
+:::
+
+:::{.callout-important}
+
+During onboarding, test the access to each one of the machines.
+
+:::
+
+# Processor (CPU)
+
+```bash
+lscpu
+```
+
+# Memory
+
+```bash
+free -hm
+```
+
+# Storage
+
+```bash
+df -H
+```

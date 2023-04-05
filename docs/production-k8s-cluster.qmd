@@ -1,0 +1,33 @@
+# Kubernetes Cluster
+
+:::{.callout-note}
+
+The production infrastructure is accessible at <http://notebooks.gesis.org>. Change to the DNS must be communicated to IT.
+
+:::
+
+:::{.callout-note}
+
+The production infrastructure can also be accessible at <https://gesis.mybinder.org/>. Changes must be communicated to <https://github.com/jupyterhub/mybinder.org-deploy>.
+
+:::
+
+Open Research Computing has the following production machines:
+
+IP           Title           Roles          Services                          DNS
+------------ --------------- -------------- --------------------------------- --------------------
+194.95.75.9  svko-css-app01                 PostgreSQL, NGINX, GESIS Gallery  notebooks.gesis.org
+194.95.75.10 svko-ilcm03     Control Panel  Kubernetes Control Panel
+194.95.75.12 spko-css-app03                 JupyterHub
+
+:::{.callout-note}
+
+Users and passwords of the machines are stored in KeePassXC.
+
+:::
+
+:::{.callout-important}
+
+During onboarding, test the access to each one of the machines.
+
+:::

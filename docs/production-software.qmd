@@ -1,0 +1,57 @@
+# Software
+
+:::{.callout-note}
+
+The production infrastructure is accessible at <http://notebooks.gesis.org>. Change to the DNS must be communicated to IT.
+
+:::
+
+:::{.callout-note}
+
+The production infrastructure can also be accessible at <https://gesis.mybinder.org/>. Changes must be communicated to <https://github.com/jupyterhub/mybinder.org-deploy>.
+
+:::
+
+Open Research Computing has the following production machines:
+
+IP           Title                        GNU/Linux Distro  Docker version Kubernetes Version Helm Version
+------------ ---------------------------- ----------------- -------------- ------------------ ------------
+194.95.75.9  svko-css-app01               Ubuntu 22.04 LTS  None           1.25.5             None
+194.95.75.10 svko-ilcm03                  Ubuntu 22.04 LTS  None           1.25.5             3.9.2
+194.95.75.12 spko-css-app03               Ubuntu 22.04 LTS  20.10.22       1.25.5             None
+
+:::{.callout-note}
+
+Users and passwords of the machines are stored in KeePassXC.
+
+:::
+
+:::{.callout-important}
+
+During onboarding, test the access to each one of the machines.
+
+:::
+
+## GNU/Linux Distro
+
+```bash
+cat /etc/*-release*
+```
+
+## Docker version
+
+```bash
+docker --version
+```
+
+## Kubernetes Version
+
+```bash
+kubectl version
+```
+
+## Helm Version
+
+```bash
+helm version
+```
