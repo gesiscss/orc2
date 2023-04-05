@@ -1,0 +1,375 @@
+/**
+ * The contents of this file are subject to the license and copyright
+ * detailed in the LICENSE and NOTICE files at the root of the source
+ * tree and available online at
+ *
+ * http://www.dspace.org/license/
+ */
+
+/**
+ * You can put your own style in this file.
+ * It will be included in all color schemes
+ */
+
+/**
+ * For ORC  project this is taken from GESIS SSOAR project and customized.
+ */
+
+@media (max-width:767px) {
+
+	.navbar-brand {
+		margin-left: 15px;
+		margin-right: 15px;
+	}
+
+/* navbar buttons disappearing fix */
+	.navbar-toggle {
+		position: relative;
+		float: right;
+		padding: 9px 10px;
+		background-color: transparent;
+		background-image: none;
+		border: 1px solid transparent;
+		display: block;
+		border-radius: 4px;
+	}
+
+	.nav > li > a > button {
+		margin: 0px;
+	}
+
+	.navbar-header {
+		float: none;
+	}
+}
+
+@media (min-width:1200px) {.container{width:960px;}}
+
+@media(min-width:992px) {.container{width:960px;}}
+
+@media print {
+	a[href]:after {
+		content: none;
+		}
+	}
+
+body {
+    background-color: #333;
+    font-family: "Droid Sans", Arial, Verdana, Helvetica, sans-serif !important;
+    }
+
+#header-container{
+	background-color: #fff;
+	border-top: 17px solid #58748f;
+	padding-right: 0px;
+	padding-left: 0px;
+	}
+.caret {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    margin-left: 2px;
+    vertical-align: middle;
+    border-top: 4px solid;
+    border-right: 4px solid transparent;
+    border-left: 4px solid transparent;
+    border-top-color: #58748f;
+}
+
+.caret.caret-reversed {
+    border-top-width: 0;
+    border-bottom: 4px solid #000000;
+}
+
+#nav-container {
+    margin-top: -20px;
+}
+.nav-main-container {
+	color: #58748f;
+	background-color: #cdd5dd;
+	border: none;
+	border-radius: 0;
+	padding: 0;
+}
+
+#navbar-list > li > a:focus {
+	color: #58748f;
+}
+
+.gs_active_sub:focus {
+	color: white !important;
+}
+
+.navbar-brand {
+    float: left;
+    padding: 0;
+    font-size: 0.9rem;
+    line-height: 1.4rem;
+    height: 37px;
+	}
+
+header {
+	background-color: #333;
+}
+header > div.navbar > div {
+	background-color: #333;
+}
+.header-icon-link {
+	display: inline;
+	padding: 0;
+}
+
+header .navbar-brand img.hidden-sm.hidden-xs {
+    max-width: 100%;
+    /*width: 160px;*/
+    /*height: 37px;*/
+	}
+
+header .navbar-brand img.visible-sm.visible-xs {
+    max-height: 100%;
+	}
+
+div.navbar-header {
+	padding: 1.28rem 3.2rem 0.8rem 3.2rem;
+	}
+
+header .navbar-default{
+	background: #333;
+	/*background-color: #333;*/
+	color: #58748f;
+	}
+
+.navbar-default {
+	color: #58748f;
+  background-color: #cdd5dd;
+	border: none;
+	border-radius: 0;
+	min-height:30px !important;
+}
+
+#navbar {
+    max-width: 100%;
+    margin-left: 0;
+	padding-left: 3.2rem;
+	border-color: #e7e7e7;
+}
+
+.navbar-default .navbar-nav>li>a {
+    color: #58748f;
+    font-size: 1.5rem;
+    font-weight: bold;
+    /*line-height: 1.0rem;*/
+    /*position: relative;*/
+    /*padding: 0 0 0 2rem;*/
+    /*float: left;*/
+	padding-top:5px !important;
+	padding-bottom:0 !important;
+	height: 30px;
+}
+
+#navbar-list > li > a {
+	padding-left: 11.9px;
+	padding-right: 11.9px;
+}
+
+.navbar-default .dropdown, .navbar-default .dropdown>a, .navbar-default .dropdown-menu>li>a, .navbar-default .dropdown-menu, .navbar-default .navbar-nav .open .dropdown-menu>li>a {
+    color: #58748f;
+    font-weight: bold;
+    background-color: #cdd5dd;
+}
+
+.navbar-default .navbar-nav>.open>a, .navbar-default .navbar-default .navbar-nav>li>a:focus, .navbar-default .navbar-nav>.open>a:focus {
+    color: #58748f;
+    font-weight: bold;
+    background-color: #cdd5dd;
+}
+
+.navbar-default .navbar-nav>li>.dropdown-menu {
+	padding: 0;
+}
+
+@media (min-width: 768px) {
+    /*not in mobile (xs)*/
+.navbar-default .dropdown:hover .dropdown-menu {
+    display: block;
+    margin-top: 0;
+ }
+}
+
+.navbar-default .navbar-nav>li>a.gs_active_sub, .navbar-default .dropdown>a.gs_active_sub, .navbar-default .dropdown-menu>li>a.gs_active_sub, .navbar-default .navbar-nav>.open>a.gs_active_sub {
+  color: #ffffff;
+	background-color: #FF6600;
+  font-weight: bold;
+}
+
+.navbar-default .navbar-nav>li>a:hover, .navbar-default .dropdown>a:hover, .navbar-default .dropdown-menu>li>a:hover {
+  color: #ffffff;
+	background-color: #FF6600;
+}
+
+header .navbar-default .navbar-toggle>li>a:hover,header .navbar-default .navbar-toggle>li>a:focus,header .navbar-default .navbar-nav>li>a:hover,header .navbar-default .navbar-nav>li>a:focus{
+	color: #58748f;
+	background-color:#fff;
+	}
+
+header .navbar-default .navbar-toggle:hover, header .navbar-default .navbar-toggle:focus, header .navbar-default .navbar-nav:hover, header .navbar-default .navbar-nav:focus {
+    color: #58748f;
+    background-color: #fff;
+	}
+
+header .navbar-default .navbar-toggle>li>a, header .navbar-default .navbar-nav>li>a {
+  color: #58748f;
+	font-weight: bold;
+	text-decoration: underline;
+	}
+
+header .navbar-default .navbar-toggle, header .navbar-default .navbar-nav {
+    border-color: transparent;
+    color: #58748f;
+	}
+
+header .navbar-default .navbar-toggle:hover, header .navbar-default .navbar-toggle:focus, header .navbar-default .navbar-nav:hover, header .navbar-default .navbar-nav:focus {
+	background-color:#ffffff;
+}
+
+#header-container > div.navbar-header.pull-right.hidden-xs {
+    padding-top: 10px;
+}
+
+#header-container > div.navbar-header.pull-right.hidden-xs > button {
+		background-color: #58748f;
+    margin-left: 15px;
+}
+
+#header-container > div.navbar-header.pull-right.hidden-xs > ul > button {
+    color: #fff;
+    background-color: #58748f;
+    border-color: #58748f;
+		margin-top: 8px;
+	}
+
+#header-container > div.navbar-header.pull-right.hidden-xs > ul > button:hover {
+    color: #58748f;
+    background-color: #fff;
+    border-color: #58748f;
+	margin-top: 8px;
+	}
+/*
+div.trail-wrapper.hidden-print > div.container{
+	background-color: #fff;
+	border-bottom: 1px solid #8b9eb2;
+	border-top: 1px solid #8b9eb2;
+	}
+div.trail-wrapper.hidden-print > div.container > div.row{
+	_background-color: #cdd5dd;
+	background-color: #fff;
+	}
+.trail-wrapper{
+	background-color:#333;
+	border-bottom: 0px;
+	}
+*/
+
+.container {
+	background-color: #fff;
+	}
+
+footer .container {
+	background-color: #333;
+	}
+
+.top-menu-item{
+    color: #58748f;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.top-menu-item:hover {
+	color: #ff6100;
+	}
+
+#header_banner {
+	padding: 0;
+	clear: both;
+	background:url(../images/gs_ms_banner_default.jpg);
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	background-position: center center;
+	}
+
+#header_banner > a{
+	display: inline-block;
+}
+
+#header_banner > a > img {
+		max-height: 126px;
+		max-width: 232px;
+		height: 95px;
+		width: auto;
+		padding-top: 1.2rem;
+		padding-bottom: 0.6rem;
+		padding-left: 3.2rem;
+		vertical-align: middle;
+
+}
+
+#header_announce {
+	padding: 0;
+	clear: both;
+	background:url(../images/gs_ms_banner_default.jpg);
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	background-position: center center;
+	width: auto;
+	padding-top: 1.2rem;
+	padding-bottom: 0.6rem;
+	padding-left: 3.2rem;
+	vertical-align: middle;
+}
+
+footer.footer {
+    padding: 1.0rem 0;
+    color: #fff;
+    margin-bottom: 10px;
+	background-color: #333;
+}
+
+.footer-span {
+    /*padding-left: 4px;*/
+    padding-right: 30px;
+}
+
+.footer-span-no-padding {
+    padding-right: 0;
+}
+
+.footer-link {
+    color: #fff;
+    text-decoration: underline;
+}
+
+.footer-link:hover {
+    color: #ff6100;
+}
+
+.footer-container {
+	padding-left: 3.2rem;
+	padding-right: 3.2rem;
+}
+
+/* maintenance page */
+div.maintenance {
+	margin: 2em;
+	text-align: center;
+}
+
+div.maintenance > h1 {
+	font-size: 300%;
+    line-height: normal;
+}
+
+div.maintenance > p {
+	font-size: 200%;
+    line-height: normal;
+}
+
