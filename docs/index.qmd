@@ -1,0 +1,27 @@
+# Preface {.unnumbered}
+
+Welcome to Open Research Computing (ORC) at GESIS – Leibniz Institute for the Social Sciences.
+
+![Screenshot of <https://notebooks.gesis.org/binder/> on 8th March, 2023.](img/notebooks.gesis.org.png)
+
+::: {.callout-note}
+
+You can use a computer running Windows, macOS, or GNU/Linux. At the time of writing, minikube IP address is not reachable directly when using the Docker driver on macOS, Windows, or Windows Subsystem for Linux (WSL) and this creates some minor challenges.
+
+:::
+
+Before you start, make sure that you have the following:
+
+1. Username at GESIS network.
+2. Account on [GESIS' GitLab instance](https://git.gesis.org)
+   1. Your public ssh key saved on your account on GESIS' GitLab instance.
+   2. Access to the [`ilcm` organisation](https://git.gesis.org/ilcm).
+3. Account on [GitHub](https://github.com/).
+   1. Your public ssh key saved on your account on GitHub.
+   2. Access to the [`gesiscss` organisation](https://github.com/gesiscss/orc).
+4. [Git](https://git-scm.com/) and [`git-crypt`](https://www.agwa.name/projects/git-crypt/) installed in your machine.
+
+   See @sec-install-git-crypt for how to install `git-crypt`.
+4. [KeePassXC](https://keepassxc.org/) installed in your machine.
+5. [minikube](https://minikube.sigs.k8s.io/docs/) installed in your machine.
+6. [helm](https://helm.sh) installed in your machine.

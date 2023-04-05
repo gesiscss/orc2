@@ -1,0 +1,14 @@
+project:
+  type: book
+
+
+book:
+  title: "Open Research Computing (ORC)"
+  author:
+    - Raniere Silva
+  chapters:
+    - index.qmd
+
+format:
+  html:
+    theme: cosmo
