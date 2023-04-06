@@ -8,6 +8,7 @@ gesis helm lint:
   image: 
     name: alpine/helm:3.11.1
     entrypoint: [""]
+  dependencies: []
   script:
     - helm version
     - helm dependency update gesis
@@ -25,7 +26,8 @@ pages:
         - .gitlab-ci.yml
         - docs/*
   image: docker-private-snapshots.gesis.intra/gesis/methods-hub/quarto:latest
-  script:
+  dependencies: []
+  cript:
     - quarto check
     - quarto render docs -t html --output-dir public
     - mv docs/public .
