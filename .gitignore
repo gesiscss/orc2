@@ -1,1 +1,3 @@
 git_crypt_secret_key
+gesis/charts/*.tgz
+gesis/Chart.lock
