@@ -10,7 +10,12 @@ gesis helm lint:
     entrypoint: [""]
   script:
     - helm version
+    - helm dependency update gesis
     - helm lint gesis
+    - helm template gesis ./gesis > gesis.helm.chart.yaml
+  artifacts:
+    paths:
+      - gesis.helm.chart.yaml
 
 pages:
   stage: build
