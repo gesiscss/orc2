@@ -17,6 +17,7 @@ book:
       - production-software.qmd
       - production-k8s-cluster.qmd
       - production-k8s-setup.qmd
+      - production-binderhub.qmd
       - production-nginx.qmd
   appendices:
     - version-log-book.qmd

@@ -1,0 +1,99 @@
+# Install GESIS BinderHub
+
+Install BinderHub based on Helm chart:
+
+```bash
+cd ~/ilcm/orc2
+```
+
+```bash
+helm dependency update ./helm/gesis
+```
+
+```
+Hang tight while we grab the latest from your chart repositories...
+...Successfully got an update from the "persistent_binderhub" chart repository
+...Successfully got an update from the "jupyterhub" chart repository
+Update Complete. ⎈Happy Helming!⎈
+Saving 1 charts
+Downloading binderhub from repo https://jupyterhub.github.io/helm-chart
+Deleting outdated charts
+```
+
+Install BinderHub:
+
+```bash
+helm upgrade --cleanup-on-fail \
+    --install binderhub ./helm/gesis \
+    --namespace=gesis \
+     --create-namespace \
+    -f helm/config.yaml \
+    -f helm/_secret.yaml
+```
+
+Check BinderHub status:
+
+```bash
+helm status bhub-test -n bhub-test-ns
+```
+
+```
+NAME: bhub-test
+LAST DEPLOYED: Fri Mar 17 15:37:00 2023
+NAMESPACE: bhub-test-ns
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
+```
+
+Check pod status:
+
+```bash
+kubectl get pods --namespace=bhub-test-ns
+```
+
+```
+NAME                              READY   STATUS    RESTARTS   AGE
+binder-6497dfdd58-bjdnl           1/1     Running   0          19s
+binder-6497dfdd58-f5q9x           1/1     Running   0          19s
+hub-7b565db558-h8jsg              1/1     Running   0          19s
+proxy-89dcdf847-67925             1/1     Running   0          19s
+user-scheduler-775dd7d7d4-bqdk2   1/1     Running   0          19s
+user-scheduler-775dd7d7d4-r8klc   1/1     Running   0          19s
+```
+
+Check service status:
+
+```bash
+kubectl get services --namespace=bhub-test-ns
+```
+
+```
+NAME           TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)                      AGE
+binder         NodePort    10.104.242.53   <none>        80:30081/TCP                 41h
+hub            ClusterIP   10.99.234.68    <none>        8081/TCP                     41h
+proxy-api      ClusterIP   10.107.68.87    <none>        8001/TCP                     41h
+proxy-public   NodePort    10.106.148.90   <none>        443:30082/TCP,80:30085/TCP   41h
+```
+
+Check if BinderHub can be accessed:
+
+```bash
+wget localhost:30081/binder/
+```
+
+:::{.callout-note}
+
+If `wget` returns a 404 error like
+
+```
+--2023-03-27 15:13:01--  http://localhost:30081/
+Resolving localhost (localhost)... 127.0.0.1
+Connecting to localhost (localhost)|127.0.0.1|:30081... connected.
+HTTP request sent, awaiting response... 404 Not Found
+2023-03-27 15:13:01 ERROR 404: Not Found.
+```
+
+check the `base_url` in the **final** `gesisbinder` Helm chart.
+
+:::
