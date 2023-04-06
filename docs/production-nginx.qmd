@@ -132,15 +132,15 @@ sudo mkdir /var/www/prod
 ```
 
 ```bash
-sudo cp -R ~/ilcm/orc/nginx/static /var/www/prod/
+sudo cp -R ~/ilcm/orc2/nginx/static /var/www/prod/
 ```
 
 ```bash
-sudo cp -R ~/ilcm/orc/nginx/snippets/* /etc/nginx/snippets/
+sudo cp -R ~/ilcm/orc2/nginx/snippets/* /etc/nginx/snippets/
 ```
 
 ```bash
-sudo cp -R ~/ilcm/orc/nginx/sites-available/* /etc/nginx/sites-available/
+sudo cp -R ~/ilcm/orc2/nginx/sites-available/* /etc/nginx/sites-available/
 ```
 
 ```bash

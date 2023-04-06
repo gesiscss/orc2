@@ -16,6 +16,7 @@ book:
       - production-hardware.qmd
       - production-software.qmd
       - production-k8s-cluster.qmd
+      - production-k8s-setup.qmd
       - production-nginx.qmd
 
 format:

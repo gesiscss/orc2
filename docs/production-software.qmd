@@ -14,11 +14,11 @@ The production infrastructure can also be accessible at <https://gesis.mybinder.
 
 Open Research Computing has the following production machines:
 
-IP           Title                        GNU/Linux Distro  Docker version Kubernetes Version Helm Version
------------- ---------------------------- ----------------- -------------- ------------------ ------------
-194.95.75.9  svko-css-app01               Ubuntu 22.04 LTS  None           1.25.5             None
-194.95.75.10 svko-ilcm03                  Ubuntu 22.04 LTS  None           1.25.5             3.9.2
-194.95.75.12 spko-css-app03               Ubuntu 22.04 LTS  20.10.22       1.25.5             None
+IP           Title                        GNU/Linux Distro  Docker version containerd version Kubernetes Version Helm Version
+------------ ---------------------------- ----------------- -------------- ------------------ ------------------ ------------
+194.95.75.9  svko-css-app01               Ubuntu 22.04 LTS  None           1.6.20             1.26.3             None
+194.95.75.10 svko-ilcm03                  Ubuntu 22.04 LTS  None           1.6.20             1.26.3             3.9.2
+194.95.75.12 spko-css-app03               Ubuntu 22.04 LTS  20.10.22       1.6.20             1.26.3             None
 
 :::{.callout-note}
 
