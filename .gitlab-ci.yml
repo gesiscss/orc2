@@ -4,16 +4,16 @@ gesis helm lint:
     - if: $CI_COMMIT_BRANCH == 'main' || $CI_PIPELINE_SOURCE == 'merge_request_event'
       changes:
         - .gitlab-ci.yml
-        - gesis/*
+        - helm/*
   image: 
     name: alpine/helm:3.11.1
     entrypoint: [""]
   dependencies: []
   script:
     - helm version
-    - helm dependency update gesis
-    - helm lint gesis
-    - helm template gesis ./gesis > gesis.helm.chart.yaml
+    - helm dependency update ./helm/gesis
+    - helm lint ./helm/gesis
+    - helm template gesis ./helm/gesis > gesis.helm.chart.yaml
   artifacts:
     paths:
       - gesis.helm.chart.yaml
