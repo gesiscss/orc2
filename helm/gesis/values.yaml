@@ -62,6 +62,43 @@ binderhub:
   podAnnotations:
     rollme: "rollme"
 
+  extraVolumes:
+    - name: binder-templates
+      configMap:
+        name: binder-templates
+    - name: binder-templates-gesis
+      configMap:
+        name: binder-templates-gesis
+  
+  extraVolumeMounts:
+    - name: binder-templates
+      mountPath: /etc/binderhub/templates
+    - name: binder-templates-gesis
+      mountPath: /etc/binderhub/templates/gesis
+
+  extraConfig:
+    01-template-variables:  |
+      import uuid
+      template_vars = {
+          "version": "beta",
+          "home_url": "/",
+          "gesisbinder_url": "/binder/",
+          "about_url": "/about.html",
+          "tou_url": "/terms.html",
+          "imprint_url": "https://www.gesis.org/en/institute/imprint/",
+          "data_protection_url": "https://www.gesis.org/en/institute/data-protection/",
+          "gesis_url": "https://www.gesis.org/en/home/",
+          "status_url": "https://gesisnotebooks.betteruptime.com",
+          "gallery_url": "/gallery/",
+          "faq_url": "/faq.html",
+          "active": "binder",
+          "static_nginx": "/static/",
+          "static_version": uuid.uuid4().hex,
+          "user": None,
+          "production": production,
+      }
+      c.BinderHub.template_variables.update(template_vars)
+
   service:
     type: NodePort
     nodePort: 30081
@@ -140,6 +177,19 @@ binderhub:
         egress: []  # no additional egress rule, this empty list also overrides the egress rule defined in values.yaml of z2jh
       nodeSelector:
         binderhub: "true"
+      storage:
+        extraVolumes:
+          - name: etc-jupyter
+            configMap:
+              name: user-etc-jupyter
+          - name: etc-jupyter-templates
+            configMap:
+              name: user-etc-jupyter-templates
+        extraVolumeMounts:
+          - name: etc-jupyter
+            mountPath: /etc/jupyter
+          - name: etc-jupyter-templates
+            mountPath: /etc/jupyter/templates
 
     # Because we have only 1 node for user pods
     scheduling:
