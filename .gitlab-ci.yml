@@ -27,7 +27,7 @@ pages:
         - docs/*
   image: docker-private-snapshots.gesis.intra/gesis/methods-hub/quarto:latest
   dependencies: []
-  cript:
+  script:
     - quarto check
     - quarto render docs -t html --output-dir public
     - mv docs/public .
