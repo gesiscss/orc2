@@ -4,7 +4,9 @@ gesis helm lint:
     - if: $CI_COMMIT_BRANCH == 'main'
       changes:
         - gesis/*
-  image: alpine/helm:3.11.1
+  image: 
+    name: alpine/helm:3.11.1
+    entrypoint: [""]
   script:
     - helm version
     - helm lint gesis
