@@ -645,27 +645,17 @@ We use the following label schema:
 
 Key         Value       Description           Status
 ----------- ----------- --------------------- -------
-base        worker      Database available    Legacy
-userbuild   worker      Docker available      Legacy
 database    postgresql  PostgreSQL available  Proposal
-binder_user all         Can be used by anyone Proposal
+binderhub   true        Can be used by Binder Proposal
 
 Label the nodes to ensure that pods run in the desired node:
 
 ```bash
-kubectl label nodes svko-css-backup-node database=postgresql
+kubectl label nodes svko-css-app01 database=postgresql
 ```
 
 ```bash
-kubectl label nodes svko-css-backup-node base=worker
-```
-
-```bash
-kubectl label nodes svko-ilcm04 binder_user=all
-```
-
-```bash
-kubectl label nodes svko-ilcm04 userbuild=worker
+kubectl label nodes svko-ilcm04 binderhub=true
 ```
 
 Check that nodes were label correctly:
