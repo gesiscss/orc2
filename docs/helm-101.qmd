@@ -28,6 +28,11 @@ sudo apt update
 sudo apt -y install helm
 ```
 
+```bash
+sudo apt-mark hold \
+    helm
+```
+
 ## Debug
 
 The complete manifest can be render using
