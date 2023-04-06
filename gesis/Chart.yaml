@@ -1,6 +1,6 @@
 apiVersion: v2
 name: gesis
-description: A Helm chart for Kubernetes
+description: GESIS BinderHub
 
 # A chart can be either an 'application' or a 'library' chart.
 #
