@@ -1,6 +1,20 @@
+gesis helm lint:
+  stage: test
+  rules:
+    - if: $CI_COMMIT_BRANCH == 'main'
+      changes:
+        - gesis/*
+  image: alpine/helm:3.11.1
+  script:
+    - helm version
+    - helm lint gesis
+
 pages:
-  only:
-    - main
+  stage: build
+  rules:
+    - if: $CI_COMMIT_BRANCH == 'main'
+      changes:
+        - docs/*
   image: docker-private-snapshots.gesis.intra/gesis/methods-hub/quarto:latest
   script:
     - quarto check
