@@ -1,5 +1,147 @@
 binderhub:
+  pdb:
+    maxUnavailable: 1
+
+  replicas: 2
+
   config:
     BinderHub:
+      base_url: /binder/
       hub_url: https://notebooks.gesis.org/binder/jupyter/
       image_prefix: gesiscss/binder-r2d-g5b5b759-
+
+      build_node_selector:
+        binderhub: true
+
+      use_registry: true
+
+      pod_quota: 120
+
+      per_repo_quota: 100
+      per_repo_quota_higher: 200
+      build_memory_limit: "8G"
+      build_memory_request: "1G"
+
+      template_path: /etc/binderhub/templates
+
+      cors_allow_origin: '*'
+
+    GitHubRepoProvider:
+      banned_specs:
+        - ^a2nk/.*
+        - ^imhajes/.*
+        - ^ines/spacy-binder.*
+        - ^soft4voip/rak.*
+        - ^hmharshit/cn-ait.*
+        - ^shishirchoudharygic/mltraining.*
+        - ^hmharshit/mltraining.*
+        - ^FDesnoyer/MathExp.*
+        - ^GuitarsAI/.*
+        - ^ferarussia/.*
+
+      high_quota_specs:
+        - ^gesiscss/.*
+
+    GitLabRepoProvider:
+      banned_specs:
+        - ^h4j3s1978%2F.*
+        - ^jasmt507%2F.*
+        - .*%2Fabooz.*
+
+    GitRepoProvider:
+      banned_specs:
+        - ^(git|https?)%3A%2F%2Fgithub.com%2Fa2nk%2F.*
+        - ^https%3A%2F%2Fbitbucket.org%2Fnikiubel%2Fnikiubel.bitbucket.io.git/.*
+        - ^https%3A%2F%2Fjovian.ml%2Fapi%2Fgit%2F.*
+        - ^https%3A%2F%2Fframagit.org%2FCecGhesq%2Flic_mdf_nsi_1.*
+        - ^(git|https?)%3A%2F%2Fnotabug.org%2FulslcuRux3Y%2F.*
+        - ^(git|https?)%3A%2F%2Fgitlab.com%2Fjasmt507%2F.*
+        - ^(git|https?)%3A%2F%2Fgitlab.com%2Fh4j3s1978%2F.*
+        - .*%2Fabooz.*
+
+  podAnnotations:
+    rollme: "rollme"
+
+  service:
+    type: NodePort
+
+  imageBuilderType: dind
+
+  imageCleaner:
+    enabled: true
+
+  jupyterhub:
+    cull:
+      # cull every 11 minutes so it is out of phase
+      # with the proxy check-routes interval of five minutes
+      every: 660
+      timeout: 600
+      # maxAge is 1 hours: 1 * 3600 = 3600
+      maxAge: 3600
+    hub:
+      # NOTE: hub and proxy must have 1 pod (https://github.com/jupyterhub/jupyterhub/issues/2841#issuecomment-561848594)
+      # replicas: 1
+      pdb:
+        minAvailable: 0
+      networkPolicy:
+        # z2jh chart has a default ingress rule which allows inbound traffic
+        # only to port 8081 (API port)
+        # from pods with label "hub.jupyter.org/network-access-hub",
+        # user and proxy pods have this label
+        # z2jh chart has a default egress rule: allow all outbound traffic for hub
+        enabled: true
+      nodeSelector:
+        database: postgresql
+      baseUrl: /binder/jupyter/
+      db:
+        type: postgres
+      authenticatePrometheus: false
+      config:
+        BinderSpawner:
+          cors_allow_origin: '*'
+      extraConfig:
+        02-orc: |
+          c.KubeSpawner.extra_pod_config.update({'restart_policy': 'Never'})
+    proxy:
+      https:
+        # https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/master/CHANGELOG.md#breaking-changes
+        # for z2jh 0.10.0+ https needs to be enabled.
+        enabled: true
+        type: offload
+      chp:
+        networkPolicy:
+          # z2jh chart has a default ingress rule which allows inbound traffic
+          # to port 8000 (HTTP port) from pods with label "hub.jupyter.org/network-access-proxy-HTTP" and
+          # to port 8001 (API port) from pods with label "hub.jupyter.org/network-access-proxy-API",
+          # and only hub pod has these labels
+          # so only the hub pod can talk to the proxy's API and HTTP ports
+          # z2jh chart has a default egress rule: allow all outbound traffic for proxy
+          enabled: true
+        # NOTE: hub and proxy must have 1 pod (https://github.com/jupyterhub/jupyterhub/issues/2841#issuecomment-561848594)
+        # replicas: 1
+        # PDB relocated to proxy.chp.pdb https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1938
+        pdb:
+          minAvailable: 0
+      service:
+        type: NodePort
+    singleuser:
+      networkPolicy:
+        enabled: true
+        # z2jh chart has a default ingress rule which allows inbound traffic
+        # only to port 8888
+        # from pods with label "hub.jupyter.org/network-access-singleuser",
+        # hub and proxy pods have this label
+        #ingress: []
+        # z2jh chart has a default egress rule which restricts outbound traffic to only JupyterHub API port
+        egress: []  # no additional egress rule, this empty list also overrides the egress rule defined in values.yaml of z2jh
+      nodeSelector:
+        binderhub: true
+
+    # Because we have only 1 node for user pods
+    scheduling:
+      userScheduler:
+        enabled: true
+      podPriority:
+        enabled: true
+      userPlaceholder:
+        enabled: true
