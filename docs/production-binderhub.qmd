@@ -27,8 +27,8 @@ helm upgrade --cleanup-on-fail \
     --install binderhub ./helm/gesis \
     --namespace=gesis \
      --create-namespace \
-    -f helm/config.yaml \
-    -f helm/_secret.yaml
+    -f ./helm/config.yaml \
+    -f ./helm/_secret.yaml
 ```
 
 Check BinderHub status:
