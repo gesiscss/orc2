@@ -11,7 +11,7 @@ binderhub:
       image_prefix: gesiscss/binder-r2d-g5b5b759-
 
       build_node_selector:
-        binderhub: true
+        binderhub: "true"
 
       use_registry: true
 
@@ -135,7 +135,7 @@ binderhub:
         # z2jh chart has a default egress rule which restricts outbound traffic to only JupyterHub API port
         egress: []  # no additional egress rule, this empty list also overrides the egress rule defined in values.yaml of z2jh
       nodeSelector:
-        binderhub: true
+        binderhub: "true"
 
     # Because we have only 1 node for user pods
     scheduling:
