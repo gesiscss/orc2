@@ -1,8 +1,34 @@
+# top-level http config for websocket headers
+# If Upgrade is defined, Connection = upgrade
+# If Upgrade is empty, Connection = close
+map $http_upgrade $connection_upgrade {
+    default upgrade;
+    ''      close;
+}
+
 # mapping to create a variable, which is used to decide if a request must be logged or not
 # this mapping is used to disable access logging for all static files from different services
 map $request_uri $loggable {
     default                                             1;
     ~^/(hub|services/binder|binder|gallery)/static/ 0;
+}
+
+upstream JupyterHub {
+  server 194.95.75.9:30080 max_fails=0;
+#   server 194.95.75.12:30080 max_fails=0;
+  server 194.95.75.14:30080 max_fails=0;
+}
+
+upstream BinderHub {
+  server 194.95.75.9:30081 max_fails=0;
+#   server 194.95.75.12:30081 max_fails=0;
+  server 194.95.75.14:30081 max_fails=0;
+}
+
+upstream BinderJupyterHub {
+  server 194.95.75.9:30082 max_fails=0;
+#   server 194.95.75.12:30082 max_fails=0;
+  server 194.95.75.14:30081 max_fails=0;
 }
 
 # HTTP server to redirect notebooks.gesis.org 80 traffic to SSL/HTTPS
@@ -70,24 +96,24 @@ server {
 
     # Managing literal requests to the BinderHub
     location /binder/ {
-        error_page 503 /static/maintenance.html;
-        return 503;
+        # error_page 503 /static/maintenance.html;
+        # return 503;
 
-        # proxy_buffering off;
-        # proxy_pass http://bhub;
-        # include snippets/headers.conf;
-        # proxy_set_header X-Scheme $scheme;
-        # proxy_set_header X-Frame-Options "SAMEORIGIN";
+        proxy_buffering off;
+        proxy_pass http://BinderHub;
+        include snippets/headers.conf;
+        proxy_set_header X-Scheme $scheme;
+        proxy_set_header X-Frame-Options "SAMEORIGIN";
     }
 
     # For JupyterHub of binder
     location /binder/jupyter/ {
-        error_page 503 /static/maintenance.html;
-        return 503;
+        # error_page 503 /static/maintenance.html;
+        # return 503;
 
-        # proxy_pass http://bjhub;
-        # include snippets/headers.conf;
-        # include snippets/websocket_headers.conf;
+        proxy_pass http://BinderJupyterHub;
+        include snippets/headers.conf;
+        include snippets/websocket_headers.conf;
     }
 
     # redirect from old location
@@ -96,11 +122,11 @@ server {
     # Managing literal requests to the JupyterHub
     location / {
         ## maintenance page
-        error_page 503 /static/maintenance.html;
-        return 503;
+        # error_page 503 /static/maintenance.html;
+        # return 503;
 
-        # Redirect to binder deployment
-        # return 301 /binder/;
+        Redirect to binder deployment
+        return 301 /binder/;
     }
 
     include snippets/ignore_fonts.conf;
