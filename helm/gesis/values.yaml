@@ -95,7 +95,7 @@ binderhub:
           "static_nginx": "/static/",
           "static_version": uuid.uuid4().hex,
           "user": None,
-          "production": production,
+          "production": True,
       }
       c.BinderHub.template_variables.update(template_vars)
 
