@@ -121,11 +121,11 @@ server {
 
     # Managing literal requests to the JupyterHub
     location / {
-        ## maintenance page
+        # maintenance page
         # error_page 503 /static/maintenance.html;
         # return 503;
 
-        Redirect to binder deployment
+        # Redirect to binder deployment
         return 301 /binder/;
     }
 
