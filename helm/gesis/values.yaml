@@ -64,6 +64,7 @@ binderhub:
 
   service:
     type: NodePort
+    nodePort: 30081
 
   imageBuilderType: dind
 
@@ -103,6 +104,11 @@ binderhub:
         02-orc: |
           c.KubeSpawner.extra_pod_config.update({'restart_policy': 'Never'})
     proxy:
+      service:
+        type: NodePort
+        nodePorts:
+          http: 30085
+          https: 30082
       https:
         # https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/master/CHANGELOG.md#breaking-changes
         # for z2jh 0.10.0+ https needs to be enabled.
@@ -122,8 +128,6 @@ binderhub:
         # PDB relocated to proxy.chp.pdb https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1938
         pdb:
           minAvailable: 0
-      service:
-        type: NodePort
     singleuser:
       networkPolicy:
         enabled: true
