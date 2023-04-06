@@ -1,0 +1,140 @@
+# PostgreSQL 101
+
+## Install {#sec-postgres-installation}
+
+```bash
+sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+```
+
+```bash
+wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+```
+
+```bash
+sudo apt-get update
+```
+
+```bash
+sudo apt-get install -y postgresql-12
+```
+
+```bash
+sudo apt-mark hold postgresql-12
+```
+
+Verify that PostgreSQL is running:
+
+```bash
+sudo systemctl status postgresql
+```
+
+## User Setup {#sec-postgresql-user-setup}
+
+Set a password for the `postgres` database user:
+
+```bash
+sudo -u postgres psql postgres
+```
+
+```bash
+\password postgres
+```
+
+```bash
+\q
+```
+
+## PostgreSQL connection URI
+
+The PostgreSQL connection URI follow the format
+
+```
+postgres[ql]://[username[:password]@][host[:port],]/database[?parameter_list]
+```
+
+## Query database
+
+```bash
+psql -h localhost -U postgres postgres -c '\list;'
+```
+
+```
+Did not find any relations.
+```
+
+## Create new database
+
+```bash
+sudo -u postgres createdb \
+    --owner=username \
+    --encoding=UTF8 \
+    --template=template0 \
+    dbname
+```
+
+## List databases
+
+```
+\list;
+```
+
+## Switch to database
+
+:::{.callout-note}
+
+The use of double quotes is recommended to avoid the expression being interpreted.
+
+:::
+
+```
+\c "database-name";
+```
+
+## List tables in database
+
+```
+\dt;
+```
+
+## Change table ownership
+
+:::{.callout-note}
+
+The use of double quotes is recommended to avoid the expression being interpreted.
+
+:::
+
+```
+ALTER TABLE "table-name" OWNER TO "username";
+```
+
+## Uninstall {#sec-postgresql-uninstall}
+
+```bash
+sudo apt -y --purge remove postgresql postgresql-*
+```
+
+```bash
+sudo apt -y --purge autoremove
+```
+
+```bash
+sudo deluser postgres
+```
+
+```bash
+sudo rm -rf /etc/postgresql
+```
+
+```bash
+sudo rm -rf /etc/postgresql-common/
+```
+
+```bash
+sudo rm -rf /usr/local/pgsql
+```
+
+```bash
+sudo rm -rf /var/log/postgresql/
+```
+

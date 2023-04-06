@@ -1,0 +1,8 @@
+# Version Log book
+
+Software Version Number
+-------- --------------
+Git      2.34.1
+Docker   23.0.1
+minikube 1.29.0
+heml     3.11.1

@@ -1,0 +1,42 @@
+# Helm 101
+
+## Installation
+
+:::{.callout-note}
+
+Check for update instructions at <https://helm.sh/docs/intro/install/#from-apt-debianubuntu>.
+
+:::
+
+```bash
+curl https://baltocdn.com/helm/signing.asc | gpg --dearmor | sudo tee /usr/share/keyrings/helm.gpg > /dev/null
+```
+
+```bash
+sudo apt install apt-transport-https --yes
+```
+
+```bash
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
+```
+
+```bash
+sudo apt update
+```
+
+```bash
+sudo apt -y install helm
+```
+
+## Debug
+
+The complete manifest can be render using
+
+```bash
+helm template gesisbinder/gesisbinder \
+    -f gesisbinder/config.yaml \
+    -f gesisbinder/_secret.yaml \
+    --debug
+```
+
+This manifest should be search for bugs.

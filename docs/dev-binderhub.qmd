@@ -1,0 +1,226 @@
+# Developing BinderHub Helm chart
+
+::: {.callout-note}
+
+This is based on [Contributing to BinderHub: Develop Helm chart](https://binderhub.readthedocs.io/en/latest/contribute.html#develop-helm-chart).
+
+:::
+
+Launch your minikube:
+
+```bash
+minikube start --kubernetes-version v1.26.1 --cpus 4 --memory 6000
+```
+
+```
+😄  minikube v1.29.0 on Ubuntu 22.04 (amd64)
+✨  Automatically selected the docker driver
+📌  Using Docker driver with root privileges
+❗  For an improved experience it's recommended to use Docker Engine instead of Docker Desktop.
+Docker Engine installation instructions: https://docs.docker.com/engine/install/#server
+👍  Starting control plane node minikube in cluster minikube
+🚜  Pulling base image ...
+🔥  Creating docker container (CPUs=4, Memory=6000MB) ...
+🐳  Preparing Kubernetes v1.26.1 on Docker 20.10.23 ...
+    ▪ Generating certificates and keys ...
+    ▪ Booting up control plane ...
+    ▪ Configuring RBAC rules ...
+🔗  Configuring bridge CNI (Container Networking Interface) ...
+    ▪ Using image gcr.io/k8s-minikube/storage-provisioner:v5
+🔎  Verifying Kubernetes components...
+🌟  Enabled addons: storage-provisioner, default-storageclass
+🏄  Done! kubectl is now configured to use "minikube" cluster and "default" namespace by default
+```
+
+Clone the source code of BinderHub:
+
+```bash
+git clone https://github.com/jupyterhub/binderhub.git
+```
+
+```bash
+cd binderhub
+```
+
+Install development requirements:
+
+```bash
+python3 -m pip install -r dev-requirements.txt
+```
+
+Configure docker using environment variables to use the same Docker daemon as your minikube cluster. This means images you build are directly available to the cluster:
+
+```bash
+eval $(minikube docker-env)
+```
+
+Build the docker images referenced by the Helm chart and update its default values to reference these images:
+
+```
+(cd helm-chart && chartpress)
+```
+
+Get the chart dependencies (for example JupyterHub):
+
+```bash
+(cd helm-chart/binderhub && helm dependency update)
+```
+
+Validate the Helm chart defined in `helm-chart/binderhub`:
+
+```bash
+helm template --validate binderhub-test helm-chart/binderhub \
+   --values testing/k8s-binder-k8s-hub/binderhub-chart-config.yaml \
+   --set config.BinderHub.hub_url=http://$(minikube ip):30902
+```
+
+Install the Helm chart defined in `helm-chart/binderhub`:
+
+```bash
+helm upgrade --cleanup-on-fail \
+    --install binderhub-test helm-chart/binderhub \
+    --values testing/k8s-binder-k8s-hub/binderhub-chart-config.yaml \
+    --set config.BinderHub.hub_url=http://$(minikube ip):30902
+```
+
+```
+Release "binderhub-test" does not exist. Installing it now.
+NAME: binderhub-test
+LAST DEPLOYED: Fri Mar 10 16:56:06 2023
+NAMESPACE: default
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
+NOTES:
+1. Get the application URL by running these commands:
+  export NODE_PORT=$(kubectl get --namespace default -o jsonpath="{.spec.ports[0].nodePort}" services binderhub-test-binderhub)
+  export NODE_IP=$(kubectl get nodes --namespace default -o jsonpath="{.items[0].status.addresses[0].address}")
+  echo http://$NODE_IP:$NODE_PORT
+```
+
+Check the pods:
+
+```bash
+kubectl get pods
+```
+
+```
+NAME                                 READY   STATUS    RESTARTS   AGE
+binder-6c78656b94-kf5hn              1/1     Running   0          90s
+binderhub-test-image-cleaner-zz2lx   1/1     Running   0          90s
+hub-5f75f4d5c-p8kzf                  1/1     Running   0          90s
+proxy-6d9f75d77d-9tc6k               1/1     Running   0          90s
+user-scheduler-7989fd4555-mspwz      1/1     Running   0          90s
+user-scheduler-7989fd4555-svb6f      1/1     Running   0          90s
+```
+
+and the services:
+
+```bash
+kubectl get service
+```
+
+```
+NAME           TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
+binder         NodePort    10.109.8.74     <none>        80:30901/TCP   115s
+hub            ClusterIP   10.101.127.72   <none>        8081/TCP       115s
+kubernetes     ClusterIP   10.96.0.1       <none>        443/TCP        10m
+proxy-api      ClusterIP   10.108.23.178   <none>        8001/TCP       115s
+proxy-public   NodePort    10.104.246.47   <none>        80:30902/TCP   115s
+```
+
+Because `binder` and JupyterHub's `proxy-public` have service type `NodePort`, configure port foward for the services:
+
+::: {.callout-note}
+
+Each port forward **must** be done in their own terminal.
+
+:::
+
+```bash
+minikube service binder --url
+```
+
+```
+http://127.0.0.1:33505
+❗  Because you are using a Docker driver on linux, the terminal needs to be open to run it.
+```
+
+```bash
+minikube service proxy-public --url
+```
+
+```
+http://127.0.0.1:41967
+❗  Because you are using a Docker driver on linux, the terminal needs to be open to run it.
+```
+
+Open BinderHub by pointing your web browser to <http://127.0.0.1:33505>.
+
+![Screenshot of BinderHub's homescreen.](img/minikube-binder-home.png)
+
+## Testing
+
+Use <https://github.com/binder-examples/requirements> to test your local instance of BinderHub.
+
+![Screenshot of BinderHub's homescreen with <https://github.com/binder-examples/requirements> as the repository to be launch.](img/minikube-binder-requirements.png)
+
+::: {.callout-important}
+
+Will take a couple of minutes for Binder to build the container and launch it.
+
+Check that Binder is building the containter:
+
+```bash
+kubectl logs binder-6c78656b94-kf5hn
+```
+
+:::
+
+Once the container is built, Binder will launch it and redirect the user to Jupyter Lab.
+
+![Screenshot of BinderHub after redirect to Jupyter Lab.](img/minikube-binder-jupyterlab.png)
+
+::: {.callout-note}
+
+Because `binder` and JupyterHub's `proxy-public` have service type `NodePort`, the redirect will fa
+
+```
+Launching server...
+Server requested
+2023-03-10T16:07:22.643886Z [Normal] Successfully assigned default/jupyter-binder-2dexamples-2drequirements-2duyjiapqq to minikube
+2023-03-10T16:07:22Z [Normal] Pulling image "jupyterhub/k8s-network-tools:2.0.0"
+2023-03-10T16:07:25Z [Normal] Successfully pulled image "jupyterhub/k8s-network-tools:2.0.0" in 2.683720781s (2.683736917s including waiting)
+2023-03-10T16:07:25Z [Normal] Created container block-cloud-metadata
+2023-03-10T16:07:25Z [Normal] Started container block-cloud-metadata
+2023-03-10T16:07:26Z [Normal] Container image "binder-2dexamples-2drequirements-55ab5c:50533eb470ee6c24e872043d30b2fee463d6943f" already present on machine
+2023-03-10T16:07:26Z [Normal] Created container notebook
+2023-03-10T16:07:26Z [Normal] Started container notebook
+Server ready at /user/binder-examples-requirements-uyjiapqq/
+server running at http://192.168.49.2:30902/user/binder-examples-requirements-uyjiapqq/
+```
+
+:::
+
+## Clean up
+
+Now you can clean up the resources:
+
+```bash
+helm uninstall my-local-binderhub --namespace binderhub
+```
+
+```
+release "my-local-binderhub" uninstalled
+```
+
+```bash
+minikube delete
+```
+
+```
+* Deleting "minikube" in docker ...
+* Deleting container "minikube" ...
+* Removing /home/raniere/.minikube/machines/minikube ...
+* Removed all traces of the "minikube" cluster.
+```

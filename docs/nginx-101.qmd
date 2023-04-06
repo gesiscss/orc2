@@ -1,0 +1,124 @@
+# NGINX 101
+
+[NGINX](http://nginx.org/) is a web server also used for load balancer. The full documentation is available at <http://nginx.org/en/docs/>.
+
+NGINX has one or more configuration files that are merged together.
+
+A minimal configuration file is
+
+```
+http {
+    server {
+        server_name  example.org;
+
+        location / {
+            root /data/www;
+        }
+    }
+}
+```
+
+The above configuration file has
+
+- a `http` context that represents the HTTP server.
+- a `server` context that represents a **virtual** HTTP server.
+- a `server_name` directive used to decide if the server should reply to a given request.
+- a `location` context used when a given partner matches the request URI.
+- a `root` directive used to define the root directory for requests.
+
+## Security
+
+By default, NGINX will return a lot of metadata information in the header.
+
+```bash
+curl -I localhost
+```
+
+```
+HTTP/1.1 200 OK
+Server: nginx/1.18.0 (Ubuntu)
+Date: Thu, 16 Mar 2023 07:49:35 GMT
+Content-Type: text/html
+Content-Length: 612
+Last-Modified: Wed, 15 Mar 2023 10:05:45 GMT
+Connection: keep-alive
+ETag: "64119879-264"
+Accept-Ranges: bytes
+```
+
+Change
+
+
+```
+ # server_tokens off;
+```
+
+to
+
+```
+server_tokens off;
+```
+
+in `/etc/nginx/nginx.conf`.
+
+Test NGINX configuration file:
+
+```bash
+sudo nginx -t
+```
+
+Reload and restart NGINX:
+
+```bash
+sudo systemctl reload nginx.service
+```
+
+```bash
+sudo systemctl restart nginx.service
+```
+
+Verify that NGINX is running:
+
+```bash
+sudo systemctl status nginx.service
+```
+
+## Encrypted Communication
+
+Use [Let's Encrypt](https://letsencrypt.org/) to enable [Hypertext Transfer Protocol Secure (HTTPS)](https://en.wikipedia.org/wiki/HTTPS).
+
+You can obtain the SSL certificate with the help of [CertBot](https://certbot.eff.org/):
+
+:::{.callout-note}
+
+NGINX **must** be able to reply to external requests. You can use a service like <https://downforeveryoneorjustme.com> to test if the server is accessible from outside GESIS network.
+
+:::
+
+```bash
+sudo snap install --classic certbot
+```
+
+```bash
+sudo ln -s /snap/bin/certbot /usr/bin/certbot
+```
+
+```bash
+sudo certbot \
+    --nginx \
+    -d your.awesome.domain.com \
+    --debug-challenges -v
+```
+
+## Debugging
+
+```bash
+sudo cat /var/log/nginx/error.log
+```
+
+## Retire Encrypted Communication
+
+```bash
+sudo certbot delete \
+    -cert-name your.awesome.domain.com
+```
