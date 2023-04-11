@@ -19,6 +19,9 @@ book:
       - production-k8s-setup.qmd
       - production-binderhub.qmd
       - production-nginx.qmd
+    - part: "Continuous Deployment"
+      chapters: 
+      - gitlab-install-agent.qmd
   appendices:
     - version-log-book.qmd
     - git-crypt.qmd
