@@ -40,9 +40,17 @@ gesis helm deploy:
     name: docker-private-snapshots.gesis.intra/gesis/ilcm/orc2/k8s:latest
     entrypoint: ['']
   script:
+    - cat $git_crypt_secret_key | base64 -d > git_crypt_secret_key
+    - git-crypt git_crypt_secret_key
     - kubectl config get-contexts
     - kubectl config use-context ilcm/orc2:kubernetes
-    - kubectl get nodes
+    - |
+      helm upgrade --cleanup-on-fail \
+      --install binderhub ./helm/gesis \
+      --namespace=gesis \
+      --create-namespace \
+      -f ./helm/config.yaml \
+      -f ./helm/_secret.yaml
 
 pages:
   stage: build
