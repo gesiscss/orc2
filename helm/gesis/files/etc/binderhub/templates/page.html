@@ -7,10 +7,18 @@
   <meta http-equiv="X-UA-Compatible" content="chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   {# The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags #}
-  <meta name="description" content="GESIS Notebooks ({{ version }})">
-  <meta name="robots" content="noindex, nofollow">
+  <meta name="description" content="Reproducible, sharable, open, interactive computing environments.">
 
   {% block head %}
+  {# Social media previews #}
+  <meta property="og:title" content="GESIS Binder">
+  <meta property="og:description" content="Reproducible, sharable, open, interactive computing environments.">
+  <meta property="og:image" content="https://notebooks.gesis.org/static/images/logo/logo_big_square.png?v={{ static_version }}">
+  <meta property="og:image:width" content="800">
+  <meta property="og:image:height" content="800">
+  <meta property="og:image:alt" content="GESIS Notebooks Logo" />
+  <meta name="twitter:card" content="summary">
+
   <link href="{{static_url("dist/styles.css")}}" rel="stylesheet">
   {% endblock head %}
   <link id="favicon" rel="shortcut icon" type="image/png" href="{{ static_nginx }}images/logo/logo.png?v={{ static_version }}" />
@@ -29,7 +37,7 @@
 
   {% block etracker %}
   {% if production %}
-  {% with et_pagename="/GESISHub:binder/", et_areas="/GESISHub" %}
+  {% with et_pagename="/GESISBinder:binder/", et_areas="/GESISBinder" %}
       {% include "gesis/etracker.html" %}
   {% endwith %}
   {% endif %}
