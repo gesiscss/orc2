@@ -26,4 +26,4 @@ appVersion: "1.16.0"
 dependencies:
 - name: binderhub
   version: "1.0.0-0.dev.git.3035.h32213a4"
-  repository: "https://hub.jupyter.org/helm-chart/"
+  repository: "https://jupyterhub.github.io/helm-chart"
