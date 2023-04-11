@@ -19,6 +19,7 @@ gesis helm lint:
       - gesis.helm.chart.yaml
 
 gesis helm deploy:
+  stage: deploy
   image:
     name: bitnami/kubectl:latest
     entrypoint: ['']
