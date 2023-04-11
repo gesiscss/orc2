@@ -1,3 +1,19 @@
+Build container with Kubernetes and git-crypt:
+  stage: build
+  rules:
+    - if: $CI_COMMIT_BRANCH == 'main'
+      changes:
+        - .gitlab-ci.yml
+        - Dockerfile
+  image: docker-private.gesis.intra/gesis/dc:5.7
+  services:
+    - name:  docker-private.gesis.intra/gesis/dind:5.5
+      alias: docker
+  dependencies: []
+  script:
+    - docker build --no-cache --pull -t docker-private-snapshots.gesis.intra/gesis/ilcm/orc2/k8s:latest .
+    - docker push docker-private-snapshots.gesis.intra/gesis/ilcm/orc2/k8s:latest
+
 gesis helm lint:
   stage: test
   rules:
@@ -6,7 +22,7 @@ gesis helm lint:
         - .gitlab-ci.yml
         - helm/**/*
   image: 
-    name: alpine/helm:3.11.1
+    name: docker-private-snapshots.gesis.intra/gesis/ilcm/orc2/k8s:latest
     entrypoint: [""]
   dependencies: []
   script:
@@ -21,7 +37,7 @@ gesis helm lint:
 gesis helm deploy:
   stage: deploy
   image:
-    name: bitnami/kubectl:latest
+    name: docker-private-snapshots.gesis.intra/gesis/ilcm/orc2/k8s:latest
     entrypoint: ['']
   script:
     - kubectl config get-contexts
