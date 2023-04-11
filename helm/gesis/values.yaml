@@ -15,21 +15,25 @@ binderhub:
       hub_url: https://notebooks.gesis.org/binder/jupyter/
       image_prefix: gesiscss/binder-r2d-g5b5b759-
 
-      build_node_selector:
-        binderhub: "true"
-
       use_registry: true
-
-      pod_quota: 120
 
       per_repo_quota: 100
       per_repo_quota_higher: 200
-      build_memory_limit: "8G"
-      build_memory_request: "1G"
 
       template_path: /etc/binderhub/templates
 
       cors_allow_origin: '*'
+
+    LaunchQuota:
+      total_quota: 120
+
+    BuildExecutor:
+      memory_limit: "8G"
+
+    KubernetesBuildExecutor:
+      memory_request: "1G"
+      node_selector:
+        binderhub: "true"
 
     GitHubRepoProvider:
       banned_specs:
