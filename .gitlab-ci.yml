@@ -41,7 +41,7 @@ gesis helm deploy:
     entrypoint: ['']
   script:
     - cat $git_crypt_secret_key | base64 -d > git_crypt_secret_key
-    - git-crypt git_crypt_secret_key
+    - git-crypt unlock git_crypt_secret_key
     - kubectl config get-contexts
     - kubectl config use-context ilcm/orc2:kubernetes
     - |
