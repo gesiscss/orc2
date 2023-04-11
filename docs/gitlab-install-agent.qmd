@@ -39,3 +39,7 @@ Select the agent from the dropdown menu and click `Register`.
 Follow the instructions provided by GitLab.
 
 ![Screenshot of `Agent access token` dialog window.](docs/img/gitlab-agent-access-token.png)
+
+Refresh the page to verify that the agent is connected.
+
+![Screenshot of GitLab showing all the agents in a project.]gitlab-new-agent.png)
