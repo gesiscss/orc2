@@ -15,3 +15,27 @@ ci_access:
   projects:
     - id: ilcm/orc2
 ```
+
+## Register
+
+::: {.callout-important}
+
+Make sure that `Operations` is enabled in your project under `Settings > General > Visibility, project features, permissions`.
+
+![Screenshot of `Settings > General > Visibility, project features, permissions`.](img/gitlab-project-settings.png)
+
+:::
+
+Point your web browser to the project's `Infrastructure > Kubernetes clusters`.
+
+![Screenshot of `Infrastructure > Kubernetes clusters`.](img/gitlab-infrastructure-k8s.png)
+
+Click in `Connect a cluster`.
+
+![Screenshot of `Connect a Kubernetes cluster` dialog window.](img/gitlab-connect-a-k8s-cluster.png)
+
+Select the agent from the dropdown menu and click `Register`.
+
+Follow the instructions provided by GitLab.
+
+![Screenshot of `Agent access token` dialog window.](docs/img/gitlab-agent-access-token.png)
