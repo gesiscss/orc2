@@ -1,4 +1,9 @@
 binderhub:
+  dind:
+    daemonset:
+      extraArgs:
+        - "--mtu=1000"
+
   pdb:
     maxUnavailable: 1
 
