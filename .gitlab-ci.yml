@@ -3,7 +3,6 @@ Build container with Kubernetes and git-crypt:
   rules:
     - if: $CI_COMMIT_BRANCH == 'main'
       changes:
-        - .gitlab-ci.yml
         - Dockerfile
   image: docker-private.gesis.intra/gesis/dc:5.7
   services:
@@ -36,14 +35,21 @@ gesis helm lint:
 
 gesis helm deploy:
   stage: deploy
+  rules:
+    - if: $CI_COMMIT_BRANCH == 'main' || $CI_PIPELINE_SOURCE == 'merge_request_event'
+      changes:
+        - .gitlab-ci.yml
+        - helm/**/*
   image:
     name: docker-private-snapshots.gesis.intra/gesis/ilcm/orc2/k8s:latest
     entrypoint: ['']
+  dependencies: []
   script:
     - cat $git_crypt_secret_key | base64 -d > git_crypt_secret_key
     - git-crypt unlock git_crypt_secret_key
-    - kubectl config get-contexts
     - kubectl config use-context ilcm/orc2:kubernetes
+    - helm version
+    - helm dependency update ./helm/gesis
     - |
       helm upgrade --cleanup-on-fail \
       --install binderhub ./helm/gesis \
