@@ -18,6 +18,15 @@ gesis helm lint:
     paths:
       - gesis.helm.chart.yaml
 
+gesis helm deploy:
+  image:
+    name: bitnami/kubectl:latest
+    entrypoint: ['']
+  script:
+    - kubectl config get-contexts
+    - kubectl config use-context ilcm/orc2:kubernetes
+    - kubectl get pods
+
 pages:
   stage: build
   rules:
