@@ -1,0 +1,81 @@
+# Setup minikube
+
+For development, we will use [minikube](https://minikube.sigs.k8s.io/).
+
+::: {.callout-note}
+
+The reader can use other implementations of local Kubernetes cluster, including [kind](https://kind.sigs.k8s.io/) and [k3s](https://k3s.io/).
+
+:::
+
+Start the local minikube cluster:
+
+```bash
+minikube start --kubernetes-version v1.26.1 --cpus 4 --memory 8192
+```
+
+::: {.callout-note}
+
+If you get a error like `Exiting due to RSRC_DOCKER_STORAGE: Docker is out of disk space!`, use
+
+```bash
+docker system prune -a
+```
+
+to remove old Docker images and free space in your machine.
+
+:::
+
+::: {.callout-note}
+
+If you are running the latest version of Docker, old versions of Kubernetes does **not** support your Docker installation. Try minikube with the [latest version of Kubernetes](https://kubernetes.io/releases/) by changing the value of the argument `--kubernetes-version`. For example,
+
+```bash
+minikube start --kubernetes-version=vX.Y.Z --cpus 4 --memory 8192
+```
+
+try to start the local minikube cluster with Kubernetes vX.Y.Z.
+
+:::
+
+Verify that the local minikube cluster is running:
+
+```bash
+minikube status
+```
+
+```
+minikube
+type: Control Plane
+host: Running
+kubelet: Running
+apiserver: Running
+kubeconfig: Configured
+```
+
+## Clean up
+
+At the begin of development breaks, you can claim some resources back:
+
+```bash
+minikube stop
+```
+
+```
+* Stopping node "minikube"  ...
+* Powering off "minikube" via SSH ...
+* 1 node stopped.
+```
+
+When development ends, you can claim all resources back:
+
+```bash
+minikube delete
+```
+
+```
+* Deleting "minikube" in docker ...
+* Deleting container "minikube" ...
+* Removing /home/raniere/.minikube/machines/minikube ...
+* Removed all traces of the "minikube" cluster.
+```

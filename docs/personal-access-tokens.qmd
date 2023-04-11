@@ -1,0 +1,13 @@
+# Personal Access Tokens {#sec-personal-access-tokens}
+
+To facilitate pull Git repositories to the remote servers, we recommend create personal access tokens.
+
+## GitLab
+
+Access <https://git.gesis.org/-/profile/personal_access_tokens>.
+
+![Screenshot of GitLab's Personal Access Tokens form.](img/gitlab-personal-access-tokens.png)
+
+Provide a `Token name` like `Remote machines at GESIS` and select only the `read_repository` scope.
+
+Save the token as you won't be able to access it again.

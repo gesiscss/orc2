@@ -27,20 +27,20 @@ helm upgrade --cleanup-on-fail \
     --install binderhub ./helm/gesis \
     --namespace=gesis \
     --create-namespace \
-    -f ./helm/config.yaml \
-    -f ./helm/_secret.yaml
+    -f ./helm/gesis/config_test.yaml \
+    -f ./helm/gesis/_secret_test.yaml
 ```
 
 Check BinderHub status:
 
 ```bash
-helm status bhub-test -n bhub-test-ns
+helm status binderhub -n gesis
 ```
 
 ```
-NAME: bhub-test
+NAME: binderhub
 LAST DEPLOYED: Fri Mar 17 15:37:00 2023
-NAMESPACE: bhub-test-ns
+NAMESPACE: gesis
 STATUS: deployed
 REVISION: 1
 TEST SUITE: None
@@ -49,7 +49,7 @@ TEST SUITE: None
 Check pod status:
 
 ```bash
-kubectl get pods --namespace=bhub-test-ns
+kubectl get pods --namespace=gesis
 ```
 
 ```
@@ -65,7 +65,7 @@ user-scheduler-775dd7d7d4-r8klc   1/1     Running   0          19s
 Check service status:
 
 ```bash
-kubectl get services --namespace=bhub-test-ns
+kubectl get services --namespace=gesis
 ```
 
 ```

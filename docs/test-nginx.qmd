@@ -1,0 +1,209 @@
+# Setup NGINX
+
+:::{.callout-important}
+
+[NGINX](https://www.nginx.com/) runs in the master machine and outside the Kubernetes cluster.
+
+:::
+
+Install NGINX:
+
+```bash
+sudo apt-get update
+```
+
+```bash
+sudo apt-get install -y nginx
+```
+
+```bash
+sudo apt-mark hold nginx
+```
+
+Verify that NGINX is running:
+
+```bash
+sudo systemctl status nginx.service
+```
+
+## Configure Secure Sockets Layer (SSL)
+
+Delete default NGINX configuration:
+
+```bash
+sudo rm /etc/nginx/sites-enabled/default
+```
+
+```bash
+sudo mv /etc/nginx/sites-available/default /etc/nginx/sites-available/default_nginx
+```
+
+Configure the SSL certificate with [Let’s Encrypt](https://letsencrypt.org/).
+
+```bash
+sudo cp /etc/nginx/sites-available/default_nginx /etc/nginx/sites-available/default_nginx4lets-encrypt
+```
+
+Change the `server_name` to `notebooks-test.gesis.org` in `/etc/nginx/sites-available/default_nginx4lets-encrypt`.
+
+Create a symbolic link from `/etc/nginx/sites-available/default_nginx4lets-encrypt` to `/etc/nginx/sites-enabled/`.
+
+```bash
+sudo ln -s /etc/nginx/sites-available/default_nginx4lets-encrypt /etc/nginx/sites-enabled/
+```
+
+Test NGINX configuration file:
+
+```bash
+sudo nginx -t
+```
+
+Reload and restart NGINX:
+
+```bash
+sudo systemctl reload nginx.service
+```
+
+```bash
+sudo systemctl restart nginx.service
+```
+
+Verify that NGINX is running:
+
+```bash
+sudo systemctl status nginx.service
+```
+
+Obtain the SSL certificate:
+
+:::{.callout-note}
+
+NGINX **must** be able to reply to external requests. You can use a service like <https://downforeveryoneorjustme.com> to test if the server is accessible from outside GESIS network.
+
+:::
+
+```bash
+sudo certbot \
+    --nginx \
+    -d notebooks-test.gesis.org \
+    --debug-challenges -v
+```
+
+```
+Saving debug log to /var/log/letsencrypt/letsencrypt.log
+Requesting a certificate for notebooks-test.gesis.org
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Challenges loaded. Press continue to submit to CA.
+Pass "-v" for more info about challenges.
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Press Enter to Continue
+
+Successfully received certificate.
+Certificate is saved at: /etc/letsencrypt/live/notebooks-test.gesis.org/fullchain.pem
+Key is saved at:         /etc/letsencrypt/live/notebooks-test.gesis.org/privkey.pem
+This certificate expires on 2023-06-14.
+These files will be updated when the certificate renews.
+Certbot has set up a scheduled task to automatically renew this certificate in the background.
+
+Deploying certificate
+Successfully deployed certificate for notebooks-test.gesis.org to /etc/nginx/sites-enabled/default_nginx
+Congratulations! You have successfully enabled HTTPS on https://notebooks-test.gesis.org
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+If you like Certbot, please consider supporting our work by:
+ * Donating to ISRG / Let's Encrypt:   https://letsencrypt.org/donate
+ * Donating to EFF:                    https://eff.org/donate-le
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+```
+
+Delete the configuration that we use to get the  SSL certificate:
+
+```bash
+sudo rm /etc/nginx/sites-enabled/default_nginx4lets-encrypt
+```
+
+## Configure routes
+
+Get the ORC configuration for NGINX:
+
+```bash
+sudo mkdir /var/www/test 
+```
+
+```bash
+sudo cp -R ~/ilcm/orc/load_balancer/static /var/www/test/
+```
+
+```bash
+sudo cp -R ~/ilcm/orc/load_balancer/snippets/* /etc/nginx/snippets/
+```
+
+```bash
+sudo cp -R ~/ilcm/orc/load_balancer/sites-available/* /etc/nginx/sites-available/
+```
+
+```bash
+sudo ln -s /etc/nginx/sites-available/orc_test /etc/nginx/sites-enabled/.
+```
+
+```bash
+sudo ln -s /etc/nginx/sites-available/default_test /etc/nginx/sites-enabled/.
+```
+
+Test NGINX configuration file:
+
+```bash
+sudo nginx -t
+```
+
+```
+nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+nginx: configuration file /etc/nginx/nginx.conf test is successful
+```
+
+Reload and restart NGINX:
+
+```bash
+sudo systemctl reload nginx.service
+```
+
+```bash
+sudo systemctl restart nginx.service
+```
+
+Verify that NGINX is running:
+
+```bash
+sudo systemctl status nginx.service
+```
+
+## Test
+
+Try to access <https://notebooks-test.gesis.org/binder/>. If everything is working well, you should see something like
+
+![Screenshot of GESIS BinderHub from <https://notebooks-test.gesis.org/binder/>.](img/k8s-test-binderhub.png)
+
+:::{.callout-note}
+
+If some static content is missing, like GESIS logo, verify that
+
+1.  static files are saved in the `/var/www/test/`, and
+2.  the NGINX configuration for the static files is correct:
+
+    ```
+    location /static/ {
+        access_log off;
+        root /var/www/test;
+    }
+    ```
+
+:::
+
+Try to launch a repository by filling the field `GitHub repository name or URL` with `https://github.com/binder-examples/requirements` and clicking in `launch`. Create the container and launch it can take a couple of minutes.
+
+::: {.callout-note}
+
+A collection of repositories is available at <https://github.com/binder-examples>. We recommend to start testing with <https://github.com/binder-examples/requirements>.
+
+:::

@@ -11,6 +11,25 @@ book:
     - part: "General"
       chapters: 
       - where-to-ask-questions.qmd
+      - secret-files.qmd
+      - git-repositories.qmd
+      - personal-access-tokens.qmd
+    - part: "Development Environment"
+      chapters: 
+      - development-environment.qmd
+      - hello-minikube.qmd
+      - local-jupyterhub.qmd
+      - local-binderhub.qmd
+    - part: "Test Environment"
+      chapters:
+      - test-hardware.qmd
+      - test-software.qmd
+      - test-k8s-cluster.qmd
+      - test-k8s-setup.qmd
+      - test-postgresql.qmd
+      - test-binderhub.qmd
+      - test-nginx.qmd
+      - test-clean-up.qmd
     - part: "Production Environment"
       chapters: 
       - production-hardware.qmd

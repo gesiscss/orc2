@@ -1,0 +1,159 @@
+# Clean up
+
+Uninstall GESIS BinderHub:
+
+```bash
+helm uninstall bhub-test --namespace=bhub-test-ns
+```
+
+Drain every node:
+
+```bash
+kubectl drain svko-ilcm04 \
+    --delete-emptydir-data \
+    --force \
+    --ignore-daemonsets
+```
+
+```bash
+kubectl delete node svko-ilcm04
+```
+
+```bash
+kubectl drain svko-css-backup-node \
+    --delete-emptydir-data \
+    --force \
+    --ignore-daemonsets
+```
+
+```bash
+kubectl delete node svko-css-backup-node
+```
+
+And reset Kubernetes in every node:
+
+::: {.panel-tabset}
+
+## Master machine at `194.95.75.20`
+
+```bash
+sudo kubeadm reset
+```
+
+```bash
+sudo rm -rf \
+    /etc/cni/net.d
+```
+
+```bash
+rm -rf ~/.kube/
+```
+
+## Worker machine at `194.95.75.14`
+
+```bash
+sudo kubeadm reset
+```
+
+```bash
+sudo rm -rf \
+    /etc/cni/net.d
+```
+
+```bash
+rm -rf ~/.kube/
+```
+
+:::
+
+Uninstall Kubernetes:
+
+::: {.panel-tabset}
+
+## Master machine at `194.95.75.20`
+
+```bash
+sudo apt-get  -y --allow-change-held-packages purge  \
+    docker \
+    docker-engine \
+    docker.io \
+    containerd \
+    runc \
+    docker-ce \
+    docker-ce-cli \
+    containerd.io \
+    docker-buildx-plugin \
+    docker-compose-plugin \
+    kubelet \
+    kubeadm \
+    kubectl
+```
+
+```bash
+sudo apt-get -y autoremove
+```
+
+```bash
+sudo rm -rf \
+    /etc/docker \
+    /etc/containerd \
+    /etc/kubernetes \
+    /var/lib/kubelet \
+    /var/lib/containerd \
+    /var/lib/docker
+```
+
+## Worker machine at `194.95.75.14`
+
+```bash
+sudo apt-get -y --allow-change-held-packages purge \
+    docker \
+    docker-engine \
+    docker.io \
+    containerd \
+    runc \
+    docker-ce \
+    docker-ce-cli \
+    containerd.io \
+    docker-buildx-plugin \
+    docker-compose-plugin \
+    kubelet \
+    kubeadm \
+    kubectl
+```
+
+```bash
+sudo apt-get -y autoremove
+```
+
+```bash
+sudo rm -rf \
+    /etc/docker \
+    /etc/containerd \
+    /etc/kubernetes \
+    /var/lib/kubelet \
+    /var/lib/containerd \
+    /var/lib/docker
+```
+
+:::
+
+Uninstall PostgreSQL following @sec-postgresql-uninstall.
+
+Reset iptables:
+
+::: {.panel-tabset}
+
+## Master machine at `194.95.75.20`
+
+```bash
+sudo iptables -F
+```
+
+## Worker machine at `194.95.75.14`
+
+```bash
+sudo iptables -F
+```
+
+:::

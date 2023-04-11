@@ -1,0 +1,389 @@
+# Hello minikube
+
+This is a very short introduction to Kubernetes and a glossary is provided at the end of the chapter.
+
+Consider that you already have minikube running on your local machine.
+
+```bash
+minikube status
+```
+
+```
+minikube
+type: Control Plane
+host: Running
+kubelet: Running
+apiserver: Running
+kubeconfig: Configured
+```
+
+::: {.callout-note}
+
+When you start minikube, it should configure `kubectl` to use minikube cluster and `default` namespace. If the configuration fail, you can always use
+
+```bash
+minikube kubectl --
+```
+
+instead of
+
+```bash
+kubectl
+```
+
+:::
+
+::: {.callout-note}
+
+You can visualise the changes in the minikube cluster using the dashboard. From a new terminal:
+
+```bash
+minikube dashboard --url
+```
+
+```
+* Enabling dashboard ...
+  - Using image docker.io/kubernetesui/metrics-scraper:v1.0.8
+  - Using image docker.io/kubernetesui/dashboard:v2.7.0
+* Some dashboard features require the metrics-server addon. To enable all features please run:
+
+	minikube addons enable metrics-server	
+
+
+* Verifying dashboard health ...
+* Launching proxy ...
+* Verifying proxy health ...
+http://127.0.0.1:34183/api/v1/namespaces/kubernetes-dashboard/services/http:kubernetes-dashboard:/proxy/
+```
+
+Open the dashboard by pointing your web browser to <http://127.0.0.1:34183/api/v1/namespaces/kubernetes-dashboard/services/http:kubernetes-dashboard:/proxy/>.
+
+![Screenshot of Kubernetes dashboard.](img/minikube-dashboard-home.png)
+
+:::
+
+Create a new Deployment (Pod and ReplicaSet):
+
+```bash
+kubectl create deployment hello-node \
+    --image=registry.k8s.io/e2e-test-images/agnhost:2.39 \
+    -- /agnhost netexec \
+    --http-port=8080
+```
+
+```
+deployment.apps/hello-node created
+```
+
+![Screenshot of Kubernetes dashboard showing new Deployment.](img/minikube-dashboard-new-deployment.png)
+
+## Accessing Services
+
+There are four types of services in Kubernetes: `ClusterIP`, `NodePort`, `LoadBalancer`, and `ExternalName`. In addition to access the service based on it's type, a service can be accessed using Ingress.
+
+### `ClusterIP`
+
+![Diagram of `ClusterIP` service from <https://medium.com/devops-mojo/kubernetes-service-types-overview-introduction-to-k8s-service-types-what-are-types-of-kubernetes-services-ea6db72c3f8c>.](img/k8s-clusterip.png)
+
+The service is accessible exclusively from inside the cluster or with the use of Ingress.
+
+Create a new `ClusterIP` Service:
+
+```bash
+kubectl expose deployment hello-node --type=ClusterIP --port=8080
+```
+
+```
+service/hello-node exposed
+```
+
+### `NodePort`
+
+![Diagram of `NodePort` service from <https://medium.com/devops-mojo/kubernetes-service-types-overview-introduction-to-k8s-service-types-what-are-types-of-kubernetes-services-ea6db72c3f8c>.](img/k8s-nodeport.png)
+
+The service is accessible using a port **allocated by Kubernetes**.
+
+Create a `NodePort` new Service:
+
+```bash
+kubectl expose deployment hello-node --type=NodePort --port=8080
+```
+
+```
+service/hello-node exposed
+```
+
+::: {.callout-note}
+
+`8080` is the port number inside the cluster.
+
+:::
+
+```bash
+minikube service list
+```
+
+```
+|-------------|------------|--------------|---------------------------|
+|  NAMESPACE  |    NAME    | TARGET PORT  |            URL            |
+|-------------|------------|--------------|---------------------------|
+| default     | hello-node |         8080 | http://192.168.49.2:31039 |
+|-------------|------------|--------------|---------------------------|
+```
+
+Open the Service by pointing your web browser to <http://192.168.49.2:31039>.
+
+::: {.callout-important}
+
+minikube IP address is not reachable directly when using the Docker driver on macOS, Windows, or Windows Subsystem for Linux (WSL). A tunnel from `localhost` to minikube IP must be created using a separate terminal window to access the services:
+
+```bash
+minikube service hello-node --url
+```
+
+```
+http://127.0.0.1:41023
+```
+
+Open the Service by pointing your web browser to <http://127.0.0.1:41023>.
+
+:::
+
+### `LoadBalancer`
+
+![Diagram of `LoadBalancer` service from <https://medium.com/devops-mojo/kubernetes-service-types-overview-introduction-to-k8s-service-types-what-are-types-of-kubernetes-services-ea6db72c3f8c>.](img/k8s-loadbalancer.png)
+
+This is typically used with cloud providers and the creation of the load balancer is done by the cloud provider. The load balancer will provide external IP address to the service. When using minikube, a load balancer mock is created with
+
+```bash
+minikube tunnel
+```
+
+`minikube tunnel` must be run in a separate terminal window to keep the tunnel running.
+
+Create a new `LoadBalancer` Service:
+
+```bash
+kubectl expose deployment hello-node --type=LoadBalancer --port=8080
+```
+
+```
+service/hello-node exposed
+```
+
+Open the Service by pointing your web browser to <http://localhost:8080>.
+
+### `ExternalName`
+
+![Diagram of `ExternalName` service from <https://medium.com/devops-mojo/kubernetes-service-types-overview-introduction-to-k8s-service-types-what-are-types-of-kubernetes-services-ea6db72c3f8c>.](img/k8s-externalname.png)
+
+The service is accessed based on it's DNS name and requires the configuration of the cluster DNS. More details at https://kubernetes.io/docs/concepts/services-networking/service/#externalname.
+
+### Ingress
+
+Ingress only provide external access to HTTP and HTTPS services. Read more at <https://kubernetes.io/docs/concepts/services-networking/ingress/>.
+
+## Debugging
+
+Check that all pods are running:
+
+```bash
+kubectl get pods -A
+```
+
+```
+NAMESPACE     NAME                               READY   STATUS    RESTARTS      AGE
+default       hello-node-7b87cd5f68-7jcmv        1/1     Running   0             53s
+kube-system   coredns-787d4945fb-ds2bn           1/1     Running   0             12m
+kube-system   etcd-minikube                      1/1     Running   0             13m
+kube-system   kube-apiserver-minikube            1/1     Running   0             13m
+kube-system   kube-controller-manager-minikube   1/1     Running   0             13m
+kube-system   kube-proxy-ngmvs                   1/1     Running   0             12m
+kube-system   kube-scheduler-minikube            1/1     Running   0             13m
+kube-system   storage-provisioner                1/1     Running   1 (12m ago)   13m
+```
+
+Check that all services are running:
+
+```bash
+kubectl get services -A
+```
+
+```
+NAMESPACE     NAME         TYPE           CLUSTER-IP     EXTERNAL-IP   PORT(S)                  AGE
+default       hello-node   LoadBalancer   10.103.36.91   <pending>     8080:32161/TCP           9s
+default       kubernetes   ClusterIP      10.96.0.1      <none>        443/TCP                  15m
+kube-system   kube-dns     ClusterIP      10.96.0.10     <none>        53/UDP,53/TCP,9153/TCP   14m
+```
+
+Retrieve description of pod and service:
+
+```bash
+kubectl describe pod hello-node
+```
+
+```
+Name:             hello-node-7b87cd5f68-7jcmv
+Namespace:        default
+Priority:         0
+Service Account:  default
+Node:             minikube/192.168.49.2
+Start Time:       Wed, 08 Mar 2023 08:40:53 +0100
+Labels:           app=hello-node
+                  pod-template-hash=7b87cd5f68
+Annotations:      <none>
+Status:           Running
+IP:               10.244.0.3
+IPs:
+  IP:           10.244.0.3
+Controlled By:  ReplicaSet/hello-node-7b87cd5f68
+Containers:
+  agnhost:
+    Container ID:  docker://00e9685398f108edc14b0cca98d0da7729726fee248893bfb61690dec6352aef
+    Image:         registry.k8s.io/e2e-test-images/agnhost:2.39
+    Image ID:      docker-pullable://registry.k8s.io/e2e-test-images/agnhost@sha256:7e8bdd271312fd25fc5ff5a8f04727be84044eb3d7d8d03611972a6752e2e11e
+    Port:          <none>
+    Host Port:     <none>
+    Command:
+      /agnhost
+      netexec
+      --http-port=8080
+    State:          Running
+      Started:      Wed, 08 Mar 2023 08:40:59 +0100
+    Ready:          True
+    Restart Count:  0
+    Environment:    <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-bs8bh (ro)
+Conditions:
+  Type              Status
+  Initialized       True 
+  Ready             True 
+  ContainersReady   True 
+  PodScheduled      True 
+Volumes:
+  kube-api-access-bs8bh:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    ConfigMapOptional:       <nil>
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age    From               Message
+  ----    ------     ----   ----               -------
+  Normal  Scheduled  4m53s  default-scheduler  Successfully assigned default/hello-node-7b87cd5f68-7jcmv to minikube
+  Normal  Pulling    4m52s  kubelet            Pulling image "registry.k8s.io/e2e-test-images/agnhost:2.39"
+  Normal  Pulled     4m47s  kubelet            Successfully pulled image "registry.k8s.io/e2e-test-images/agnhost:2.39" in 4.875796238s (4.875814953s including waiting)
+  Normal  Created    4m47s  kubelet            Created container agnhost
+  Normal  Started    4m47s  kubelet            Started container agnhost
+```
+
+```bash
+kubectl describe service hello-node
+```
+
+```
+Name:                     hello-node
+Namespace:                default
+Labels:                   app=hello-node
+Annotations:              <none>
+Selector:                 app=hello-node
+Type:                     LoadBalancer
+IP Family Policy:         SingleStack
+IP Families:              IPv4
+IP:                       10.103.36.91
+IPs:                      10.103.36.91
+Port:                     <unset>  8080/TCP
+TargetPort:               8080/TCP
+NodePort:                 <unset>  32161/TCP
+Endpoints:                10.244.0.3:8080
+Session Affinity:         None
+External Traffic Policy:  Cluster
+Events:                   <none>
+```
+
+Retrieve log from a pod:
+
+::: {.callout-note}
+
+You **must** provide the unique name of the pod.
+
+:::
+
+```bash
+kubectl logs hello-node-7b87cd5f68-7jcmv
+```
+
+```
+I0308 07:40:59.271836       1 log.go:195] Started HTTP server on port 8080
+I0308 07:40:59.272048       1 log.go:195] Started UDP server on port  8081
+```
+
+Run a command from inside the pod:
+
+::: {.callout-note}
+
+You **must** provide the unique name of the pod.
+
+:::
+
+```bash
+kubectl exec hello-node-7b87cd5f68-7jcmv -- uname -a
+```
+
+```
+Linux hello-node-7b87cd5f68-7jcmv 5.15.90.1-microsoft-standard-WSL2 #1 SMP Fri Jan 27 02:56:13 UTC 2023 x86_64 Linux
+```
+
+## Clean up
+
+Now you can clean up the resources:
+
+```bash
+kubectl delete service hello-node
+```
+
+```
+service "hello-node" deleted
+```
+
+```bash
+kubectl delete deployment hello-node
+```
+
+```
+deployment.apps "hello-node" deleted
+```
+
+```bash
+minikube delete
+```
+
+```
+* Deleting "minikube" in docker ...
+* Deleting container "minikube" ...
+* Removing /home/raniere/.minikube/machines/minikube ...
+* Removed all traces of the "minikube" cluster.
+```
+
+## Glossary
+
+Container
+
+: virtual operating system
+
+Pod
+
+: group of one or more Containers, tied together for the purposes of administration and networking.
+
+Deployment
+
+: checks on the health of your Pod and restarts the Pod's Container if it terminates
+
+Service
+
+: exposition of Pod to IP address external to the Kubernetes cluster

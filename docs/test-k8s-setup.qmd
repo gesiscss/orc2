@@ -1,0 +1,675 @@
+# Setup Kubernetes
+
+## Disable swap
+
+::: {.panel-tabset}
+
+## Master machine at `194.95.75.20`
+
+```bash
+sudo swapoff -a
+```
+
+And comment any swap matching reference found in `/etc/fstab`.
+
+## Worker machine at `194.95.75.14`
+
+```bash
+sudo swapoff -a
+```
+
+And comment any swap matching reference found in `/etc/fstab`.
+
+:::
+
+## Disable Firewall
+
+::: {.panel-tabset}
+
+## Master machine at `194.95.75.20`
+
+```bash
+sudo ufw disable
+```
+
+```
+Firewall stopped and disabled on system startup
+```
+
+And confirm that firewall is disable:
+
+```bash
+sudo ufw status
+```
+
+```
+Status: inactive
+```
+
+## Worker machine at `194.95.75.14`
+
+```bash
+sudo ufw disable
+```
+
+```
+Firewall stopped and disabled on system startup
+```
+
+And confirm that firewall is disable:
+
+```bash
+sudo ufw status
+```
+
+```
+Status: inactive
+```
+
+:::
+
+## Install Kubernetes
+
+:::{.callout-note}
+
+Detailed instructions at <https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/>.
+
+:::
+
+::: {.panel-tabset}
+
+## Master machine at `194.95.75.20`
+
+```bash
+sudo apt-get update
+```
+
+```bash
+sudo apt-get install -y \
+    apt-transport-https \
+    ca-certificates \
+    curl
+```
+
+```bash
+sudo curl -fsSLo /etc/apt/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
+```
+
+```bash
+echo "deb [signed-by=/etc/apt/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+```
+
+```bash
+sudo apt-get update
+```
+
+```bash
+sudo apt-get install -y \
+    kubelet \
+    kubeadm \
+    kubectl
+```
+
+```bash
+sudo apt-mark hold \
+    kubelet \
+    kubeadm \
+    kubectl
+```
+
+## Worker machine at `194.95.75.14`
+
+```bash
+sudo apt-get update
+```
+
+```bash
+sudo apt-get install -y \
+    apt-transport-https \
+    ca-certificates \
+    curl
+```
+
+```bash
+sudo curl -fsSLo /etc/apt/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
+```
+
+```bash
+echo "deb [signed-by=/etc/apt/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+```
+
+```bash
+sudo apt-get update
+```
+
+```bash
+sudo apt-get install -y \
+    kubelet \
+    kubeadm \
+    kubectl
+```
+
+```bash
+sudo apt-mark hold \
+    kubelet \
+    kubeadm \
+    kubectl
+```
+
+:::
+
+Record the installed Kubernetes version:
+
+```bash
+kubectl version
+```
+
+## Setup bridge traffic
+
+::: {.panel-tabset}
+
+## Master machine at `194.95.75.20`
+
+```bash
+sudo modprobe overlay
+```
+
+```bash
+sudo modprobe br_netfilter
+```
+
+```bash
+sudo tee /etc/sysctl.d/kubernetes.conf<<EOF
+net.bridge.bridge-nf-call-ip6tables = 1
+net.bridge.bridge-nf-call-iptables = 1
+net.ipv4.ip_forward = 1
+EOF
+```
+
+```bash
+sudo sysctl --system
+```
+
+```bash
+cat <<EOF | sudo tee /etc/modules-load.d/containerd.conf
+overlay
+br_netfilter
+EOF
+```
+
+```bash
+sudo modprobe overlay
+```
+
+```bash
+sudo modprobe br_netfilter
+```
+
+```bash
+cat <<EOF | sudo tee /etc/sysctl.d/99-kubernetes-cri.conf
+net.bridge.bridge-nf-call-iptables  = 1
+net.ipv4.ip_forward                 = 1
+net.bridge.bridge-nf-call-ip6tables = 1
+EOF
+```
+
+```bash
+sudo sysctl --system
+```
+
+## Worker machine at `194.95.75.14`
+
+```bash
+sudo modprobe overlay
+```
+
+```bash
+sudo modprobe br_netfilter
+```
+
+```bash
+sudo tee /etc/sysctl.d/kubernetes.conf<<EOF
+net.bridge.bridge-nf-call-ip6tables = 1
+net.bridge.bridge-nf-call-iptables = 1
+net.ipv4.ip_forward = 1
+EOF
+```
+
+```bash
+sudo sysctl --system
+```
+
+```bash
+cat <<EOF | sudo tee /etc/modules-load.d/containerd.conf
+overlay
+br_netfilter
+EOF
+```
+
+```bash
+sudo modprobe overlay
+```
+
+```bash
+sudo modprobe br_netfilter
+```
+
+```bash
+cat <<EOF | sudo tee /etc/sysctl.d/99-kubernetes-cri.conf
+net.bridge.bridge-nf-call-iptables  = 1
+net.ipv4.ip_forward                 = 1
+net.bridge.bridge-nf-call-ip6tables = 1
+EOF
+```
+
+```bash
+sudo sysctl --system
+```
+
+:::
+
+## Install containerd
+
+:::{.callout-note}
+
+For updated intructions, visit <https://docs.docker.com/engine/install/ubuntu/>.
+
+:::
+
+::: {.panel-tabset}
+
+## Master machine at `194.95.75.20`
+
+```bash
+sudo apt-get remove \
+    docker \
+    docker-engine \
+    docker.io \
+    containerd \
+    runc
+```
+
+```bash
+sudo mkdir -m 0755 -p /etc/apt/keyrings
+```
+
+```bash
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+```
+
+```bash
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+```
+
+```bash
+sudo apt-get update
+```
+
+```bash
+sudo apt-get install -y \
+    containerd.io
+```
+
+```bash
+sudo apt-mark hold \
+    containerd.io
+```
+
+```bash
+sudo mkdir -p /etc/containerd
+```
+
+```bash
+containerd config default | sudo tee /etc/containerd/config.toml
+```
+
+Change `SystemdCgroup = false` to `SystemdCgroup = true` in `/etc/containerd/config.toml`.
+
+```bash
+sudo systemctl restart containerd
+```
+
+```bash
+sudo systemctl enable containerd
+```
+
+## Worker machine at `194.95.75.14`
+
+```bash
+sudo apt-get remove \
+    docker \
+    docker-engine \
+    docker.io \
+    containerd \
+    runc
+```
+
+```bash
+sudo mkdir -m 0755 -p /etc/apt/keyrings
+```
+
+```bash
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+```
+
+```bash
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+```
+
+```bash
+sudo apt-get update
+```
+
+```bash
+sudo apt-get install -y \
+    containerd.io
+```
+
+```bash
+sudo apt-mark hold \
+    containerd.io
+```
+
+```bash
+sudo mkdir -p /etc/containerd
+```
+
+```bash
+containerd config default | sudo tee /etc/containerd/config.toml
+```
+
+Change `SystemdCgroup = false` to `SystemdCgroup = true` in `/etc/containerd/config.toml`.
+
+```bash
+sudo systemctl restart containerd
+```
+
+```bash
+sudo systemctl enable containerd
+```
+
+:::
+
+## Pull Kubernetes images
+
+Only on the master machine at `194.95.75.20`:
+
+```bash
+sudo kubeadm config images pull --cri-socket unix:///run/containerd/containerd.sock
+```
+
+## Create Kubernetes cluster
+
+Only on the master machine at `194.95.75.20`:
+
+::: {.callout-note}
+
+`--apiserver-advertise-address` is the IP address of the master machine (`194.95.75.20`).
+
+:::
+
+```bash
+kubeadm init \
+    --pod-network-cidr=10.244.0.0/16 \
+    --upload-certs \
+    --control-plane-endpoint=194.95.75.20 \
+    --cri-socket unix:///run/containerd/containerd.sock
+```
+
+```
+[init] Using Kubernetes version: v1.26.2
+[preflight] Running pre-flight checks
+[preflight] Pulling images required for setting up a Kubernetes cluster
+[preflight] This might take a minute or two, depending on the speed of your internet connection
+[preflight] You can also perform this action in beforehand using 'kubeadm config images pull'
+[certs] Using certificateDir folder "/etc/kubernetes/pki"
+[certs] Generating "ca" certificate and key
+[certs] Generating "apiserver" certificate and key
+[certs] apiserver serving cert is signed for DNS names [kubernetes kubernetes.default kubernetes.default.svc kubernetes.default.svc.cluster.local svko-css-backup-node] and IPs [10.96.0.1 194.95.75.20]
+[certs] Generating "apiserver-kubelet-client" certificate and key
+[certs] Generating "front-proxy-ca" certificate and key
+[certs] Generating "front-proxy-client" certificate and key
+[certs] Generating "etcd/ca" certificate and key
+[certs] Generating "etcd/server" certificate and key
+[certs] etcd/server serving cert is signed for DNS names [localhost svko-css-backup-node] and IPs [194.95.75.20 127.0.0.1 ::1]
+[certs] Generating "etcd/peer" certificate and key
+[certs] etcd/peer serving cert is signed for DNS names [localhost svko-css-backup-node] and IPs [194.95.75.20 127.0.0.1 ::1]
+[certs] Generating "etcd/healthcheck-client" certificate and key
+[certs] Generating "apiserver-etcd-client" certificate and key
+[certs] Generating "sa" key and public key
+[kubeconfig] Using kubeconfig folder "/etc/kubernetes"
+[kubeconfig] Writing "admin.conf" kubeconfig file
+[kubeconfig] Writing "kubelet.conf" kubeconfig file
+[kubeconfig] Writing "controller-manager.conf" kubeconfig file
+[kubeconfig] Writing "scheduler.conf" kubeconfig file
+[kubelet-start] Writing kubelet environment file with flags to file "/var/lib/kubelet/kubeadm-flags.env"
+[kubelet-start] Writing kubelet configuration to file "/var/lib/kubelet/config.yaml"
+[kubelet-start] Starting the kubelet
+[control-plane] Using manifest folder "/etc/kubernetes/manifests"
+[control-plane] Creating static Pod manifest for "kube-apiserver"
+[control-plane] Creating static Pod manifest for "kube-controller-manager"
+[control-plane] Creating static Pod manifest for "kube-scheduler"
+[etcd] Creating static Pod manifest for local etcd in "/etc/kubernetes/manifests"
+[wait-control-plane] Waiting for the kubelet to boot up the control plane as static Pods from directory "/etc/kubernetes/manifests". This can take up to 4m0s
+[apiclient] All control plane components are healthy after 5.002454 seconds
+[upload-config] Storing the configuration used in ConfigMap "kubeadm-config" in the "kube-system" Namespace
+[kubelet] Creating a ConfigMap "kubelet-config" in namespace kube-system with the configuration for the kubelets in the cluster
+[upload-certs] Skipping phase. Please see --upload-certs
+[mark-control-plane] Marking the node svko-css-backup-node as control-plane by adding the labels: [node-role.kubernetes.io/control-plane node.kubernetes.io/exclude-from-external-load-balancers]
+[mark-control-plane] Marking the node svko-css-backup-node as control-plane by adding the taints [node-role.kubernetes.io/control-plane:NoSchedule]
+[bootstrap-token] Using token: r14pk6.c06swpnxfbq6kdg4
+[bootstrap-token] Configuring bootstrap tokens, cluster-info ConfigMap, RBAC Roles
+[bootstrap-token] Configured RBAC rules to allow Node Bootstrap tokens to get nodes
+[bootstrap-token] Configured RBAC rules to allow Node Bootstrap tokens to post CSRs in order for nodes to get long term certificate credentials
+[bootstrap-token] Configured RBAC rules to allow the csrapprover controller automatically approve CSRs from a Node Bootstrap Token
+[bootstrap-token] Configured RBAC rules to allow certificate rotation for all node client certificates in the cluster
+[bootstrap-token] Creating the "cluster-info" ConfigMap in the "kube-public" namespace
+[kubelet-finalize] Updating "/etc/kubernetes/kubelet.conf" to point to a rotatable kubelet client certificate and key
+[addons] Applied essential addon: CoreDNS
+[addons] Applied essential addon: kube-proxy
+
+Your Kubernetes control-plane has initialized successfully!
+
+To start using your cluster, you need to run the following as a regular user:
+
+  mkdir -p $HOME/.kube
+  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+  sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+Alternatively, if you are the root user, you can run:
+
+  export KUBECONFIG=/etc/kubernetes/admin.conf
+
+You should now deploy a pod network to the cluster.
+Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
+  https://kubernetes.io/docs/concepts/cluster-administration/addons/
+
+Then you can join any number of worker nodes by running the following on each as root:
+
+kubeadm join 194.95.75.20:6443 --token my-secret-token --discovery-token-ca-cert-hash sha256:my-secret-hash
+```
+
+Create regular user configuration for Kubernetes:
+
+```bash
+mkdir -p $HOME/.kube
+```
+
+```bash
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+```
+
+```bash
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+```
+
+```bash
+export KUBECONFIG=$HOME/.kube/config
+```
+
+Check that Kubernetes is running:
+
+```bash
+kubectl get nodes
+```
+
+```
+NAME                   STATUS     ROLES           AGE   VERSION
+svko-css-backup-node   NotReady   control-plane   48s   v1.26.3
+```
+
+The Kubernetes node status is `NotReady` because it is missing the pod network.
+
+## Install Container Network Interface (CNI) Flannel
+
+::: {.callout-note}
+
+We are using Flannel. Other Container Network Interface (CNI) are listed at <https://kubernetes.io/docs/concepts/cluster-administration/addons/#networking-and-network-policy>.
+
+:::
+
+Only on the master machine at `194.95.75.20`:
+
+```bash
+kubectl apply -f https://github.com/coreos/flannel/raw/master/Documentation/kube-flannel.yml
+```
+
+Check that Kubernetes is running:
+
+```bash
+kubectl get nodes
+```
+
+```
+NAME                   STATUS   ROLES           AGE   VERSION
+svko-css-backup-node   Ready    control-plane   27m   v1.26.3
+```
+
+```bash
+kubectl get pods -A
+```
+
+```
+NAMESPACE      NAME                                           READY   STATUS    RESTARTS   AGE
+kube-flannel   kube-flannel-ds-f7xc9                          1/1     Running   0          22m
+kube-system    coredns-787d4945fb-c6d6r                       1/1     Running   0          27m
+kube-system    coredns-787d4945fb-frr5l                       1/1     Running   0          27m
+kube-system    etcd-svko-css-backup-node                      1/1     Running   864        27m
+kube-system    kube-apiserver-svko-css-backup-node            1/1     Running   803        27m
+kube-system    kube-controller-manager-svko-css-backup-node   1/1     Running   859        27m
+kube-system    kube-proxy-4f9s6                               1/1     Running   0          27m
+kube-system    kube-scheduler-svko-css-backup-node            1/1     Running   839        27m
+```
+
+## Join the Worker Nodes
+
+It is time to connect the worker machine (`194.95.75.14`) to the master machine (`194.95.75.20`).
+
+In the master machine, retrieve the join command:
+
+```bash
+kubeadm token create --print-join-command
+```
+
+```
+kubeadm join 194.95.75.20:6443 --token my-secret-token --discovery-token-ca-cert-hash sha256:my-secret-hash
+```
+
+::: {.callout-important}
+
+Clean old Kubernetes configuration in the worker machine:
+
+```bash
+sudo kubeadm reset
+```
+
+```bash
+rm -rf ~/.kube/config
+```
+
+:::
+
+In the worker machine, use the command provided before by `kubeadm token create --print-join-command`:
+
+```bash
+sudo kubeadm join 194.95.75.20:6443 --token my-secret-token --discovery-token-ca-cert-hash sha256:my-secret-hash
+```
+
+```
+[preflight] Running pre-flight checks
+[preflight] Reading configuration from the cluster...
+[preflight] FYI: You can look at this config file with 'kubectl -n kube-system get cm kubeadm-config -o yaml'
+[kubelet-start] Writing kubelet configuration to file "/var/lib/kubelet/config.yaml"
+[kubelet-start] Writing kubelet environment file with flags to file "/var/lib/kubelet/kubeadm-flags.env"
+[kubelet-start] Starting the kubelet
+[kubelet-start] Waiting for the kubelet to perform the TLS Bootstrap...
+
+This node has joined the cluster:
+* Certificate signing request was sent to apiserver and a response was received.
+* The Kubelet was informed of the new secure connection details.
+
+Run 'kubectl get nodes' on the control-plane to see this node join the cluster.
+```
+
+Now, back to the master machine and verify the node was added successfully:
+
+```bash
+kubectl get nodes
+```
+
+```
+NAME                   STATUS   ROLES           AGE   VERSION
+svko-css-backup-node   Ready    control-plane   19h   v1.26.2
+svko-ilcm04            Ready    <none>          49m   v1.26.2
+```
+
+## Node Affinity
+
+:::{.callout-note}
+
+More details on Kubernetes documentat at <https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/>.
+
+:::
+
+:::{.callout-important}
+
+For node affinity to work properly, the labels should exist in the node and in the pod. BinderHub uses `build_node_selector` and JupyterHub uses `nodeSelector`.
+
+:::
+
+We use the following label schema:
+
+Key         Value       Description           Status
+----------- ----------- --------------------- -------
+base        worker      Database available    Legacy
+userbuild   worker      Docker available      Legacy
+database    postgresql  PostgreSQL available  Proposal
+binder_user all         Can be used by anyone Proposal
+
+Label the nodes to ensure that pods run in the desired node:
+
+```bash
+kubectl label nodes svko-css-backup-node database=postgresql
+```
+
+```bash
+kubectl label nodes svko-css-backup-node base=worker
+```
+
+```bash
+kubectl label nodes svko-ilcm04 binder_user=all
+```
+
+```bash
+kubectl label nodes svko-ilcm04 userbuild=worker
+```
+
+Check that nodes were label correctly:
+
+```bash
+kubectl get nodes --show-labels
+```

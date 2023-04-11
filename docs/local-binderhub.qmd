@@ -1,0 +1,277 @@
+# Deploy a BinderHub Locally
+
+::: {.callout-note}
+
+BinderHub documentation at <https://binderhub.readthedocs.io>.
+
+:::
+
+```bash
+mkdir binderhub
+```
+
+```bash
+cd binderhub
+```
+
+Create the helm configuration file (`config.yaml`):
+
+```yaml
+config:
+  BinderHub:
+    use_registry: false
+```
+
+Make Helm aware of the JupyterHub Helm chart repository:
+
+```bash
+helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/
+```
+
+```
+"jupyterhub" has been added to your repositories
+```
+
+```bash
+helm repo update
+```
+
+```
+Hang tight while we grab the latest from your chart repositories...
+...Successfully got an update from the "jupyterhub" chart repository
+Update Complete. ⎈Happy Helming!⎈
+```
+
+Now, install the chart configured by `config.yaml`:
+
+::: {.callout-note}
+
+`--version` refers to the version of the Helm chart, **not the version of BinderHub**, available at <https://jupyterhub.github.io/helm-chart/>.
+
+:::
+
+```bash
+helm upgrade --cleanup-on-fail \
+    --install my-local-binderhub jupyterhub/binderhub \
+    --version=1.0.0-0.dev.git.3025.h276be90 \
+    --namespace=binderhub \
+    --create-namespace \
+    --values config.yaml
+```
+
+```
+Release "my-local-binderhub" does not exist. Installing it now.
+NAME: my-local-binderhub
+LAST DEPLOYED: Tue Mar  7 13:51:48 2023
+NAMESPACE: binderhub
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
+NOTES:
+1. Get the application URL by running these commands:
+     NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+           You can watch the status of by running 'kubectl get svc -w my-local-binderhub-binderhub'
+  export SERVICE_IP=$(kubectl get svc --namespace binderhub my-local-binderhub-binderhub -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+  echo http://$SERVICE_IP:
+```
+
+Check the pods:
+
+```bash
+kubectl --namespace=binderhub get pod
+```
+
+```
+NAME                                     READY   STATUS              RESTARTS   AGE
+binder-78c9d6678d-wzc9k                  0/1     ContainerCreating   0          14s
+hub-fd755b86f-qj6qq                      0/1     ContainerCreating   0          14s
+my-local-binderhub-image-cleaner-t9zc9   1/1     Running             0          15s
+proxy-5dcd488d4d-bj7st                   0/1     ContainerCreating   0          14s
+user-scheduler-84dfbd89c7-x45s7          0/1     ContainerCreating   0          14s
+user-scheduler-84dfbd89c7-x9tt8          0/1     ContainerCreating   0          14s
+```
+
+and the services:
+
+```bash
+kubectl --namespace=binderhub get service
+```
+
+```
+NAME           TYPE           CLUSTER-IP       EXTERNAL-IP      PORT(S)        AGE
+binder         LoadBalancer   10.96.98.46      10.96.98.46      80:30443/TCP   12h
+hub            ClusterIP      10.102.200.73    <none>           8081/TCP       12h
+proxy-api      ClusterIP      10.96.77.245     <none>           8001/TCP       12h
+proxy-public   LoadBalancer   10.106.185.193   10.106.185.193   80:32040/TCP   12h
+```
+
+::: {.callout-note}
+
+If the external IP is pending, verify that you are running `minikube tunnel`.
+
+:::
+
+::: {.callout-note}
+
+BinderHub Helm chart installs the JupyterHub Helm chart as a dependency.
+
+:::
+
+Open BinderHub by pointing your web browser to `binder`'s external IP, <http://10.96.98.46> in the example.
+
+![Screenshot of BinderHub's homescreen.](img/minikube-binder-home.png)
+
+## Expanding Settings
+
+::: {.callout-note}
+
+We will use [Docker Hub](https://hub.docker.com/) as container image registry here. Check [Zero to BinderHub](https://binderhub.readthedocs.io/en/latest/zero-to-binderhub/index.html) for other container image registries.
+
+:::
+
+Create `secret.yaml` and include
+
+```yaml
+registry:
+  username: <docker-id>
+  password: <password>
+```
+
+Change `config.yaml` to
+
+```yaml
+config:
+  BinderHub:
+    use_registry: true
+    image_prefix: <docker-id>/<prefix>-
+    hub_url: http://<IP-address>
+```
+
+::: {.callout-note}
+
+`hub_url` should be the external IP address of JupyterHub assigned by the load balancer.
+
+If you are using minikube on GNU/Linux, use the external IP address of the `proxy-public` service reported by
+
+```bash
+kubectl get services -n binderhub proxy-public
+```
+
+```
+NAME           TYPE           CLUSTER-IP       EXTERNAL-IP   PORT(S)        AGE
+proxy-public   LoadBalancer   10.106.185.193   10.106.185.193   80:32040/TCP   12h
+```
+
+If you are using minikube on on macOS, Windows, or Windows Subsystem for Linux (WSL), use the cluster IP address of the `proxy-public` service reported by
+
+```bash
+kubectl get services -n binderhub proxy-public
+```
+
+```
+NAME           TYPE           CLUSTER-IP       EXTERNAL-IP   PORT(S)        AGE
+proxy-public   LoadBalancer   10.103.171.165   <pending>     80:30435/TCP   35m
+```
+
+:::
+
+::: {.callout-important}
+
+minikube IP address is not reachable directly when using the Docker driver on macOS, Windows, or Windows Subsystem for Linux (WSL). This will create some limitations when testing. A workaround is to use `NodePort`.
+
+```bash
+minikube service binder -n binderhub --url
+```
+
+```
+http://127.0.0.1:41681
+```
+
+```bash
+minikube service proxy-public -n binderhub --url
+```
+
+```
+http://127.0.0.1:36543
+```
+
+:::
+
+Restart the cluster:
+
+```bash
+helm upgrade --cleanup-on-fail \
+    --install my-local-binderhub jupyterhub/binderhub \
+    --version=1.0.0-0.dev.git.3025.h276be90 \
+    --namespace=binderhub \
+    --create-namespace \
+    --values secret.yaml \
+    --values config.yaml
+```
+
+## Testing
+
+::: {.callout-note}
+
+A collection of repositories is available at <https://github.com/binder-examples>. We recommend to start testing with <https://github.com/binder-examples/requirements>.
+
+:::
+
+Fill the field `GitHub repository name or URL` with `https://github.com/binder-examples/requirements` and click in `launch`. Create the container and launch it can take a couple of minutes. Verify that BinderHub started creating the container with
+
+```bash
+kubectl logs -n binderhub -f binder-58567cb8ff-hcj8g
+```
+
+```
+Loading /etc/binderhub/config/values.yaml
+[BinderHub] WARNING | BinderHub.build_node_selector is deprecated, use KubernetesBuildExecutor.node_selector
+[W 230313 11:38:11 app:680] Generating random build token secret. Set BinderHub.build_token_secret to avoid this warning.
+[I 230313 11:38:11 app:1035] BinderHub starting on port 8585
+[I 230313 11:38:38 log:135] 200 GET / (anonymous@10.244.0.1) 14.62ms
+[I 230313 11:38:39 log:135] 200 GET /_config (anonymous@10.244.0.1) 0.35ms
+[I 230313 11:39:16 registry:114] Loading docker config /root/.docker/config.json
+[I 230313 11:39:17 launcher:197] Creating user binder-examples-requirements-7xfkok07 for image rgaiacsgesis/orc-binder-2dexamples-2drequirements-55ab5c:50533eb470ee6c24e872043d30b2fee463d6943f
+[I 230313 11:39:17 launcher:257] Starting server for user binder-examples-requirements-7xfkok07 with image rgaiacsgesis/orc-binder-2dexamples-2drequirements-55ab5c:50533eb470ee6c24e872043d30b2fee463d6943f
+[I 230313 11:40:00 builder:701] Launched https://github.com/binder-examples/requirements in 44s
+[I 230313 11:40:00 log:135] 200 GET /build/gh/binder-examples/requirements/master (anonymous@10.244.0.1) 54999.45ms
+```
+
+Once the container is launch, BinderHub will redirect the user to the running instance of the container using the valeu of `hub_url`.
+
+![Screenshot of JupyterLab's homescreen after succesful redirect by BinderHub.](img/minikube-jupyterhub-lab.png)
+
+::: {.callout-important}
+
+minikube IP address is not reachable directly when using the Docker driver on macOS, Windows, or Windows Subsystem for Linux (WSL). This will make the redirect fail. A workaround is to replace the cluster IP address in the web browser with the node port of JupyterHub retrieved before with `minikube service proxy-public -n binderhub --url`.
+
+:::
+
+## Clean up
+
+Now you can clean up the resources.
+
+First, stop all servers and shut down JupyterHub using the admin panel at <http://127.0.0.1/hub/admin/>.
+
+![Screenshot of JupyterHub admin panel.](img/minikube-jupyterhub-admin.png)
+
+After stop all servers and shut down JupyterHub, you can uninstall JupyterHub.
+
+```bash
+helm uninstall my-local-binderhub --namespace binderhub
+```
+
+```
+release "my-local-binderhub" uninstalled
+```
+
+```bash
+minikube delete
+```
+
+```
+* Deleting "minikube" in docker ...
+* Deleting container "minikube" ...
+* Removing /home/raniere/.minikube/machines/minikube ...
+* Removed all traces of the "minikube" cluster.
+```

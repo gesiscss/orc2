@@ -1,0 +1,242 @@
+# Deploy a JupyterHub Locally
+
+::: {.callout-note}
+
+JupyterHub documentation at <https://jupyterhub.readthedocs.io>.
+
+:::
+
+::: {.callout-note}
+
+Awesome "Zero to JupyterHub with Kubernetes" tutorial at <https://zero-to-jupyterhub.readthedocs.io>.
+
+:::
+
+```bash
+mkdir jupyterhub
+```
+
+```bash
+cd jupyterhub
+```
+
+Create the helm configuration file (`config.yaml`):
+
+```yaml
+# This file can update the JupyterHub Helm chart's default configuration values.
+#
+# For reference see the configuration reference and default values, but make
+# sure to refer to the Helm chart version of interest to you!
+#
+# Introduction to YAML:     https://www.youtube.com/watch?v=cdLNKUoMc6c
+# Chart config reference:   https://zero-to-jupyterhub.readthedocs.io/en/stable/resources/reference.html
+# Chart default values:     https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/HEAD/jupyterhub/values.yaml
+# Available chart versions: https://jupyterhub.github.io/helm-chart/
+#
+```
+
+Make Helm aware of the JupyterHub Helm chart repository:
+
+```bash
+helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/
+```
+
+```
+"jupyterhub" has been added to your repositories
+```
+
+```bash
+helm repo update
+```
+
+```
+Hang tight while we grab the latest from your chart repositories...
+...Successfully got an update from the "jupyterhub" chart repository
+Update Complete. ⎈Happy Helming!⎈
+```
+
+Now, install the chart configured by `config.yaml`:
+
+::: {.callout-note}
+
+`--version` refers to the version of the Helm chart, **not the version of JupyterHub**, available at <https://jupyterhub.github.io/helm-chart/>.
+
+:::
+
+```bash
+helm upgrade --cleanup-on-fail \
+  --install my-local-jupyterhub jupyterhub/jupyterhub \
+  --namespace jupyterhub \
+  --create-namespace \
+  --version=2.0.0 \
+  --values config.yaml
+```
+
+```
+Release "my-local-jupyterhub" does not exist. Installing it now.
+NAME: my-local-jupyterhub
+LAST DEPLOYED: Tue Mar  7 08:36:58 2023
+NAMESPACE: jupyterhub
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
+NOTES:
+.      __                          __                  __  __          __
+      / / __  __  ____    __  __  / /_  ___    _____  / / / / __  __  / /_
+ __  / / / / / / / __ \  / / / / / __/ / _ \  / ___/ / /_/ / / / / / / __ \
+/ /_/ / / /_/ / / /_/ / / /_/ / / /_  /  __/ / /    / __  / / /_/ / / /_/ /
+\____/  \__,_/ / .___/  \__, /  \__/  \___/ /_/    /_/ /_/  \__,_/ /_.___/
+              /_/      /____/
+
+       You have successfully installed the official JupyterHub Helm chart!
+
+### Installation info
+
+  - Kubernetes namespace: jupyterhub
+  - Helm release name:    my-local-jupyterhub
+  - Helm chart version:   2.0.0
+  - JupyterHub version:   3.0.0
+  - Hub pod packages:     See https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/2.0.0/images/hub/requirements.txt
+
+### Followup links
+
+  - Documentation:  https://z2jh.jupyter.org
+  - Help forum:     https://discourse.jupyter.org
+  - Social chat:    https://gitter.im/jupyterhub/jupyterhub
+  - Issue tracking: https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues
+
+### Post-installation checklist
+
+  - Verify that created Pods enter a Running state:
+
+      kubectl --namespace=jupyterhub get pod
+
+    If a pod is stuck with a Pending or ContainerCreating status, diagnose with:
+
+      kubectl --namespace=jupyterhub describe pod <name of pod>
+
+    If a pod keeps restarting, diagnose with:
+
+      kubectl --namespace=jupyterhub logs --previous <name of pod>
+
+  - Verify an external IP is provided for the k8s Service proxy-public.
+
+      kubectl --namespace=jupyterhub get service proxy-public
+
+    If the external ip remains <pending>, diagnose with:
+
+      kubectl --namespace=jupyterhub describe service proxy-public
+
+  - Verify web based access:
+
+    You have not configured a k8s Ingress resource so you need to access the k8s
+    Service proxy-public directly.
+
+    If your computer is outside the k8s cluster, you can port-forward traffic to
+    the k8s Service proxy-public with kubectl to access it from your
+    computer.
+
+      kubectl --namespace=jupyterhub port-forward service/proxy-public 8080:http
+
+    Try insecure HTTP access: http://localhost:8080
+```
+
+Check the pods:
+
+```bash
+kubectl --namespace=jupyterhub get pod
+```
+
+```
+NAME                             READY   STATUS    RESTARTS   AGE
+continuous-image-puller-2nprk    1/1     Running   0          43m
+hub-5dd6db89f-vwclm              1/1     Running   0          43m
+proxy-5b65d484fb-lp5rl           1/1     Running   0          43m
+user-scheduler-dcd8dff75-brpmr   1/1     Running   0          43m
+user-scheduler-dcd8dff75-lsscm   1/1     Running   0          43m
+```
+
+and the services:
+
+```bash
+kubectl --namespace=jupyterhub get service
+```
+
+```
+NAME           TYPE           CLUSTER-IP       EXTERNAL-IP   PORT(S)          AGE
+hub            NodePort       10.111.15.143    <none>        8081/TCP         135m
+proxy-api      ClusterIP      10.107.222.216   <none>        8001/TCP         135m
+proxy-public   LoadBalancer   10.98.40.47      127.0.0.1     80:30169/TCP     135m
+```
+
+::: {.callout-note}
+
+If the external IP is pending, verify that you are running `minikube tunnel`.
+
+:::
+
+Open JupyterHub by pointing your web browser to <http://127.0.0.1>.
+
+![Screenshot of JupyterHub's homescreen.](img/minikube-jupyterhub-home.png)
+
+## Authentication
+
+To use JupyterHub, the user must have a username and password. **for testing purposes**, we will employ the *dummy authenticator*. Add
+
+```yaml
+hub:
+  config:
+    Authenticator:
+      admin_users:
+        - admin
+      allowed_users:
+        - user
+    DummyAuthenticator:
+      password: "qwerty123"
+    JupyterHub:
+      authenticator_class: dummy
+```
+
+to [`config.yaml`](files/jupyterhub/config.yml) and restart the cluster by run
+
+```bash
+helm upgrade --cleanup-on-fail \
+  --install my-local-jupyterhub jupyterhub/jupyterhub \
+  --namespace jupyterhub \
+  --create-namespace \
+  --version=2.0.0 \
+  --values config.yaml
+```
+
+Open JupyterHub by pointing your web browser to <http://127.0.0.1> and login using `user` for the username and `qwerty123` for the password.
+
+![Screenshot of JupyterLab's homescreen.](img/minikube-jupyterhub-lab.png)
+
+## Clean up
+
+Now you can clean up the resources.
+
+First, stop all servers and shut down JupyterHub using the admin panel at <http://127.0.0.1/hub/admin/>.
+
+![Screenshot of JupyterHub admin panel.](img/minikube-jupyterhub-admin.png)
+
+After stop all servers and shut down JupyterHub, you can uninstall JupyterHub.
+
+```bash
+helm uninstall my-local-jupyterhub --namespace jupyterhub
+```
+
+```
+release "my-local-jupyterhub" uninstalled
+```
+
+```bash
+minikube delete
+```
+
+```
+* Deleting "minikube" in docker ...
+* Deleting container "minikube" ...
+* Removing /home/raniere/.minikube/machines/minikube ...
+* Removed all traces of the "minikube" cluster.
+```

@@ -1,0 +1,152 @@
+## Setup PostgreSQL
+
+:::{.callout-important}
+
+[PostgreSQL](https://www.postgresql.org/) runs in the master machine and outside the Kubernetes cluster.
+
+:::
+
+Follow the installation at @sec-postgres-installation and the configuration at @sec-postgresql-user-setup.
+
+Create the users `orc` and `jhub` for PostgreSQL:
+
+```bash
+sudo -u postgres psql
+```
+
+```bash
+CREATE USER orc;
+```
+
+```
+CREATE ROLE
+```
+
+```bash
+CREATE USER jhub;
+```
+
+```
+CREATE ROLE
+```
+
+Assign password for the users `orc` and `jhub` for PostgreSQL:
+
+:::{.callout-important}
+
+The password is stored in KeePassXC.
+
+:::
+
+```bash
+ALTER USER orc WITH PASSWORD 'password';
+```
+
+```
+ALTER ROLE
+```
+
+```bash
+ALTER USER jhub WITH PASSWORD 'password';
+```
+
+```
+ALTER ROLE
+```
+
+Exit `psql` shell.
+
+```bash
+\q
+```
+
+Make PostgreSQL to accept all incoming ssl connections by adding
+
+```
+# TYPE DATABASE USER ADDRESS METHOD
+# use hostssl to require use of SSL for all connections
+# hostssl: https://www.postgresql.org/docs/12/auth-pg-hba-conf.html
+#hostssl  all  all 0.0.0.0/0 scram-sha-256
+hostssl  all  all 0.0.0.0/0 md5
+# host: This record matches connection attempts made using TCP/IP. host records match SSL or non-SSL connection attempts...
+#host  all  all 0.0.0.0/0 md5
+# https://dba.stackexchange.com/questions/8580/force-postgresql-clients-to-use-ssl
+#hostssl  all  all 0.0.0.0/0 cert
+```
+
+at the beginning of `/etc/postgresql/12/main/pg_hba.conf`. And replace
+
+```
+listen_addresses = 'localhost'
+```
+
+with
+
+```
+listen_addresses = '*'
+```
+
+at `/etc/postgresql/12/main/postgresql.conf`.
+
+Enable SSL in PostgreSQL configuration by replacing
+
+```
+ssl_min_protocol_version = 'TLSv1'
+```
+
+with
+
+```
+ssl_min_protocol_version = 'TLSv1.2'
+```
+
+and
+
+```
+ssl_ciphers = 'HIGH:MEDIUM:+3DES:!aNULL'
+```
+
+with
+
+```
+ssl_ciphers = 'TLSv1.2:!aNULL'
+```
+
+at `/etc/postgresql/12/main/postgresql.conf`.
+
+Optimize PostgreSQL by setting
+
+```
+shared_buffers = 6GB
+effective_cache_size = 12GB
+work_mem = 8MB
+maintenance_work_mem = 512MB
+```
+
+in `/etc/postgresql/12/main/postgresql.conf`.
+
+Reload and restart PostgreSQL:
+
+```bash
+sudo systemctl reload postgresql@12-main.service
+```
+
+```bash
+sudo systemctl restart postgresql@12-main.service
+```
+
+Verify that PostgreSQL is running:
+
+```bash
+sudo systemctl status postgresql@12-main.service
+```
+
+Create database:
+
+```bash
+sudo -u postgres createdb \
+    -O orc \
+    -E UTF8 \
+    -T template0 \
+    gesisbinder
+```
