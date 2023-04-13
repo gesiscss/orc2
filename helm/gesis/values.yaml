@@ -47,6 +47,8 @@ binderhub:
         - ^FDesnoyer/MathExp.*
         - ^GuitarsAI/.*
         - ^ferarussia/.*
+        - ^ayman107/.*
+        - ^Miner2008001/.*
 
       high_quota_specs:
         - ^gesiscss/.*
