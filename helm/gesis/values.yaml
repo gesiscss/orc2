@@ -223,3 +223,30 @@ cryptnono:
       key: hub.jupyter.org_dedicated
       operator: Equal
       value: user
+
+prometheus:
+  enabled: true
+  alertmanager:
+    enabled: false
+  prometheus-pushgateway:
+    enabled: false
+  server:
+    podLabels:
+      # needs access to the Hub API
+      hub.jupyter.org/network-access-hub: "true"
+    strategy:
+      # The default of RollingUpdate fail because attached storage can only be
+      # mounted on one pod, so we need to use Recreate that first shut down the
+      # pod and then starts it up during updates.
+      type: Recreate
+    ingress:
+      enabled: true
+      annotations:
+        kubernetes.io/ingress.class: nginx
+        kubernetes.io/tls-acme: "true"
+
+  # make sure we collect metrics on pods by app/component at least
+  kube-state-metrics:
+    metricLabelsAllowlist:
+      - pods=[app,component]
+      - nodes=[*]
