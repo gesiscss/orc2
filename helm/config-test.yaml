@@ -5,3 +5,6 @@ binderhub:
     BinderHub:
       hub_url: https://notebooks-test.gesis.org/binder/jupyter/
       image_prefix: gesiscss/binder-r2d-g5b5b759-
+
+prometheus:
+  enabled: true

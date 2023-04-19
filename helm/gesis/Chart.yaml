@@ -32,3 +32,8 @@ dependencies:
     version: "0.0.1-n025.h28f473f"
     repository: https://yuvipanda.github.io/cryptnono/
     condition: cryptnono.enabled
+
+  - name: prometheus
+    version: "20.2.0"
+    repository: https://prometheus-community.github.io/helm-charts
+    condition: prometheus.enabled
