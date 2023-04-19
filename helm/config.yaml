@@ -9,5 +9,8 @@ binderhub:
 prometheus:
   enabled: true
 
+grafana:
+  enabled: true
+
 cryptnono:
   enabled: true
