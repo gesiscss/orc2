@@ -8,6 +8,22 @@ binderhub:
 
 prometheus:
   enabled: true
+  server:
+    livenessProbeInitialDelay: 800
+    resources:
+      requests:
+        cpu: "4"
+        memory: 30Gi
+      limits:
+        cpu: "4"
+        memory: 36Gi
+    persistentVolume:
+      size: 500Gi
+      storageClass: ssd
+    retention: 30d
+    ingress:
+      hosts:
+        - prometheus.notebooks.gesis.org
 
 grafana:
   enabled: true
