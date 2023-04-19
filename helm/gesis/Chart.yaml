@@ -28,3 +28,7 @@ dependencies:
     version: "1.0.0-0.dev.git.3035.h32213a4"
     repository: "https://jupyterhub.github.io/helm-chart"
 
+  - name: cryptnono
+    version: "0.0.1-n025.h28f473f"
+    repository: https://yuvipanda.github.io/cryptnono/
+    condition: cryptnono.enabled
