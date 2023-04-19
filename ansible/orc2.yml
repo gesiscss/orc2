@@ -6,6 +6,13 @@
       ansible.builtin.copy:
         src: nginx/static/
         dest: /var/www/
-        owner: iuser
-        group: isuer
+        owner: root
+        group: root
+        mode: u=rw,g=r,o=r
+    - name: Copy configuration files
+      ansible.builtin.copy:
+        src: nginx/sites-available/
+        dest: /etc/nginx/sites-available/
+        owner: root
+        group: root
         mode: u=rw,g=r,o=r
