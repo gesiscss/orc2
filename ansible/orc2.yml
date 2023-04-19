@@ -1,8 +1,11 @@
 - name: Update NGINX configuration
   hosts: notebooks_gesis_org
+  become: true
   tasks:
     - name: Copy static files
       ansible.builtin.copy:
         src: nginx/static/
         dest: /var/www/
-      become: true
+        owner: iuser
+        group: isuer
+        mode: u=rw,g=r,o=r
