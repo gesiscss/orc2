@@ -16,3 +16,8 @@
         owner: root
         group: root
         mode: u=rw,g=r,o=r
+    - name: Create a symbolic link
+      ansible.builtin.file:
+        src: /etc/nginx/sites-available/orc2
+        dest: /etc/nginx/sites-enabled/orc2
+        state: link
