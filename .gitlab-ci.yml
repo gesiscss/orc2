@@ -36,7 +36,7 @@ gesis helm lint:
 gesis helm deploy:
   stage: deploy
   rules:
-    - if: $CI_COMMIT_BRANCH == 'main' || $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: $CI_COMMIT_BRANCH == 'main'
       changes:
         - .gitlab-ci.yml
         - helm/**/*
