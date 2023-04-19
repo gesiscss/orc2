@@ -18,7 +18,6 @@ gesis ansible lint:
   rules:
     - if: $CI_COMMIT_BRANCH == 'main' || $CI_PIPELINE_SOURCE == 'merge_request_event'
       changes:
-        - .gitlab-ci.yml
         - ansible/**/*
   image: 
     name: pipelinecomponents/ansible-lint
@@ -27,12 +26,22 @@ gesis ansible lint:
   script:
     - ansible-lint --show-relpath ansible
 
+gesis ansible deploy:
+  tags:
+    - notebooks_gesis_org
+  stage: deploy
+  rules:
+    - if: $CI_COMMIT_BRANCH == 'main'
+      changes:
+        - ansible/**/*
+  script:
+    - ansible -i ansible/inventories/production ansible/orc2.yml
+
 gesis helm lint:
   stage: test
   rules:
     - if: $CI_COMMIT_BRANCH == 'main' || $CI_PIPELINE_SOURCE == 'merge_request_event'
       changes:
-        - .gitlab-ci.yml
         - helm/**/*
   image: 
     name: docker-private-snapshots.gesis.intra/gesis/ilcm/orc2/k8s:latest
@@ -52,7 +61,6 @@ gesis helm deploy:
   rules:
     - if: $CI_COMMIT_BRANCH == 'main'
       changes:
-        - .gitlab-ci.yml
         - helm/**/*
   image:
     name: docker-private-snapshots.gesis.intra/gesis/ilcm/orc2/k8s:latest
@@ -77,7 +85,6 @@ pages:
   rules:
     - if: $CI_COMMIT_BRANCH == 'main'
       changes:
-        - .gitlab-ci.yml
         - docs/**/*
   image: docker-private-snapshots.gesis.intra/gesis/methods-hub/quarto:latest
   dependencies: []
