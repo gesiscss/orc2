@@ -1,8 +1,8 @@
-- name: My first play
+- name: Update NGINX configuration
   hosts: notebooks_gesis_org
   tasks:
-    - name: Ping my hosts
-      ansible.builtin.ping:
-    - name: Print message
-      ansible.builtin.debug:
-        msg: Hello world
+    - name: Copy static files
+      ansible.builtin.copy:
+        src: nginx/static/
+        dest: /var/www/
+      become: true
