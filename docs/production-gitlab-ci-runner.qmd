@@ -6,6 +6,10 @@ We use [GitLab CI Runner](https://docs.gitlab.com/runner/) for our [Infrastructu
 
 Follow the notes at @sec-gitlab-ci-runner-101.
 
+## Configure self-managed runners
+
+Follow the notes at @sec-gitlab-ci-runner-101.
+
 ## Register self-managed runners
 
 Get the registration token from the project's `Settings > CI/CD > Runners > Specific runners` and run
@@ -17,7 +21,7 @@ Replace `GITLAB_TOKEN` with the registration token.
 :::
 
 ```bash
-sudo gitlab-runner register \
+gitlab-runner register \
     --non-interactive \
     --tag-list notebooks_gesis_org \
     --url https://git.gesis.org/ \

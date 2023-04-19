@@ -16,6 +16,50 @@ curl -LJO "https://gitlab-runner-downloads.s3.amazonaws.com/latest/deb/gitlab-ru
 sudo dpkg -i gitlab-runner_amd64.deb
 ```
 
+## Configure self-managed runners
+
+Is preferable to have non-root runners.
+
+Create the configuration file `~/.gitlab-runner/config.toml` and add
+
+```
+concurrent = 1
+check_interval = 0
+
+[session_server]
+  session_timeout = 1800
+```
+
+Create `/etc/systemd/system/gitlab-runner-username.service` and add
+
+```
+[Unit]
+Description=GitLab Runner as username
+After=syslog.target network.target
+ConditionFileIsExecutable=/usr/local/bin/gitlab-runner
+
+[Service]
+StartLimitInterval=5
+StartLimitBurst=10
+ExecStart=/usr/local/bin/gitlab-runner "run" "--working-directory" "/home/username" "--config" "/home/iuser/.gitlab-runner/config.toml" "--service" "gitlab-runner-username" "--syslog" "--user" "username"
+
+Restart=always
+RestartSec=120
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Start the daemon:
+
+```bash
+sudo systemctl start gitlab-runner-iuser
+```
+
+```bash
+sudo systemctl enable gitlab-runner-iuser
+```
+
 ## Get status
 
 ```bash
@@ -25,27 +69,27 @@ sudo gitlab-runner status
 ## List runners
 
 ```bash
-sudo gitlab-runner list
+gitlab-runner list
 ```
 
 ## Create runner
 
 ```bash
-sudo gitlab-runner register
+gitlab-runner register
 ```
 
 ## Remove runner
 
 ```bash
-sudo gitlab-runner unregister --name runner_name
+gitlab-runner unregister --name runner_name
 ```
 
 ## Remove all runners
 
 ```bash
-sudo gitlab-runner verify --delete
+gitlab-runner verify --delete
 ```
 
 ```bash
-sudo gitlab-runner unregister --all-runners
+gitlab-runner unregister --all-runners
 ```
