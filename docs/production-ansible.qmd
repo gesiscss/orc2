@@ -8,6 +8,128 @@ Ansible has fundametal differences to [Terraform](https://www.terraform.io/), a 
 
 :::
 
+## Preparation
+
+Create user `ansible`.
+
+::: {.panel-tabset}
+
+## Master machine at `194.95.75.10`
+
+```bash
+sudo adduser \
+    --gecos ansible,,, \
+    ansible
+```
+
+```bash
+sudo usermod -aG sudo ansible
+```
+
+## Worker machine at `194.95.75.9`
+
+```bash
+sudo adduser \
+    --gecos ansible,,, \
+    ansible
+```
+
+```bash
+sudo usermod -aG sudo ansible
+```
+
+:::
+
+Avoid ask for password to user `ansible`:
+
+::: {.panel-tabset}
+
+## Master machine at `194.95.75.20`
+
+Use `sudo visudo /etc/sudoers` to add the file
+
+```
+ansible ALL=(ALL) NOPASSWD: ALL
+```
+
+## Worker machine at `194.95.75.14`
+
+Use `sudo visudo /etc/sudoers` to add the file
+
+```
+ansible ALL=(ALL) NOPASSWD: ALL
+```
+
+:::
+
+Create SSH key for user `ansible`:
+
+::: {.panel-tabset}
+
+## Master machine at `194.95.75.10`
+
+```bash
+su ansible
+```
+
+```bash
+ssh-keygen \
+    -t ed25519 \
+    -N '' \
+    -C "ansible@notebooks.gesis.org" \
+    -f ~/.ssh/id_ed25519
+```
+
+```bash
+ssh-copy-id ansible@194.95.75.9
+```
+
+```bash
+exit
+```
+
+## Worker machine at `194.95.75.9`
+
+Nothing to do here.
+
+:::
+
+Disable password authentication for user `ansible`:
+
+::: {.panel-tabset}
+
+## Master machine at `194.95.75.20`
+
+Add
+
+```
+Match User ansible
+    PasswordAuthentication no
+```
+
+to `/etc/ssh/sshd_config` and restart the SSH server:
+
+```bash
+sudo systemctl restart ssh
+```
+
+## Worker machine at `194.95.75.14`
+
+Add
+
+```
+Match User ansible
+    PasswordAuthentication no
+```
+
+to `/etc/ssh/sshd_config` and restart the SSH server:
+
+```bash
+sudo systemctl restart ssh
+```
+
+:::
+
 ## Installation
 
 In the control panel server (`194.95.75.10`), run
@@ -35,16 +157,6 @@ ansible all --list-hosts
 ```
   hosts (1):
     194.95.75.9
-```
-
-Add public SSH keys to the servers:
-
-```bash
-ssh-keygen -t ed25519 -C "ansible@notebooks.gesis.org"
-```
-
-```bash
-ssh-copy-id iuser@194.95.75.9
 ```
 
 Check that the servers are accessible:
