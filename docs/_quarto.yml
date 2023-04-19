@@ -34,6 +34,7 @@ book:
       chapters: 
       - production-hardware.qmd
       - production-software.qmd
+      - production-ansible.qmd
       - production-k8s-cluster.qmd
       - production-k8s-setup.qmd
       - production-binderhub.qmd

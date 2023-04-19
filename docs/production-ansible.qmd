@@ -1,0 +1,64 @@
+# Ansible
+
+[Ansible](https://www.ansible.com/) is a configuration management tool that can be used to configure **bare metal** servers with the right software.
+
+:::{.callout-important}
+
+Ansible has fundametal differences to [Terraform](https://www.terraform.io/), a provisioning tool.
+
+:::
+
+## Installation
+
+In the control panel server (`194.95.75.10`), run
+
+```bash
+sudo apt install -y \
+    ansible
+```
+
+## Inventory
+
+Ansible requires a list of servers that it can access. Edit `/etc/ansible/hosts` to be like
+
+```ansible
+[methodshub]
+194.95.75.9
+```
+
+Check that your inventory is correct:
+
+```bash
+ansible all --list-hosts
+```
+
+```
+  hosts (1):
+    194.95.75.9
+```
+
+Add public SSH keys to the servers:
+
+```bash
+ssh-keygen -t ed25519 -C "ansible@notebooks.gesis.org"
+```
+
+```bash
+ssh-copy-id iuser@194.95.75.9
+```
+
+Check that the servers are accessible:
+
+```bash
+ansible all -m ping
+```
+
+```
+194.95.75.9 | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python3"
+    },
+    "changed": false,
+    "ping": "pong"
+}
+```
