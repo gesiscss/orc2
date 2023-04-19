@@ -41,7 +41,7 @@ ConditionFileIsExecutable=/usr/local/bin/gitlab-runner
 [Service]
 StartLimitInterval=5
 StartLimitBurst=10
-ExecStart=/usr/local/bin/gitlab-runner "run" "--working-directory" "/home/username" "--config" "/home/iuser/.gitlab-runner/config.toml" "--service" "gitlab-runner-username" "--syslog" "--user" "username"
+ExecStart=/usr/local/bin/gitlab-runner "run" "--working-directory" "/home/username" "--config" "/home/username/.gitlab-runner/config.toml" "--service" "gitlab-runner-username" "--syslog" "--user" "username"
 
 Restart=always
 RestartSec=120
