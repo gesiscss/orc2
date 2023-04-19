@@ -1,0 +1,15 @@
+# Docker 101
+
+Docker images and containers can use a huge amount of storage space. It's important to remove old images preriodically.
+
+## Remove all resources
+
+:::{.callout-note}
+
+This can take a lot of time.
+
+:::
+
+```bash
+docker system prune --force --all
+```

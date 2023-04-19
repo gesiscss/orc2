@@ -44,6 +44,7 @@ book:
   appendices:
     - version-log-book.qmd
     - git-crypt.qmd
+    - docker-101.qmd
     - nginx-101.qmd
     - postgresql-101.qmd
     - openlens-101.qmd
