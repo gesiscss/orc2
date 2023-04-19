@@ -34,6 +34,7 @@ book:
       chapters: 
       - production-hardware.qmd
       - production-software.qmd
+      - production-gitlab-ci-runner.qmd
       - production-ansible.qmd
       - production-k8s-cluster.qmd
       - production-k8s-setup.qmd
@@ -45,6 +46,7 @@ book:
   appendices:
     - version-log-book.qmd
     - git-crypt.qmd
+    - gitlab-ci-runner-101.qmd
     - docker-101.qmd
     - nginx-101.qmd
     - postgresql-101.qmd

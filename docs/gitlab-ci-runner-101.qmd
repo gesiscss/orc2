@@ -1,0 +1,51 @@
+# GitLab CI Runner 101 {#sec-gitlab-ci-runner-101}
+
+## Install self-managed runners
+
+:::{.callout-important}
+
+Full documentation at <https://docs.gitlab.com/runner/install/index.html>.
+
+:::
+
+```bash
+curl -LJO "https://gitlab-runner-downloads.s3.amazonaws.com/latest/deb/gitlab-runner_amd64.deb"
+```
+
+```bash
+sudo dpkg -i gitlab-runner_amd64.deb
+```
+
+## Get status
+
+```bash
+sudo gitlab-runner status
+```
+
+## List runners
+
+```bash
+sudo gitlab-runner list
+```
+
+## Create runner
+
+```bash
+sudo gitlab-runner register
+```
+
+## Remove runner
+
+```bash
+sudo gitlab-runner unregister --name runner_name
+```
+
+## Remove all runners
+
+```bash
+sudo gitlab-runner verify --delete
+```
+
+```bash
+sudo gitlab-runner unregister --all-runners
+```

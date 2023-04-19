@@ -1,0 +1,37 @@
+# GitLab CI Runner
+
+We use [GitLab CI Runner](https://docs.gitlab.com/runner/) for our [Infrastructure as code (IaC)](https://en.wikipedia.org/wiki/Infrastructure_as_code).
+
+## Install self-managed runners
+
+Follow the notes at @sec-gitlab-ci-runner-101.
+
+## Register self-managed runners
+
+Get the registration token from the project's `Settings > CI/CD > Runners > Specific runners` and run
+
+:::{.callout-important}
+
+Replace `GITLAB_TOKEN` with the registration token.
+
+:::
+
+```bash
+sudo gitlab-runner register \
+    --non-interactive \
+    --tag-list notebooks_gesis_org \
+    --url https://git.gesis.org/ \
+    --registration-token GITLAB_TOKEN \
+    --name orc2_production \
+    --request-concurrency 1 \
+    --executor shell \
+    --shell bash
+```
+
+```
+Runtime platform                                    arch=amd64 os=linux pid=1109000 revision=de7731dd version=12.1.0
+Running in system-mode.                            
+                                                   
+Registering runner... succeeded                     runner=GR134894
+Runner registered successfully. Feel free to start it, but if it's running already the config should be automatically reloaded!
+```
