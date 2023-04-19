@@ -2,6 +2,32 @@
 
 Docker images and containers can use a huge amount of storage space. It's important to remove old images preriodically.
 
+## Configuration
+
+:::{.callout-note}
+
+Docker runs as a daemon and more information is available at <https://docs.docker.com/config/daemon/>.
+
+:::
+
+First, stop the Docker daemon:
+
+```bash
+sudo systemctl stop docker
+```
+
+The configuration file is `/etc/docker/daemon.json`.
+
+Last, start the Docker daemon:
+
+```bash
+sudo systemctl start docker
+```
+
+```bash
+sudo systemctl enable docker
+```
+
 ## Remove all resources
 
 :::{.callout-note}
