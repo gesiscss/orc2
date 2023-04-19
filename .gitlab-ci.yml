@@ -13,6 +13,20 @@ Build container with Kubernetes and git-crypt:
     - docker build --no-cache --pull -t docker-private-snapshots.gesis.intra/gesis/ilcm/orc2/k8s:latest .
     - docker push docker-private-snapshots.gesis.intra/gesis/ilcm/orc2/k8s:latest
 
+gesis ansible lint:
+  stage: test
+  rules:
+    - if: $CI_COMMIT_BRANCH == 'main' || $CI_PIPELINE_SOURCE == 'merge_request_event'
+      changes:
+        - .gitlab-ci.yml
+        - ansible/**/*
+  image: 
+    name: pipelinecomponents/ansible-lint
+    entrypoint: [""]
+  dependencies: []
+  script:
+    - ansible-lint --show-relpath ansible
+
 gesis helm lint:
   stage: test
   rules:
