@@ -65,4 +65,23 @@ ansible all -m ping
 
 ## Playbook
 
-Playbook is the rules that Ansible uses to configure the servers.
+Playbook is the rules that Ansible uses to configure the servers. For example,
+
+```
+- name: My first play
+  hosts: notebooks_gesis_org
+  tasks:
+   - name: Ping my hosts
+     ansible.builtin.ping:
+   - name: Print message
+     ansible.builtin.debug:
+       msg: Hello world
+```
+
+The instructions in the playbook can be executed by running
+
+```bash
+ansible-playbook playbook.yaml
+```
+
+where `playbook.yaml` is the file storing the playbook.
