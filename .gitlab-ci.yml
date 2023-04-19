@@ -35,7 +35,7 @@ gesis ansible deploy:
       changes:
         - ansible/**/*
   script:
-    - ansible -i ansible/inventories/production ansible/orc2.yml
+    - ansible-playbook -i ansible/inventories/production ansible/orc2.yml
 
 gesis helm lint:
   stage: test
