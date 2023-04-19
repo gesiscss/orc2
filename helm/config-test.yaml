@@ -8,3 +8,6 @@ binderhub:
 
 prometheus:
   enabled: true
+
+cryptnono:
+  enabled: true
