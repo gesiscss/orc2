@@ -1,0 +1,66 @@
+# Kubernetes Storage
+
+By design, Kubernetes pod always starts with a clean storage (**files do NOT persist after pod reboot**). If files need to persist, a [persistent volume](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) must be configured.
+
+:::{.callout-note}
+
+We will use Network File System (NFS) storage but other options are described at <https://kubernetes.io/docs/concepts/storage/persistent-volumes/>.
+
+:::
+
+## Configure NFS server at `194.95.75.12`
+
+See instructions at @sec-production-storage.
+
+## Install NFS provisioner in Kubernetes
+
+:::{.callout-note}
+
+We will use <https://github.com/kubernetes-sigs/nfs-subdir-external-provisioner>. Other provisioners are available.
+
+:::
+
+In the machine running the controller panel (`194.95.75.10`), run
+
+```bash
+helm repo add nfs-subdir-external-provisioner https://kubernetes-sigs.github.io/nfs-subdir-external-provisioner/
+```
+
+```
+"nfs-subdir-external-provisioner" has been added to your repositories
+```
+
+```bash
+helm install nfs-subdir-external-provisioner nfs-subdir-external-provisioner/nfs-subdir-external-provisioner \
+    --set nfs.server=194.95.75.12 \
+    --set nfs.path=/sdd
+```
+
+```
+NAME: nfs-subdir-external-provisioner
+LAST DEPLOYED: Tue Apr  4 11:28:25 2023
+NAMESPACE: default
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
+```
+
+## Create Persistent Volume
+
+In the machine running the controller panel (`194.95.75.10`), run
+
+
+```bash
+kubectl apply -f nfs-storage/config-test.yaml
+```
+
+```
+persistentvolumeclaim/nfs-test created
+```
+
+Check the volume is working:
+
+```bash
+kubectl get pvc
+```
+
