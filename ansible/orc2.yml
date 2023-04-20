@@ -2,6 +2,9 @@
   hosts: notebooks_gesis_org
   become: true
   tasks:
+    - name: Print message
+      ansible.builtin.debug:
+        msg: Hello world
     - name: Copy static files
       ansible.builtin.copy:
         src: nginx/static/
