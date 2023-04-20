@@ -18,8 +18,7 @@ prometheus:
         cpu: "4"
         memory: 36Gi
     persistentVolume:
-      size: 500Gi
-      storageClass: ssd
+      size: 50Gi
     retention: 30d
     ingress:
       hosts:
