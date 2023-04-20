@@ -27,8 +27,6 @@ gesis ansible lint:
     - ansible-lint --show-relpath ansible
 
 gesis ansible deploy:
-  variables:
-    CI_DEBUG_TRACE: "true"
   tags:
     - notebooks_gesis_org
   stage: deploy
