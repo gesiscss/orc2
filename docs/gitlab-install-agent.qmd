@@ -42,4 +42,4 @@ Follow the instructions provided by GitLab.
 
 Refresh the page to verify that the agent is connected.
 
-![Screenshot of GitLab showing all the agents in a project.]gitlab-new-agent.png)
+![Screenshot of GitLab showing all the agents in a project.](gitlab-new-agent.png)
