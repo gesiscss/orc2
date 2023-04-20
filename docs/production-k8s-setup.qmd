@@ -645,8 +645,8 @@ We use the following label schema:
 
 Key         Value       Description           Status
 ----------- ----------- --------------------- -------
-database    postgresql  PostgreSQL available  Proposal
-binderhub   true        Can be used by Binder Proposal
+database    postgresql  PostgreSQL available  In use
+binderhub   true        Can be used by Binder In use
 
 Label the nodes to ensure that pods run in the desired node:
 
@@ -655,7 +655,7 @@ kubectl label nodes svko-css-app01 database=postgresql
 ```
 
 ```bash
-kubectl label nodes svko-ilcm04 binderhub=true
+kubectl label nodes spko-css-app03 binderhub=true
 ```
 
 Check that nodes were label correctly:
