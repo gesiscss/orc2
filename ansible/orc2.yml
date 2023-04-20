@@ -21,3 +21,5 @@
         src: /etc/nginx/sites-available/orc2
         dest: /etc/nginx/sites-enabled/orc2
         state: link
+    - name: Restart server
+      ansible.builtin.shell: systemctl restart nginx.service
