@@ -23,5 +23,5 @@
         state: link
     - name: Reload server
       ansible.builtin.systemd:
-        state: reload
+        state: reloaded
         name: nginx
