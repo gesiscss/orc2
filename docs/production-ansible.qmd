@@ -46,7 +46,7 @@ Avoid ask for password to user `ansible`:
 
 ## Master machine at `194.95.75.20`
 
-Use `sudo visudo /etc/sudoers` to add the file
+Create the file `/etc/sudoers.d/ansible` and add
 
 ```
 ansible ALL=(ALL) NOPASSWD: ALL
@@ -54,7 +54,7 @@ ansible ALL=(ALL) NOPASSWD: ALL
 
 ## Worker machine at `194.95.75.14`
 
-Use `sudo visudo /etc/sudoers` to add the file
+Create the file `/etc/sudoers.d/ansible` and add
 
 ```
 ansible ALL=(ALL) NOPASSWD: ALL
