@@ -21,7 +21,7 @@ Replace `GITLAB_TOKEN` with the registration token.
 :::
 
 ```bash
-sudo gitlab-runner register \
+gitlab-runner register \
     --non-interactive \
     --tag-list notebooks_gesis_org \
     --url https://git.gesis.org/ \

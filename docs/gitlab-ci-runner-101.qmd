@@ -20,13 +20,51 @@ sudo dpkg -i gitlab-runner_amd64.deb
 
 Is preferable to have non-root runners.
 
-```
-sudo gitlab-runner uninstall
-```
+Create the configuration file `~/.gitlab-runner/config.toml` and add
 
 ```
-sudo gitlab-runner install --working-directory /home/username --user username
+concurrent = 1
+check_interval = 0
+
+[session_server]
+  session_timeout = 1800
 ```
+
+Create `/etc/systemd/system/gitlab-runner-username.service` and add
+
+```
+[Unit]
+Description=GitLab Runner as username
+After=syslog.target network.target
+ConditionFileIsExecutable=/usr/local/bin/gitlab-runner
+
+[Service]
+StartLimitInterval=5
+StartLimitBurst=10
+ExecStart=/usr/local/bin/gitlab-runner "run" "--working-directory" "/home/username" "--config" "/home/username/.gitlab-runner/config.toml" "--service" "gitlab-runner-username" "--syslog" "--user" "username"
+
+Restart=always
+RestartSec=120
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Start the daemon:
+
+```bash
+sudo systemctl start gitlab-runner-username
+```
+
+```bash
+sudo systemctl enable gitlab-runner-username
+```
+
+:::{.callout-important}
+
+On Debian and Ubuntu, the file default `/home/username/.bash_logout` makes the runner to not clone the Git repository as explained in <https://forum.gitlab.com/t/gitlab-runner-as-non-root-does-not-clone-repo/21935/6>.
+
+:::
 
 ## Get status
 
