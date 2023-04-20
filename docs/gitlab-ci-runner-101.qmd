@@ -93,3 +93,14 @@ gitlab-runner verify --delete
 ```bash
 gitlab-runner unregister --all-runners
 ```
+
+## Troubleshooting
+
+Add
+
+```
+variables:
+  CI_DEBUG_TRACE: "true"
+```
+
+to the job that is failing.
