@@ -15,14 +15,18 @@ sudo apt install -y nfs-server
 Add
 
 ```
-/ssd 192.168.12.8(rw,no_subtree_check,no_root_squash)
+/ssd *(rw,sync,no_root_squash,no_subtree_check)
 ```
 
 to `/etc/exports`.
 
 :::{.callout-note}
 
-`192.168.12.8` is the local IP address.
+The format of `/etc/exports` is
+
+```
+<export> <host1>(<options>) <hostN>(<options>)...
+```
 
 :::
 
@@ -32,4 +36,17 @@ sudo systemctl enable --now nfs-server
 
 ```bash
 sudo exportfs -ar
+```
+
+## Test NFS server
+
+From `194.95.75.12`, run
+
+```bash
+showmount -e 194.95.75.12
+```
+
+```
+Export list for 194.95.75.12:
+/ssd 192.168.12.8
 ```
