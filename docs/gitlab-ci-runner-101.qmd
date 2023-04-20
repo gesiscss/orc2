@@ -20,44 +20,12 @@ sudo dpkg -i gitlab-runner_amd64.deb
 
 Is preferable to have non-root runners.
 
-Create the configuration file `~/.gitlab-runner/config.toml` and add
-
 ```
-concurrent = 1
-check_interval = 0
-
-[session_server]
-  session_timeout = 1800
+sudo gitlab-runner uninstall
 ```
 
-Create `/etc/systemd/system/gitlab-runner-username.service` and add
-
 ```
-[Unit]
-Description=GitLab Runner as username
-After=syslog.target network.target
-ConditionFileIsExecutable=/usr/local/bin/gitlab-runner
-
-[Service]
-StartLimitInterval=5
-StartLimitBurst=10
-ExecStart=/usr/local/bin/gitlab-runner "run" "--working-directory" "/home/username" "--config" "/home/username/.gitlab-runner/config.toml" "--service" "gitlab-runner-username" "--syslog" "--user" "username"
-
-Restart=always
-RestartSec=120
-
-[Install]
-WantedBy=multi-user.target
-```
-
-Start the daemon:
-
-```bash
-sudo systemctl start gitlab-runner-iuser
-```
-
-```bash
-sudo systemctl enable gitlab-runner-iuser
+sudo gitlab-runner install --working-directory /home/username --user username
 ```
 
 ## Get status
