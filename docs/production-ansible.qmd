@@ -46,11 +46,21 @@ Avoid ask for password to user `ansible`:
 
 ## Master machine at `194.95.75.20`
 
-Use `sudoedit /etc/sudoers.d/ansible` to create the file `/etc/sudoers.d/ansible` and add
+Use `sudoedit /etc/sudoers.d/20_servers_admins` to add
 
 ```
 ansible ALL=(ALL) NOPASSWD: ALL
 ```
+
+## Worker machine at `194.95.75.14`
+
+Use `sudoedit /etc/sudoers.d/20_servers_admins` to add
+
+```
+ansible ALL=(ALL) NOPASSWD: ALL
+```
+
+:::
 
 To test if `sudo` without password is working, you can first disable current `sudo` with
 
@@ -61,20 +71,10 @@ sudo -k
 and run
 
 ```
-sudo cat /etc/sudoers.d/ansible
+sudo cat /etc/sudoers.d/20_servers_admins
 ```
 
 or any other shell command prepended with `sudo`.
-
-## Worker machine at `194.95.75.14`
-
-Use `sudoedit /etc/sudoers.d/ansible` to create the file `/etc/sudoers.d/ansible` and add
-
-```
-ansible ALL=(ALL) NOPASSWD: ALL
-```
-
-:::
 
 Create SSH key for user `ansible`:
 
