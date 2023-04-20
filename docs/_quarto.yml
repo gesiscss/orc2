@@ -34,10 +34,12 @@ book:
       chapters: 
       - production-hardware.qmd
       - production-software.qmd
+      - production-storage.qmd
       - production-gitlab-ci-runner.qmd
       - production-ansible.qmd
       - production-k8s-cluster.qmd
       - production-k8s-setup.qmd
+      - production-k8s-storage.qmd
       - production-binderhub.qmd
       - production-nginx.qmd
     - part: "Continuous Deployment"

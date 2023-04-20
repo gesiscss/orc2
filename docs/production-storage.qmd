@@ -1,0 +1,35 @@
+# Storage {#sec-production-storage}
+
+We will use Network File System (NFS) storage to share data between servers.
+
+## Configure NFS server at `194.95.75.12`
+
+```bash
+sudo apt update
+```
+
+```bash
+sudo apt install -y nfs-server
+```
+
+Add
+
+```
+/ssd 192.168.12.8(rw,no_subtree_check,no_root_squash)
+```
+
+to `/etc/exports`.
+
+:::{.callout-note}
+
+`192.168.12.8` is the local IP address.
+
+:::
+
+```bash
+sudo systemctl enable --now nfs-server
+```
+
+```bash
+sudo exportfs -ar
+```

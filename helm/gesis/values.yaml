@@ -279,3 +279,12 @@ grafana:
       enabled: true
     security:
       allow_embedding: true
+
+nfs:
+  enabled: true
+  storageClass:
+    name: ssd2nfs-to-docker
+    provisionerName: k8s-sigs.io/ssd2nfs-to-docker-nfs-subdir-external-provisioner
+  nodeSelector:
+    binderhub: "true"
+    
