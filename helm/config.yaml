@@ -19,6 +19,7 @@ prometheus:
         memory: 36Gi
     persistentVolume:
       size: 50Gi
+      storageClassName: local-storage
     retention: 30d
     ingress:
       hosts:
