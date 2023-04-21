@@ -25,3 +25,28 @@
       ansible.builtin.systemd:
         state: reloaded
         name: nginx
+
+- name: Create storage point for Kubernetes
+  hosts: notebooks_gesis_org
+  become: true
+  tasks:
+    - name: Create root directory
+      ansible.builtin.file:
+        path: /orc2_data
+        state: directory
+        mode: u=rwx,g=rx,o=rx
+    - name: Create directory for prometheus
+      ansible.builtin.file:
+        path: /orc2_data/prometheus
+        state: directory
+        mode: u=rwx,g=rx,o=rx
+    - name: Create directory for grafana
+      ansible.builtin.file:
+        path: /orc2_data/grafana
+        state: directory
+        mode: u=rwx,g=rx,o=rx
+    - name: Create directory for alert
+      ansible.builtin.file:
+        path: /orc2_data/alertmanager
+        state: directory
+        mode: u=rwx,g=rx,o=rx
