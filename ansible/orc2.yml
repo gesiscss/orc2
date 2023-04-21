@@ -5,7 +5,7 @@
     - name: Copy static files
       ansible.builtin.copy:
         src: ../nginx/static/
-        dest: /var/www/
+        dest: /var/www/orc2
         owner: root
         group: root
         mode: u=rw,g=r,o=r
