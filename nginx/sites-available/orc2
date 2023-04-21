@@ -136,7 +136,7 @@ server {
 
     location /static/ {
         access_log off;
-        alias /var/www/orc2;
+        alias /var/www/orc2/;
     }
 
     location = /robots.txt {
