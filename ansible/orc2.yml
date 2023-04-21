@@ -6,15 +6,15 @@
       ansible.builtin.copy:
         src: ../nginx/static/
         dest: /var/www/orc2
-        owner: root
-        group: root
+        owner: nginx
+        group: nginx
         mode: u=rw,g=r,o=r
     - name: Copy configuration files
       ansible.builtin.copy:
         src: ../nginx/sites-available/
         dest: /etc/nginx/sites-available/
-        owner: root
-        group: root
+        owner: nginx
+        group: nginx
         mode: u=rw,g=r,o=r
     - name: Create a symbolic link
       ansible.builtin.file:
