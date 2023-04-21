@@ -1,3 +1,5 @@
+# Use https://github.com/jupyterhub/mybinder.org-deploy/blob/main/mybinder/Chart.yaml as reference
+
 apiVersion: v2
 name: gesis
 description: GESIS BinderHub
