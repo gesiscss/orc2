@@ -130,15 +130,15 @@ server {
 
     location /static/ {
         access_log off;
-        root /var/www/orc2;
+        alias /var/www/orc2;
     }
 
     location = /robots.txt {
-       root /var/www/orc2/static/;
+       root /var/www/orc2;
     }
 
     location = /sitemap.xml {
-        root /var/www/orc2/static/;
+        root /var/www/orc2;
     }
 
     # location /usertakeout/ {
@@ -146,13 +146,13 @@ server {
     # }
 
     location = /terms.html {
-        root /var/www/orc2/static/;
+        root /var/www/orc2;
     }
     location = /faq.html {
-        root /var/www/orc2/static/;
+        root /var/www/orc2;
     }
     location = /about.html {
-        root /var/www/orc2/static/;
+        root /var/www/orc2;
     }
 
     include snippets/_secret.conf;
