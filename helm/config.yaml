@@ -59,4 +59,4 @@ nfs:
   enabled: true
   nfs:
     server: 194.95.75.12
-    path: /sdd
+    path: /ssd
