@@ -34,6 +34,7 @@ gesis ansible deploy:
     - if: $CI_COMMIT_BRANCH == 'main'
       changes:
         - ansible/**/*
+        - nginx/**/*
   script:
     - ansible --version
     - ansible-playbook -i ansible/inventories/production --extra-vars ansible_become_password=${ANSIBLE_BECOME_PASSWORD} ansible/orc2.yml
