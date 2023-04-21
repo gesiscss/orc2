@@ -21,7 +21,7 @@ prometheus:
         memory: 36Gi
     persistentVolume:
       size: 50Gi
-      storageClassName: standard
+      storageClass: standard
     retention: 30d
     ingress:
       hosts:
