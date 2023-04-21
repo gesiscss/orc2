@@ -50,3 +50,19 @@ showmount -e 194.95.75.12
 Export list for 194.95.75.12:
 /ssd 192.168.12.8
 ```
+
+Try to mount the NFS directory:
+
+```bash
+sudo mkdir /var/orc2_data/ssd
+```
+
+```bash
+sudo mount -t nfs 192.168.12.8:/ssd /var/orc2_data/ssd
+```
+
+If successful, unmount the NFS directory:
+
+```bash
+sudo umount /var/orc2_data/ssd
+```
