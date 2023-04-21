@@ -9,7 +9,6 @@ spec:
   accessModes:
   - ReadWriteOnce
   persistentVolumeReclaimPolicy: Delete
-  storageClassName: standard
   local:
     path: /orc2_data/alertmanager
   nodeAffinity:
