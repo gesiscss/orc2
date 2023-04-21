@@ -29,7 +29,7 @@ dependencies:
     repository: "https://jupyterhub.github.io/helm-chart"
 
   - name: prometheus
-    version: "20.2.0"
+    version: "20.2.1"
     repository: https://prometheus-community.github.io/helm-charts
     condition: prometheus.enabled
 
