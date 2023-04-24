@@ -1,8 +1,7 @@
 Build container with Kubernetes and git-crypt:
   stage: build
   rules:
-    - if: $CI_PIPELINE_SOURCE != "schedule"
-    - if: $CI_COMMIT_BRANCH == 'main'
+    - if: ($CI_PIPELINE_SOURCE != "schedule") && $CI_COMMIT_BRANCH == 'main'
       changes:
         - Dockerfile
   image: docker-private.gesis.intra/gesis/dc:5.7
@@ -17,8 +16,7 @@ Build container with Kubernetes and git-crypt:
 Build container with Python for test:
   stage: build
   rules:
-    - if: $CI_PIPELINE_SOURCE != "schedule"
-    - if: $CI_COMMIT_BRANCH == 'main'
+    - if: ($CI_PIPELINE_SOURCE != "schedule") && $CI_COMMIT_BRANCH == 'main'
       changes:
         - Dockerfile
         - test/env.yaml
@@ -34,8 +32,7 @@ Build container with Python for test:
 gesis ansible lint:
   stage: test
   rules:
-    - if: $CI_PIPELINE_SOURCE != "schedule"
-    - if: $CI_COMMIT_BRANCH == 'main' || $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: (($CI_PIPELINE_SOURCE != "schedule") && $CI_COMMIT_BRANCH == 'main') || $CI_PIPELINE_SOURCE == 'merge_request_event'
       changes:
         - ansible/**/*
   image: 
@@ -51,8 +48,7 @@ gesis ansible deploy:
     - notebooks_gesis_org
   stage: deploy
   rules:
-    - if: $CI_PIPELINE_SOURCE != "schedule"
-    - if: $CI_COMMIT_BRANCH == 'main'
+    - if: ($CI_PIPELINE_SOURCE != "schedule") && $CI_COMMIT_BRANCH == 'main'
       changes:
         - ansible/**/*
         - nginx/**/*
@@ -64,8 +60,7 @@ gesis ansible deploy:
 gesis helm lint:
   stage: test
   rules:
-    - if: $CI_PIPELINE_SOURCE != "schedule"
-    - if: $CI_COMMIT_BRANCH == 'main' || $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: (($CI_PIPELINE_SOURCE != "schedule") && $CI_COMMIT_BRANCH == 'main') || $CI_PIPELINE_SOURCE == 'merge_request_event'
       changes:
         - helm/**/*
   image: 
@@ -84,8 +79,7 @@ gesis helm lint:
 gesis helm deploy:
   stage: deploy
   rules:
-    - if: $CI_PIPELINE_SOURCE != "schedule"
-    - if: $CI_COMMIT_BRANCH == 'main'
+    - if: ($CI_PIPELINE_SOURCE != "schedule") && $CI_COMMIT_BRANCH == 'main'
       changes:
         - helm/**/*
   image:
@@ -109,8 +103,7 @@ gesis helm deploy:
 Test script lint:
   stage: test
   rules:
-    - if: $CI_PIPELINE_SOURCE != "schedule"
-    - if: $CI_COMMIT_BRANCH == 'main' || $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: (($CI_PIPELINE_SOURCE != "schedule") && $CI_COMMIT_BRANCH == 'main') || $CI_PIPELINE_SOURCE == 'merge_request_event'
       changes:
         - test/**/*
   image: 
@@ -138,8 +131,7 @@ Test script run:
 pages:
   stage: build
   rules:
-    - if: $CI_PIPELINE_SOURCE != "schedule"
-    - if: $CI_COMMIT_BRANCH == 'main'
+    - if: ($CI_PIPELINE_SOURCE != "schedule") && $CI_COMMIT_BRANCH == 'main'
       changes:
         - docs/**/*
   image: docker-private-snapshots.gesis.intra/gesis/methods-hub/quarto:latest
