@@ -34,17 +34,18 @@ gesis ansible deploy:
   rules:
     - if: $CI_COMMIT_BRANCH == 'main'
       changes:
+        - .gitlab-ci.yml
         - ansible/**/*
         - nginx/**/*
   script:
     - echo $ANSIBLE_VAULT > ansible/.ansible-vault-password-file
     - ansible --version
     - |
-      ansible-playbook /
-        --vault-password-file ansible/.ansible-vault-password-file /
-        --extra-vars @ansible/vault/prometheus.yml /
-        --extra-vars ansible_become_password=${ANSIBLE_BECOME_PASSWORD} /
-        --inventory ansible/inventories/production /
+      ansible-playbook
+        --vault-password-file ansible/.ansible-vault-password-file
+        --extra-vars @ansible/vault/prometheus.yml
+        --extra-vars ansible_become_password=${ANSIBLE_BECOME_PASSWORD}
+        --inventory ansible/inventories/production
         ansible/orc2.yml
 
 gesis helm lint:
