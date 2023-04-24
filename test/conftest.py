@@ -11,10 +11,16 @@ import pytest
 def pytest_addoption(parser):
     """Add extra options to command line parser."""
     parser.addoption(
-        "--binder-url", help="Fully qualified URL to the Binder installation", required=True
+        "--binder-url",
+        help="Fully qualified URL to the Binder installation",
+        required=True,
     )
 
-    parser.addoption("--hub-url", help="Fully qualified URL to the JupyterHub installation", required=True)
+    parser.addoption(
+        "--hub-url",
+        help="Fully qualified URL to the JupyterHub installation",
+        required=True,
+    )
 
 
 @pytest.fixture
