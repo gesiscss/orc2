@@ -20,7 +20,7 @@
       community.general.htpasswd:
         path: /etc/nginx/passwdfile
         name: gesis
-        password: {{ PROMETHEUS_PASSWORD }}
+        password: "{{ PROMETHEUS_PASSWORD }}"
         owner: nginx
         group: nginx
         mode: u=rw,g=r
