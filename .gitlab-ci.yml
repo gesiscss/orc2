@@ -21,6 +21,7 @@ Build container with Python for test:
     - if: $CI_COMMIT_BRANCH == 'main'
       changes:
         - Dockerfile
+        - test/env.yaml
   image: docker-private.gesis.intra/gesis/dc:5.7
   services:
     - name:  docker-private.gesis.intra/gesis/dind:5.5
@@ -118,6 +119,7 @@ Test script lint:
   dependencies: []
   script:
     - black test
+    - pylint test/*.py
 
 Test script run:
   stage: deploy
