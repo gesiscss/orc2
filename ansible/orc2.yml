@@ -17,7 +17,13 @@
         group: nginx
         mode: u=rw,g=r,o=r
     - name: Create HTTP Basic Authentication
-      ansible.builtin.shell: htpasswd -c /etc/nginx/.htpasswd gesis {{ PROMETHEUS_PASSWORD }}
+      community.general.htpasswd:
+        path: /etc/nginx/passwdfile
+        name: gesis
+        password: {{ PROMETHEUS_PASSWORD }}
+        owner: nginx
+        group: nginx
+        mode: u=rw,g=r
     - name: Create a symbolic link
       ansible.builtin.file:
         src: /etc/nginx/sites-available/orc2

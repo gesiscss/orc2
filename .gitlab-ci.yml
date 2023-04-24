@@ -25,7 +25,7 @@ gesis ansible lint:
   dependencies: []
   script:
     - ansible-lint --version
-    - ansible-lint --show-relpath ansible # noqa command-instead-of-shell, no-changed-when
+    - ansible-lint --show-relpath ansible
 
 gesis ansible deploy:
   tags:

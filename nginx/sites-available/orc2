@@ -89,7 +89,7 @@ server {
         # return 503;
 
         auth_basic "Administrator's Area";
-        auth_basic_user_file /etc/letsencrypt/.htpasswd_prometheus;
+        auth_basic_user_file /etc/nginx/passwdfile;
         # https://github.com/prometheus/prometheus/issues/2193
         proxy_set_header Accept-Encoding "";
         proxy_pass http://prometheus/;
