@@ -3,9 +3,13 @@
   become: true
   tasks:
     - name: Copy static files
-      ansible.builtin.copy:
+      ansible.posix.synchronize:
         src: ../nginx/static/
         dest: /var/www/orc2
+    - name: Change file ownership
+      ansible.builtin.file:
+        path: /var/www/orc2
+        recurse: true
         owner: nginx
         group: nginx
         mode: u=rw,g=r,o=r
