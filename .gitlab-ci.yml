@@ -1,6 +1,7 @@
 Build container with Kubernetes and git-crypt:
   stage: build
   rules:
+    - if: $CI_PIPELINE_SOURCE != "schedule"
     - if: $CI_COMMIT_BRANCH == 'main'
       changes:
         - Dockerfile
@@ -32,6 +33,7 @@ Build container with Python for test:
 gesis ansible lint:
   stage: test
   rules:
+    - if: $CI_PIPELINE_SOURCE != "schedule"
     - if: $CI_COMMIT_BRANCH == 'main' || $CI_PIPELINE_SOURCE == 'merge_request_event'
       changes:
         - ansible/**/*
@@ -48,6 +50,7 @@ gesis ansible deploy:
     - notebooks_gesis_org
   stage: deploy
   rules:
+    - if: $CI_PIPELINE_SOURCE != "schedule"
     - if: $CI_COMMIT_BRANCH == 'main'
       changes:
         - ansible/**/*
@@ -60,6 +63,7 @@ gesis ansible deploy:
 gesis helm lint:
   stage: test
   rules:
+    - if: $CI_PIPELINE_SOURCE != "schedule"
     - if: $CI_COMMIT_BRANCH == 'main' || $CI_PIPELINE_SOURCE == 'merge_request_event'
       changes:
         - helm/**/*
@@ -79,6 +83,7 @@ gesis helm lint:
 gesis helm deploy:
   stage: deploy
   rules:
+    - if: $CI_PIPELINE_SOURCE != "schedule"
     - if: $CI_COMMIT_BRANCH == 'main'
       changes:
         - helm/**/*
@@ -100,9 +105,38 @@ gesis helm deploy:
       -f ./helm/config.yaml \
       -f ./helm/_secret.yaml
 
+Test script lint:
+  stage: test
+  rules:
+    - if: $CI_PIPELINE_SOURCE != "schedule"
+    - if: $CI_COMMIT_BRANCH == 'main' || $CI_PIPELINE_SOURCE == 'merge_request_event'
+      changes:
+        - test/**/*
+  image: 
+    name: docker-private-snapshots.gesis.intra/gesis/ilcm/orc2/test:latest
+    entrypoint: [""]
+  dependencies: []
+  script:
+    - black test
+
+Test script run:
+  stage: deploy
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+    - if: $CI_COMMIT_BRANCH == 'main'
+      changes:
+        - test/**/*
+  image: 
+    name: docker-private-snapshots.gesis.intra/gesis/ilcm/orc2/test:latest
+    entrypoint: [""]
+  dependencies: []
+  script:
+    - pytest --binder-url https://notebooks.gesis.org/binder/ --hub-url https://notebooks.gesis.org/binder/jupyter/ test
+
 pages:
   stage: build
   rules:
+    - if: $CI_PIPELINE_SOURCE != "schedule"
     - if: $CI_COMMIT_BRANCH == 'main'
       changes:
         - docs/**/*
