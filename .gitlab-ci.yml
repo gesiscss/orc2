@@ -24,6 +24,7 @@ gesis ansible lint:
     entrypoint: [""]
   dependencies: []
   script:
+    - ansible-lint --version
     - ansible-lint --show-relpath ansible
 
 gesis ansible deploy:
