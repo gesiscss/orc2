@@ -8,6 +8,10 @@ binderhub:
       hub_url: https://notebooks.gesis.org/binder/jupyter/
       image_prefix: gesiscss/binder-r2d-g5b5b759-
 
+  extraConfig:
+    02-badge-base-url: |
+      c.BinderHub.badge_base_url = "https://mybinder.org/"
+
 prometheus:
   enabled: true
   server:
