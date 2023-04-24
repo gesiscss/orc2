@@ -10,8 +10,24 @@ Build container with Kubernetes and git-crypt:
       alias: docker
   dependencies: []
   script:
-    - docker build --no-cache --pull -t docker-private-snapshots.gesis.intra/gesis/ilcm/orc2/k8s:latest .
+    - docker build --no-cache --pull --target kubernetes -t docker-private-snapshots.gesis.intra/gesis/ilcm/orc2/k8s:latest .
     - docker push docker-private-snapshots.gesis.intra/gesis/ilcm/orc2/k8s:latest
+
+Build container with Python for test:
+  stage: build
+  rules:
+    - if: $CI_PIPELINE_SOURCE != "schedule"
+    - if: $CI_COMMIT_BRANCH == 'main'
+      changes:
+        - Dockerfile
+  image: docker-private.gesis.intra/gesis/dc:5.7
+  services:
+    - name:  docker-private.gesis.intra/gesis/dind:5.5
+      alias: docker
+  dependencies: []
+  script:
+    - docker build --no-cache --pull --target test -t docker-private-snapshots.gesis.intra/gesis/ilcm/orc2/test:latest .
+    - docker push docker-private-snapshots.gesis.intra/gesis/ilcm/orc2/test:latest
 
 gesis ansible lint:
   stage: test
