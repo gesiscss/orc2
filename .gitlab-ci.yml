@@ -24,6 +24,7 @@ gesis ansible lint:
     entrypoint: [""]
   dependencies: []
   script:
+    - ansible-lint --version
     - ansible-lint --show-relpath ansible
 
 gesis ansible deploy:
@@ -36,8 +37,15 @@ gesis ansible deploy:
         - ansible/**/*
         - nginx/**/*
   script:
+    - echo $ANSIBLE_VAULT > ansible/.ansible-vault-password-file
     - ansible --version
-    - ansible-playbook -i ansible/inventories/production --extra-vars ansible_become_password=${ANSIBLE_BECOME_PASSWORD} ansible/orc2.yml
+    - |
+      ansible-playbook
+        --vault-password-file ansible/.ansible-vault-password-file
+        --extra-vars @ansible/vault/prometheus.yml
+        --extra-vars ansible_become_password=${ANSIBLE_BECOME_PASSWORD}
+        --inventory ansible/inventories/production 
+        ansible/orc2.yml
 
 gesis helm lint:
   stage: test

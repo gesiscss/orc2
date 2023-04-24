@@ -15,6 +15,10 @@ binderhub:
 prometheus:
   enabled: true
   server:
+    service:
+      type: NodePort
+      nodePort: 30073
+      servicePort: 80
     livenessProbeInitialDelay: 800
     resources:
       requests:
