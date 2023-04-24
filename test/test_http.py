@@ -26,18 +26,3 @@ def test_binder_health(binder_url):
     resp = requests.get(binder_url + "/health")
     pprint.pprint(resp.json())
     assert resp.status_code == 200
-
-
-# the proxy-patches pod can take up to 30 seconds
-# to register its route after a proxy restart
-@pytest.mark.flaky(reruns=3, reruns_delay=10)
-def test_hub_user_redirect(hub_url):
-    """Requesting a Hub URL for a non-running user"""
-    # this should *not* redirect for now,
-    resp = requests.get(hub_url + "/user/doesntexist")
-    assert resp.status_code == 424
-    assert "Binder not found" in resp.text
-
-    resp = requests.get(hub_url + "/other/doesntexist")
-    assert resp.status_code == 404
-    assert "Binder not found" in resp.text

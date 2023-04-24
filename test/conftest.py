@@ -1,3 +1,9 @@
+"""
+Sharing scope for test
+
+Read https://docs.pytest.org/en/6.2.x/fixture.html#scope-sharing-fixtures-across-classes-modules-packages-or-session for more information.
+"""
+
 import pytest
 
 
