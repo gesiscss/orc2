@@ -71,11 +71,11 @@ server {
 
      # Grafana UI
     location /grafana/ {
-        error_page 503 /static/retired.html;
-        return 503;
+        # error_page 503 /static/maintenance.html;
+        # return 503;
 
-        # proxy_pass http://grafana/;
-        # include snippets/headers.conf;
+        proxy_pass http://grafana/;
+        include snippets/headers.conf;
     }
 
      # Prometheus
