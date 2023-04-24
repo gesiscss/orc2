@@ -34,7 +34,6 @@ gesis ansible deploy:
   rules:
     - if: $CI_COMMIT_BRANCH == 'main'
       changes:
-        - .gitlab-ci.yml
         - ansible/**/*
         - nginx/**/*
   script:
