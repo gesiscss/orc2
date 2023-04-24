@@ -28,6 +28,11 @@ upstream BinderJupyterHub {
   server 194.95.75.12:30082 max_fails=0;
 }
 
+upstream grafana {
+  server 194.95.75.9:30075;
+  server 194.95.75.12:30075;
+}
+
 # HTTP server to redirect notebooks.gesis.org 80 traffic to SSL/HTTPS
 server {
     listen 80;
