@@ -28,6 +28,11 @@ upstream BinderJupyterHub {
   server 194.95.75.12:30082 max_fails=0;
 }
 
+upstream grafana {
+  server 194.95.75.9:30075;
+  server 194.95.75.12:30075;
+}
+
 # HTTP server to redirect notebooks.gesis.org 80 traffic to SSL/HTTPS
 server {
     listen 80;
@@ -66,11 +71,11 @@ server {
 
      # Grafana UI
     location /grafana/ {
-        error_page 503 /static/retired.html;
-        return 503;
+        # error_page 503 /static/maintenance.html;
+        # return 503;
 
-        # proxy_pass http://grafana/;
-        # include snippets/headers.conf;
+        proxy_pass http://grafana/;
+        include snippets/headers.conf;
     }
 
      # Prometheus
