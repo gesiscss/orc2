@@ -1,11 +1,6 @@
 # Use https://github.com/jupyterhub/mybinder.org-deploy/blob/main/mybinder/values.yaml as reference
 
 binderhub:
-  dind:
-    daemonset:
-      extraArgs:
-        - "--mtu=1000"
-
   pdb:
     maxUnavailable: 1
 
@@ -129,6 +124,17 @@ binderhub:
     nodePort: 30081
 
   imageBuilderType: dind
+  dind:
+    resources:
+      requests:
+        cpu: "0.5"
+        memory: 1Gi
+      limits:
+        cpu: "4"
+        memory: 4Gi
+    daemonset:
+      extraArgs:
+        - "--mtu=1000"
 
   imageCleaner:
     enabled: true
