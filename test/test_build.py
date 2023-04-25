@@ -30,6 +30,8 @@ def push_dummy_gh_branch(repo, branch):
 
     with tempfile.TemporaryDirectory() as gitdir:
         subprocess.check_call(["git", "clone", repo, gitdir])
+        subprocess.check_call(["git", "config", "--global", "user.email", "bot@notebooks.gesis.org"], cwd=gitdir)
+        subprocess.check_call(["git", "config", "--global", "user.name", "Test bot"], cwd=gitdir)
         branchfile = os.path.join(gitdir, "branchname")
         with open(branchfile, "w", encoding="utf-8") as _file:
             _file.write(branch)
