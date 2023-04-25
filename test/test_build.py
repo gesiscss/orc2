@@ -10,7 +10,7 @@ import tempfile
 import time
 from contextlib import contextmanager
 
-import pytest
+import pytest  # pylint: disable=unused-import
 import requests
 
 
@@ -31,8 +31,8 @@ def push_dummy_gh_branch(repo, branch):
     with tempfile.TemporaryDirectory() as gitdir:
         subprocess.check_call(["git", "clone", repo, gitdir])
         branchfile = os.path.join(gitdir, "branchname")
-        with open(branchfile, "w") as f:
-            f.write(branch)
+        with open(branchfile, "w", encoding="utf-8") as _file:
+            _file.write(branch)
         subprocess.check_call(["git", "add", branchfile], cwd=gitdir)
         subprocess.check_call(
             ["git", "commit", "-m", f"Dummy update for {branch}"], cwd=gitdir
@@ -59,9 +59,9 @@ def test_build_binder(binder_url):
     branch = str(time.time())
     repo = "gesiscss/orc2-test-build"
 
-    GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
+    GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")  # pylint: disable=invalid-name
     if GITHUB_TOKEN is None:
-        raise Exception("GITHUB_TOKEN is empty")
+        raise Exception("GITHUB_TOKEN is empty")  # pylint: disable=broad-exception-raised
 
     with push_dummy_gh_branch(
         f"https://bot:{GITHUB_TOKEN}@github.com:/{repo}.git",
@@ -69,9 +69,9 @@ def test_build_binder(binder_url):
     ):
         build_url = binder_url + f"/build/gh/{repo}/{branch}"
         print(f"building {build_url}")
-        r = requests.get(build_url, stream=True, timeout=TIMEOUT)
-        r.raise_for_status()
-        for line in r.iter_lines():
+        response  = requests.get(build_url, stream=True, timeout=TIMEOUT)
+        response.raise_for_status()
+        for line in response.iter_lines():
             line = line.decode("utf8")
             if line.startswith("data:"):
                 data = json.loads(line.split(":", 1)[1])
@@ -87,11 +87,11 @@ def test_build_binder(binder_url):
             assert False
 
         headers = {"Authorization": f"token {token}"}
-        r = requests.get(notebook_url + "/api", headers=headers, timeout=TIMEOUT)
-        assert r.status_code == 200
-        assert "version" in r.json()
+        response = requests.get(notebook_url + "/api", headers=headers, timeout=TIMEOUT)
+        assert response.status_code == 200
+        assert "version" in response.json()
 
-        r = requests.post(
+        response = requests.post(
             notebook_url + "/api/shutdown", headers=headers, timeout=TIMEOUT
         )
-        assert r.status_code == 200
+        assert response.status_code == 200
