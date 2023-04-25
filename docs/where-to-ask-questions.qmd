@@ -2,7 +2,7 @@
 
 Before ask questions, check the official documentation:
 
-- [BinderHub Federation](https://mybinder.readthedocs.io/en/latest/)
+- [BinderHub Federation](https://mybinder.readthedocs.io/en/latest/) and [Site Reliability Guide for mybinder.org](https://mybinder-sre.readthedocs.io/en/latest/)
 - [BinderHub](https://binderhub.readthedocs.io/en/latest/)
 - [repo2docker](https://repo2docker.readthedocs.io/en/latest/)
 - [JupyterHub with Kubernetes](https://z2jh.jupyter.org/en/stable/)
