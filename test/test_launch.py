@@ -40,5 +40,7 @@ def test_launch_binder(binder_url):
     assert response.status_code == 200
     assert "version" in response.json()
 
-    response = requests.post(notebook_url + "/api/shutdown", headers=headers, timeout=TIMEOUT)
+    response = requests.post(
+        notebook_url + "/api/shutdown", headers=headers, timeout=TIMEOUT
+    )
     assert response.status_code == 200

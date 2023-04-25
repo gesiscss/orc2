@@ -30,8 +30,13 @@ def push_dummy_gh_branch(repo, branch):
 
     with tempfile.TemporaryDirectory() as gitdir:
         subprocess.check_call(["git", "clone", repo, gitdir])
-        subprocess.check_call(["git", "config", "--global", "user.email", "bot@notebooks.gesis.org"], cwd=gitdir)
-        subprocess.check_call(["git", "config", "--global", "user.name", "Test bot"], cwd=gitdir)
+        subprocess.check_call(
+            ["git", "config", "--global", "user.email", "bot@notebooks.gesis.org"],
+            cwd=gitdir,
+        )
+        subprocess.check_call(
+            ["git", "config", "--global", "user.name", "Test bot"], cwd=gitdir
+        )
         branchfile = os.path.join(gitdir, "branchname")
         with open(branchfile, "w", encoding="utf-8") as _file:
             _file.write(branch)
@@ -63,7 +68,9 @@ def test_build_binder(binder_url):
 
     GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")  # pylint: disable=invalid-name
     if GITHUB_TOKEN is None:
-        raise Exception("GITHUB_TOKEN is empty")  # pylint: disable=broad-exception-raised
+        raise Exception(  # pylint: disable=broad-exception-raised
+            "GITHUB_TOKEN is empty"
+        )
 
     with push_dummy_gh_branch(
         f"https://bot:{GITHUB_TOKEN}@github.com:/{repo}.git",
@@ -71,7 +78,7 @@ def test_build_binder(binder_url):
     ):
         build_url = binder_url + f"/build/gh/{repo}/{branch}"
         print(f"building {build_url}")
-        response  = requests.get(build_url, stream=True, timeout=TIMEOUT)
+        response = requests.get(build_url, stream=True, timeout=TIMEOUT)
         response.raise_for_status()
         for line in response.iter_lines():
             line = line.decode("utf8")
