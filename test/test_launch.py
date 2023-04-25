@@ -6,7 +6,7 @@ import json
 
 import logging
 
-import pytest
+import pytest  # pylint: disable=unused-import
 import requests
 
 TIMEOUT = 30
@@ -21,9 +21,9 @@ def test_launch_binder(binder_url):
     repo = "binder-examples/requirements"
     ref = "50533eb470ee6c24e872043d30b2fee463d6943f"
     build_url = f"{binder_url}/build/gh/{repo}/{ref}"
-    r = requests.get(build_url, stream=True, timeout=TIMEOUT)
-    r.raise_for_status()
-    for line in r.iter_lines():
+    response = requests.get(build_url, stream=True, timeout=TIMEOUT)
+    response.raise_for_status()
+    for line in response.iter_lines():
         line = line.decode("utf8")
         if line.startswith("data:"):
             data = json.loads(line.split(":", 1)[1])
@@ -36,9 +36,9 @@ def test_launch_binder(binder_url):
         assert False
 
     headers = {"Authorization": f"token {token}"}
-    r = requests.get(notebook_url + "/api", headers=headers, timeout=TIMEOUT)
-    assert r.status_code == 200
-    assert "version" in r.json()
+    response = requests.get(notebook_url + "/api", headers=headers, timeout=TIMEOUT)
+    assert response.status_code == 200
+    assert "version" in response.json()
 
-    r = requests.post(notebook_url + "/api/shutdown", headers=headers, timeout=TIMEOUT)
-    assert r.status_code == 200
+    response = requests.post(notebook_url + "/api/shutdown", headers=headers, timeout=TIMEOUT)
+    assert response.status_code == 200
