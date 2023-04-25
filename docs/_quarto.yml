@@ -42,6 +42,7 @@ book:
       - production-k8s-storage.qmd
       - production-binderhub.qmd
       - production-nginx.qmd
+      - production-monitoring-status.qmd
     - part: "Continuous Deployment"
       chapters: 
       - gitlab-install-agent.qmd
