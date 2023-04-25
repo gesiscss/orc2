@@ -16,6 +16,7 @@ import requests
 
 TIMEOUT = 30
 
+
 @contextmanager
 def push_dummy_gh_branch(repo, branch):
     """
@@ -58,10 +59,9 @@ def test_build_binder(binder_url):
     branch = str(time.time())
     repo = "gesiscss/orc2-test-build"
 
-
-    GITHUB_TOKEN = os.getenv('GITHUB_TOKEN')
+    GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
     if GITHUB_TOKEN is None:
-        raise Exception('GITHUB_TOKEN is empty')
+        raise Exception("GITHUB_TOKEN is empty")
 
     with push_dummy_gh_branch(
         f"https://bot:{GITHUB_TOKEN}@github.com:/{repo}.git",
@@ -91,5 +91,7 @@ def test_build_binder(binder_url):
         assert r.status_code == 200
         assert "version" in r.json()
 
-        r = requests.post(notebook_url + "/api/shutdown", headers=headers, timeout=TIMEOUT)
+        r = requests.post(
+            notebook_url + "/api/shutdown", headers=headers, timeout=TIMEOUT
+        )
         assert r.status_code == 200
