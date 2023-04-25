@@ -25,3 +25,4 @@ Before you start, make sure that you have the following:
 4. [KeePassXC](https://keepassxc.org/) and [NextCloud Desktop client](https://nextcloud.com/install/#install-clients) installed in your machine.
 5. [minikube](https://minikube.sigs.k8s.io/docs/) installed in your machine.
 6. [helm](https://helm.sh) installed in your machine.
+7. [Ansible](https://www.ansible.com/) installed in your machine.
