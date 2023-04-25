@@ -16,6 +16,8 @@ binderhub:
 
   config:
     BinderHub:
+      pod_quota: 400
+      
       base_url: /binder/
       hub_url: https://notebooks.gesis.org/binder/jupyter/
       image_prefix: gesiscss/binder-r2d-g5b5b759-
