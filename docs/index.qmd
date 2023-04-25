@@ -22,6 +22,6 @@ Before you start, make sure that you have the following:
 4. [Git](https://git-scm.com/) and [`git-crypt`](https://www.agwa.name/projects/git-crypt/) installed in your machine.
 
    See @sec-install-git-crypt for how to install `git-crypt`.
-4. [KeePassXC](https://keepassxc.org/) installed in your machine.
+4. [KeePassXC](https://keepassxc.org/) and [NextCloud Desktop client](https://nextcloud.com/install/#install-clients) installed in your machine.
 5. [minikube](https://minikube.sigs.k8s.io/docs/) installed in your machine.
 6. [helm](https://helm.sh) installed in your machine.
