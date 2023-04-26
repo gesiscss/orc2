@@ -98,7 +98,8 @@ gesis helm deploy:
       --namespace=gesis \
       --create-namespace \
       -f ./helm/config.yaml \
-      -f ./helm/_secret.yaml
+      -f ./helm/_secret.yaml \
+      -f ./helm/_secret-mybinder.org-common.yaml
 
 Test script lint:
   stage: test
