@@ -1,10 +1,9 @@
 ---
-name: Bug report
-about: Create a report to help us improve
+name: Repository build failure
+about: Report a Git repository that fail at notebooks.gesis.org
 title: ''
 labels: ''
-assignees: ''
-
+assignees: '@rgaiacs'
 ---
 
 [repo2docker](https://github.com/jupyterhub/repo2docker) failed to build <failed-repository-url>.
