@@ -45,8 +45,9 @@ grafana:
       cpu: "0.25"
       memory: 128Mi
   ingress:
+    path: /grafana
     hosts:
-      - notebooks.gesis.org/grafana
+      - notebooks.gesis.org
   datasources:
     datasources.yaml:
       apiVersion: 1
