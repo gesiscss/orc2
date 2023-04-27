@@ -33,7 +33,7 @@ prometheus:
     retention: 30d
     ingress:
       hosts:
-        - prometheus.notebooks.gesis.org
+        - notebooks.gesis.org/prometheus
 
 grafana:
   enabled: true
@@ -46,7 +46,7 @@ grafana:
       memory: 128Mi
   ingress:
     hosts:
-      - grafana.notebooks.gesis.org
+      - notebooks.gesis.org/grafana
   datasources:
     datasources.yaml:
       apiVersion: 1
