@@ -285,6 +285,11 @@ etcJupyter:
       # when people leave a notebook open and wander off
       cull_connected: true
 
+# Send GESIS Binder events to mybinder.org's StackDriver
+# must be override in _secret.yaml
+eventsArchiver:
+  serviceAccountKey: ""
+
 cryptnono:
   enabled: true
   tolerations:
