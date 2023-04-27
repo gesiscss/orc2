@@ -91,12 +91,21 @@ binderhub:
     - name: binder-templates-gesis
       configMap:
         name: binder-templates-gesis
+    - name: secrets
+      secret:
+        secretName: events-archiver-secrets
   
   extraVolumeMounts:
     - name: binder-templates
       mountPath: /etc/binderhub/templates
     - name: binder-templates-gesis
       mountPath: /etc/binderhub/templates/gesis
+    - name: secrets
+      mountPath: /secrets
+      readOnly: true
+
+  extraEnv:
+    GOOGLE_APPLICATION_CREDENTIALS: /secrets/service-account.json
 
   extraConfig:
     # Send Events to StackDriver on Google Cloud
