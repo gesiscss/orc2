@@ -39,3 +39,9 @@ This can take a lot of time.
 ```bash
 docker system prune --force --all
 ```
+
+## Access log
+
+### Windows Subsystem for Linux (WSL)
+
+The log files are under `C:\Users\username\AppData\Local\Docker` where `username` is your user name.
