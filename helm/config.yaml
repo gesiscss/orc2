@@ -54,7 +54,7 @@ grafana:
         - name: prometheus
           orgId: 1
           type: prometheus
-          url: https://prometheus.notebooks.gesis.org
+          url: https://notebooks.gesis.org/prometheus
           isDefault: true
           editable: false
   persistence:
