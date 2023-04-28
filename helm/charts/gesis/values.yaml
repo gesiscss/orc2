@@ -185,8 +185,8 @@ binderhub:
     enabled: true
     # when 80% of inodes are used,
     # cull images until only 40% are used.
-    imageGCThresholdHigh: 80
-    imageGCThresholdLow: 40
+    imageGCThresholdHigh: 70
+    imageGCThresholdLow: 35
 
   jupyterhub:
     cull:
