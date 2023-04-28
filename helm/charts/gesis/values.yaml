@@ -395,3 +395,6 @@ nfs:
   nodeSelector:
     binderhub: "true"
     
+minesweeper:
+  enabled: true
+  image: jupyterhub/mybinder.org-minesweeper:set-by-chartpress
