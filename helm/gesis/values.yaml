@@ -59,6 +59,7 @@ binderhub:
         - ^ferarussia/.*
         - ^ayman107/.*
         - ^Miner2008001/.*
+        - ^Sologanian/.*
 
       high_quota_specs:
         - ^gesiscss/.*
