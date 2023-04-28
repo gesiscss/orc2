@@ -69,9 +69,9 @@ gesis helm lint:
   dependencies: []
   script:
     - helm version
-    - helm dependency update ./helm/gesis
-    - helm lint ./helm/gesis
-    - helm template gesis ./helm/gesis > gesis.helm.chart.yaml
+    - helm dependency update ./helm/charts/gesis
+    - helm lint ./helm/charts/gesis
+    - helm template gesis ./helm/charts/gesis > gesis.helm.chart.yaml
   artifacts:
     paths:
       - gesis.helm.chart.yaml
@@ -91,15 +91,15 @@ gesis helm deploy:
     - git-crypt unlock git_crypt_secret_key
     - kubectl config use-context ilcm/orc2:kubernetes
     - helm version
-    - helm dependency update ./helm/gesis
+    - helm dependency update ./helm/charts/gesis
     - |
       helm upgrade --cleanup-on-fail \
-      --install binderhub ./helm/gesis \
+      --install binderhub ./helm/charts/gesis \
       --namespace=gesis \
       --create-namespace \
-      -f ./helm/config.yaml \
-      -f ./helm/_secret.yaml \
-      -f ./helm/_secret-mybinder.org-common.yaml
+      -f ./helm/config/prod.yaml \
+      -f ./helm/config/_secret-prod.yaml \
+      -f ./config/common/_secret-mybinder.org-common.yaml
 
 Test script lint:
   stage: test
