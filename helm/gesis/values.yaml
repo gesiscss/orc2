@@ -61,6 +61,7 @@ binderhub:
         - ^Miner2008001/.*
         - ^Sologanian/.*
         - ^PiTi2k5/.*
+        - ^JayWalker512/.*
 
       high_quota_specs:
         - ^gesiscss/.*
