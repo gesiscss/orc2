@@ -16,7 +16,7 @@ binderhub:
 
   config:
     BinderHub:
-      pod_quota: 50
+      pod_quota: 0
       
       base_url: /binder/
       hub_url: https://notebooks.gesis.org/binder/jupyter/
