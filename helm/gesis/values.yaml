@@ -60,6 +60,7 @@ binderhub:
         - ^ayman107/.*
         - ^Miner2008001/.*
         - ^Sologanian/.*
+        - ^PiTi2k5/.*
 
       high_quota_specs:
         - ^gesiscss/.*
