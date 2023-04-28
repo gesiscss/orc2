@@ -62,6 +62,7 @@ binderhub:
         - ^Sologanian/.*
         - ^PiTi2k5/.*
         - ^JayWalker512/.*
+        - ^KhetaguriDimitri/.*
 
       high_quota_specs:
         - ^gesiscss/.*
