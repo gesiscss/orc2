@@ -162,6 +162,7 @@ binderhub:
 
   imageBuilderType: dind
   dind:
+    hostLibDir: /ssd
     resources:
       requests:
         cpu: "0.5"
