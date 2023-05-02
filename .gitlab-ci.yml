@@ -1,3 +1,11 @@
+stages:
+  - build
+  - test
+  - test-stage
+  - test-prod
+  - deploy-stage
+  - deploy-prod
+
 Build container with Kubernetes and git-crypt:
   stage: build
   rules:
@@ -27,7 +35,7 @@ gesis ansible lint:
     - ansible-lint --version
     - ansible-lint --show-relpath ansible
 
-gesis ansible deploy:
+.gesis ansible deploy:
   tags:
     - notebooks_gesis_org
   stage: deploy
@@ -36,10 +44,26 @@ gesis ansible deploy:
       changes:
         - ansible/**/*
         - nginx/**/*
+  variables:
+    ANSIBLE_INVENTORY: template
   script:
     - echo $ANSIBLE_VAULT > ansible/.ansible-vault-password-file
     - ansible --version
-    - ansible-playbook --vault-password-file ansible/.ansible-vault-password-file --extra-vars @ansible/vault/prometheus.yml --extra-vars ansible_become_password=${ANSIBLE_BECOME_PASSWORD} --inventory ansible/inventories/production ansible/orc2.yml
+    - ansible-playbook --vault-password-file ansible/.ansible-vault-password-file --extra-vars @ansible/vault/prometheus.yml --extra-vars ansible_become_password=${ANSIBLE_BECOME_PASSWORD} --inventory ansible/inventories/$ANSIBLE_INVENTORY ansible/orc2.yml
+
+gesis ansible stage deploy:
+  stage: deploy-stage
+  variables:
+    ANSIBLE_INVENTORY: test
+  extends:
+    - .gesis ansible deploy
+
+gesis ansible production deploy:
+  stage: deploy-prod
+  variables:
+    ANSIBLE_INVENTORY: production
+  extends:
+    - .gesis ansible deploy
 
 gesis helm lint:
   stage: test
@@ -58,7 +82,7 @@ gesis helm lint:
     - helm template gesis ./helm/charts/gesis > gesis.helm.chart.yaml
 
 gesis helm deploy:
-  stage: deploy
+  stage: deploy-prod
   rules:
     - if: ($CI_PIPELINE_SOURCE != "schedule") && $CI_COMMIT_BRANCH == 'main'
       changes:
