@@ -384,15 +384,7 @@ grafana:
     server:
       root_url: "https://notebooks.gesis.org/grafana/"
       http_port: 3000
-
-nfs:
-  enabled: true
-  storageClass:
-    name: ssd2nfs-to-docker
-    provisionerName: k8s-sigs.io/ssd2nfs-to-docker-nfs-subdir-external-provisioner
-  nodeSelector:
-    binderhub: "true"
-    
+   
 minesweeper:
   enabled: true
   image: jupyterhub/mybinder.org-minesweeper:set-by-chartpress
