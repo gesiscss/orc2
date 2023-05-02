@@ -44,9 +44,3 @@ dependencies:
     version: "0.0.1-n025.h28f473f"
     repository: https://yuvipanda.github.io/cryptnono/
     condition: cryptnono.enabled
-
-  - name: nfs-subdir-external-provisioner
-    version: "4.0.18"
-    repository: https://kubernetes-sigs.github.io/nfs-subdir-external-provisioner/
-    alias: nfs
-    condition: nfs.enabled
