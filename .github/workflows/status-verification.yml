@@ -4,8 +4,8 @@ on:
   schedule:
     - cron:  '0 * * * *'
 jobs:
-  check-bats-version:
-    runs-on: python
+  pytest:
+    runs-on: ubuntu-22.04
     steps:
       - run: python -m pip install pytest
       - run: pytest --binder-url https://notebooks.gesis.org/binder/ --hub-url https://notebooks.gesis.org/binder/jupyter/ test

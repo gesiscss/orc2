@@ -111,7 +111,7 @@ Test script lint:
     name: docker-private-snapshots.gesis.intra/gesis/ilcm/orc2/test:latest
   dependencies: []
   script:
-    - black test
+    - black --check test
     - pylint test/*.py
 
 Test script run:

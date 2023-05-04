@@ -7,6 +7,7 @@ import os
 import subprocess
 import sys
 import tempfile
+import datetime
 import time
 from contextlib import contextmanager
 
@@ -66,7 +67,9 @@ def test_build_binder(binder_url):
     branch = str(time.time())
     repo = "gesiscss/orc2-test-build"
 
-    SECRET_GITHUB_TOKEN = os.getenv("SECRET_GITHUB_TOKEN")  # pylint: disable=invalid-name
+    SECRET_GITHUB_TOKEN = os.getenv(  # pylint: disable=invalid-name
+        "SECRET_GITHUB_TOKEN"
+    )
     if SECRET_GITHUB_TOKEN is None:
         raise Exception(  # pylint: disable=broad-exception-raised
             "SECRET_GITHUB_TOKEN is empty"
@@ -77,10 +80,18 @@ def test_build_binder(binder_url):
         branch,
     ):
         build_url = binder_url + f"/build/gh/{repo}/{branch}"
-        print(f"building {build_url}")
+
+        begin_of_request = datetime.datetime.now()
+
         response = requests.get(build_url, stream=True, timeout=TIMEOUT)
         response.raise_for_status()
         for line in response.iter_lines():
+            now = datetime.datetime.now()
+            request_duration = now - begin_of_request
+            if request_duration.seconds > 300:  # 5min
+                response.close()
+                break
+
             line = line.decode("utf8")
             if line.startswith("data:"):
                 data = json.loads(line.split(":", 1)[1])
