@@ -22,8 +22,6 @@ binderhub:
 
       use_registry: true
 
-      build_image: quay.io/jupyterhub/repo2docker:2022.10.0-163.gd3c7441
-
       per_repo_quota: 100
       per_repo_quota_higher: 200
 
@@ -35,6 +33,7 @@ binderhub:
       memory_limit: "8G"
 
     KubernetesBuildExecutor:
+      build_image: quay.io/jupyterhub/repo2docker:2022.10.0-163.gd3c7441
       memory_request: "1G"
       memory_limit: "3G"
       node_selector:
