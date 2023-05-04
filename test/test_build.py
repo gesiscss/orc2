@@ -67,7 +67,9 @@ def test_build_binder(binder_url):
     branch = str(time.time())
     repo = "gesiscss/orc2-test-build"
 
-    SECRET_GITHUB_TOKEN = os.getenv("SECRET_GITHUB_TOKEN")  # pylint: disable=invalid-name
+    SECRET_GITHUB_TOKEN = os.getenv(  # pylint: disable=invalid-name
+        "SECRET_GITHUB_TOKEN"
+    )
     if SECRET_GITHUB_TOKEN is None:
         raise Exception(  # pylint: disable=broad-exception-raised
             "SECRET_GITHUB_TOKEN is empty"
@@ -78,9 +80,9 @@ def test_build_binder(binder_url):
         branch,
     ):
         build_url = binder_url + f"/build/gh/{repo}/{branch}"
-        
+
         begin_of_request = datetime.datetime.now()
-        
+
         response = requests.get(build_url, stream=True, timeout=TIMEOUT)
         response.raise_for_status()
         for line in response.iter_lines():
