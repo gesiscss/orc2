@@ -1,5 +1,7 @@
 # Open Research Computing v2
 
+[![status-verification](https://github.com/gesiscss/orc2/actions/workflows/status-verification.yml/badge.svg)](https://github.com/gesiscss/orc2/actions/workflows/status-verification.yml)
+
 Production server at <https://notebooks.gesis.org>.
 
 Test server at <https://notebooks-test.gesis.org>.
