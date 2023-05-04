@@ -9,6 +9,9 @@ binderhub:
 
       hub_url: https://notebooks.gesis.org/binder/jupyter/
 
+    LaunchQuota:
+      total_quota: 0
+
   extraConfig:
     02-badge-base-url: |
       c.BinderHub.badge_base_url = "https://mybinder.org/"

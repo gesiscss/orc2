@@ -31,9 +31,6 @@ binderhub:
 
       cors_allow_origin: '*'
 
-    LaunchQuota:
-      total_quota: 120
-
     BuildExecutor:
       memory_limit: "8G"
 
