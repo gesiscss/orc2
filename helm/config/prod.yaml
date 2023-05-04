@@ -5,8 +5,6 @@ url: https://notebooks.gesis.org/binder/
 binderhub:
   config:
     BinderHub:
-      pod_quota: 0
-
       hub_url: https://notebooks.gesis.org/binder/jupyter/
 
     LaunchQuota:
