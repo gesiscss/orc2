@@ -66,14 +66,14 @@ def test_build_binder(binder_url):
     branch = str(time.time())
     repo = "gesiscss/orc2-test-build"
 
-    GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")  # pylint: disable=invalid-name
-    if GITHUB_TOKEN is None:
+    SECRET_GITHUB_TOKEN = os.getenv("SECRET_GITHUB_TOKEN")  # pylint: disable=invalid-name
+    if SECRET_GITHUB_TOKEN is None:
         raise Exception(  # pylint: disable=broad-exception-raised
-            "GITHUB_TOKEN is empty"
+            "SECRET_GITHUB_TOKEN is empty"
         )
 
     with push_dummy_gh_branch(
-        f"https://bot:{GITHUB_TOKEN}@github.com:/{repo}.git",
+        f"https://bot:{SECRET_GITHUB_TOKEN}@github.com:/{repo}.git",
         branch,
     ):
         build_url = binder_url + f"/build/gh/{repo}/{branch}"

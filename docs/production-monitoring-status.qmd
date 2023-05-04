@@ -6,7 +6,7 @@ A couple of Python scripts (see `test` directory) check basic reply from GESIS N
 
 First, create a access token to <https://github.com/gesiscss/orc2-test-build> by following the [instructions on GitHub documentation](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token).
 
-Save the access token as (GESIS GitLab CI/CD)[https://git.gesis.org/ilcm/orc2/-/settings/ci_cd] variable under the name `GITHUB_TOKEN`.
+Save the access token as (GESIS GitLab CI/CD)[https://git.gesis.org/ilcm/orc2/-/settings/ci_cd] variable under the name `SECRET_GITHUB_TOKEN`.
 
 [Schedule a new pipeline in GESIS GitLab](https://git.gesis.org/ilcm/orc2/-/pipeline_schedules/new) to run every hour. `.gitlab-ci.yml` is already configured to only run some jobs on schedule pipelines.
 
