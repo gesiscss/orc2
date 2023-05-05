@@ -13,7 +13,10 @@ mybinder.org bot script lint:
 mybinder.org bot execution:
   stage: deploy
   rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $GITLAB_CI_SCHEDULE_NAME == 'sync-mybinder.org'
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+      changes:
+        - bot/mybinder.org/bot.py
   image: 
     name: docker-private-snapshots.gesis.intra/gesis/ilcm/orc2/test:latest
   dependencies: []
