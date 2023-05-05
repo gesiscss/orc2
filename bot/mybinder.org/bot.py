@@ -31,7 +31,7 @@ GITLAB_REPO_URL = f"https://oauth2:{GITLAB_BOT_TOKEN}@git.gesis.org/{GITLAB_ORG_
 GITHUB_ORG_NAME = os.environ.get("GITHUB_ORG_NAME", "gesiscss")
 GITHUB_REPO_NAME = os.environ.get("GITHUB_REPO_NAME", "orc2")
 GITHUB_REPO_RAW_URL = (
-    f"https://raw.githubusercontent.com/{GITHUB_ORG_NAME}/{GITHUB_REPO_NAME}/master/"
+    f"https://raw.githubusercontent.com/{GITHUB_ORG_NAME}/{GITHUB_REPO_NAME}/main/"
 )
 
 MYBINDER_REPO_URL = f"https://github.com/jupyterhub/mybinder.org-deploy/"
@@ -63,24 +63,16 @@ class Bot:
             "build_image": None,
         }
 
-        response = requests.get(
-            "https://raw.githubusercontent.com/gesiscss/orc2/main/helm/charts/gesis/Chart.yaml"
-        )
+        response = requests.get(f"{GITHUB_REPO_RAW_URL}helm/charts/gesis/Chart.yaml")
         self.orc2_chart = load(response.text, Loader=Loader)
         self.orc2_chart_new = copy.deepcopy(self.orc2_chart)
-        response = requests.get(
-            "https://raw.githubusercontent.com/gesiscss/orc2/main/helm/charts/gesis/values.yaml"
-        )
+        response = requests.get(f"{GITHUB_REPO_RAW_URL}helm/charts/gesis/values.yaml")
         self.orc2_config = load(response.text, Loader=Loader)
         self.orc2_config_new = copy.deepcopy(self.orc2_config)
 
-        response = requests.get(
-            "https://raw.githubusercontent.com/jupyterhub/mybinder.org-deploy/main/mybinder/Chart.yaml"
-        )
+        response = requests.get(f"{MYBINDER_REPO_RAW_URL}mybinder/Chart.yaml")
         self.mybinder_chart = load(response.text, Loader=Loader)
-        response = requests.get(
-            "https://raw.githubusercontent.com/jupyterhub/mybinder.org-deploy/main/mybinder/values.yaml"
-        )
+        response = requests.get(f"{MYBINDER_REPO_RAW_URL}mybinder/values.yaml")
         self.mybinder_config = load(response.text, Loader=Loader)
 
     def update_repo(self):
