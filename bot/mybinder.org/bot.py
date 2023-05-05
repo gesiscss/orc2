@@ -2,7 +2,13 @@
 Derived from henchbot.py script: https://github.com/henchbot/mybinder.org-upgrades/blob/master/src/mybinder-upgrades/henchbot.py
 """
 
-from yaml import safe_load as load
+from yaml import load, dump
+
+try:
+    from yaml import CLoader as Loader, CDumper as Dumper
+except ImportError:
+    from yaml import Loader, Dumper
+
 import requests
 import subprocess
 import os
@@ -10,8 +16,11 @@ import shutil
 import time
 import logging
 import re
+import copy
 
-logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
+import argparse
+
+logging.basicConfig(level=logging.WARNING)
 
 GITLAB_BOT_NAME = os.environ["GITLAB_BOT_NAME"].strip()
 GITLAB_BOT_EMAIL = os.environ["GITLAB_BOT_EMAIL"].strip()
@@ -22,6 +31,7 @@ GITLAB_API_AUTHORIZATION_HEADER = {"PRIVATE-TOKEN": GITLAB_BOT_TOKEN}
 GITLAB_API_URL = f"https://git.gesis.org/api/v4/"
 GITLAB_ORG_NAME = os.environ.get("GITLAB_ORG_NAME", "ilcm")
 GITLAB_REPO_NAME = os.environ.get("GITLAB_REPO_NAME", "orc2")
+GITLAB_PROJECT_ID_ENCODED = f"{GITLAB_ORG_NAME}%2F{GITLAB_REPO_NAME}"
 GITLAB_REPO_URL = f"https://oauth2:{GITLAB_BOT_TOKEN}@git.gesis.org/{GITLAB_ORG_NAME}/{GITLAB_REPO_NAME}"
 
 GITHUB_ORG_NAME = os.environ.get("GITHUB_ORG_NAME", "gesiscss")
@@ -69,10 +79,109 @@ class Bot:
         Start by getting the latest commits of repo2docker, BinderHub and Jupyterhub in mybinder.org
         and the live ones in GESIS Binder.
         """
-        self.commit_info = {"binderhub": {}, "repo2docker": {}, "jupyterhub": {}}
-        self.get_new_commits()
-        self.gitlab_project_id = None
-        self.branch_name = None
+        self.chart_sync = {
+            "binderhub": None,
+            "prometheus": None,
+            "grafana": None,
+            "cryptnono": None,
+        }
+        self.config_sync = {
+            "build_image": None,
+        }
+
+        response = requests.get(
+            "https://raw.githubusercontent.com/gesiscss/orc2/main/helm/charts/gesis/Chart.yaml"
+        )
+        self.orc2_chart = load(response.text, Loader=Loader)
+        self.orc2_chart_new = copy.deepcopy(self.orc2_chart)
+        response = requests.get(
+            "https://raw.githubusercontent.com/gesiscss/orc2/main/helm/charts/gesis/values.yaml"
+        )
+        self.orc2_config = load(response.text, Loader=Loader)
+        self.orc2_config_new = copy.deepcopy(self.orc2_config)
+
+        response = requests.get(
+            "https://raw.githubusercontent.com/jupyterhub/mybinder.org-deploy/main/mybinder/Chart.yaml"
+        )
+        self.mybinder_chart = load(response.text, Loader=Loader)
+        response = requests.get(
+            "https://raw.githubusercontent.com/jupyterhub/mybinder.org-deploy/main/mybinder/values.yaml"
+        )
+        self.mybinder_config = load(response.text, Loader=Loader)
+
+    def update_repo(self):
+        """
+        Main method to check/create upgrades
+        """
+        self.sync_chart()
+
+        self.sync_config()
+
+    def sync_chart(self):
+        create_merge_request = False
+
+        for dependency_name in self.chart_sync:
+            orc2_version = None
+            orc2_idx = None
+            mybinder_version = None
+
+            for idx, orc2_dependency in enumerate(self.orc2_chart["dependencies"]):
+                if orc2_dependency["name"] == dependency_name:
+                    orc2_version = orc2_dependency["version"]
+                    orc2_idx = idx
+
+            for mybinder_dependency in self.mybinder_chart["dependencies"]:
+                if mybinder_dependency["name"] == dependency_name:
+                    mybinder_version = mybinder_dependency["version"]
+
+            if orc2_version == mybinder_version:
+                logging.debug(f"{dependency_name} has the same version.")
+                self.chart_sync[dependency_name] = True
+            else:
+                logging.debug(f"{dependency_name} need sync.")
+                create_merge_request = True
+
+                self.chart_sync[dependency_name] = False
+                self.orc2_chart_new["dependencies"][orc2_idx][
+                    "version"
+                ] = mybinder_version
+
+        if create_merge_request:
+            logging.debug(f"Create new branch.")
+            response = requests.post(
+                f"{GITLAB_API_URL}/projects/{GITLAB_PROJECT_ID_ENCODED}/repository/branches?branch=chart-sync&ref=main",
+                headers=GITLAB_API_AUTHORIZATION_HEADER,
+            )
+            logging.debug(response.text)
+
+            logging.debug(f"Update file.")
+            response = requests.post(
+                f"{GITLAB_API_URL}/projects/{GITLAB_PROJECT_ID_ENCODED}/repository/files/helm/charts%2Fgesis%2FChart%2Eyaml",
+                headers=GITLAB_API_AUTHORIZATION_HEADER,
+                json={
+                    "branch": "chart-sync",
+                    "author_email": GITLAB_BOT_EMAIL,
+                    "author_name": GITLAB_BOT_NAME,
+                    "content": dump(self.orc2_chart_new, Dumper=Dumper),
+                    "commit_message": "Sync Chart file",
+                },
+            )
+            logging.debug(response.text)
+
+            logging.debug(f"Create merge request.")
+            response = requests.post(
+                f"{GITLAB_API_URL}/projects/{GITLAB_PROJECT_ID_ENCODED}/merge_requests",
+                headers=GITLAB_API_AUTHORIZATION_HEADER,
+                json={
+                    "source_branch": "chart-sync",
+                    "target_branch": "main",
+                    "title": "Sync Helm Chart with mybinder.org",
+                },
+            )
+            logging.debug(response.text)
+
+    def sync_config(self):
+        pass
 
     def set_gitlab_project_id(self, repo_name):
         projects = requests.get(
@@ -121,61 +230,11 @@ class Bot:
             )
             assert res.status_code == 204
 
-    def edit_repo2docker_files(self, repo):
-        """
-        Update the SHA to latest for r2d
-        """
-        # https://github.com/henchbot/mybinder.org-upgrades/pull/12
-        pattern_base = r"([^\s]+/)?jupyter(hub)?/repo2docker:"
-        fnames = [
-            "gesisbinder/gesisbinder/values.yaml",
-            "gesishub/gesishub/values.yaml",
-        ]
-        for fname in fnames:
-            with open(fname, "r", encoding="utf8") as f:
-                values_yaml = f.read()
-
-            # updated_yaml = values_yaml.replace(
-            #     "jupyter/repo2docker:{}".format(self.commit_info[repo]['live']),
-            #     "jupyter/repo2docker:{}".format(self.commit_info[repo]['latest'])
-            # )
-            updated_yaml = re.sub(
-                pattern_base + re.escape(self.commit_info[repo]["live"]),
-                self.commit_info[repo]["repo_latest"],
-                values_yaml,
-            )
-
-            with open(fname, "w", encoding="utf8") as f:
-                f.write(updated_yaml)
-        return fnames
-
-    def edit_binderhub_files(self, repo):
-        """
-        Update the SHA to latest for bhub
-        """
-        fname = "gesisbinder/gesisbinder/requirements.yaml"
-        with open(fname, "r", encoding="utf8") as f:
-            requirements_yaml = f.read()
-
-        updated_yaml = requirements_yaml.replace(
-            "version: {}".format(self.commit_info[repo]["live"]),
-            "version: {}".format(self.commit_info[repo]["latest"]),
-            1,
-        )
-
-        with open(fname, "w", encoding="utf8") as f:
-            f.write(updated_yaml)
-
-        return [fname]
-
     def edit_files(self, repo):
         """
         Controlling method to update file for the repo
         """
-        if repo == "repo2docker":
-            return self.edit_repo2docker_files(repo)
-        elif repo == "binderhub":
-            return self.edit_binderhub_files(repo)
+        pass
 
     def add_commit_push(self, files_changed, repo):
         """
@@ -184,18 +243,7 @@ class Bot:
         for f in files_changed:
             subprocess.check_call(["git", "add", f])
 
-        if repo == "repo2docker":
-            old, new = normalize_r2d_tags(
-                self.commit_info["repo2docker"]["live"],
-                self.commit_info["repo2docker"]["latest"],
-            )
-            commit_message = "repo2docker: https://github.com/jupyterhub/repo2docker/compare/{}...{}".format(
-                old, new
-            )
-        elif repo == "binderhub":
-            commit_message = "binderhub: https://github.com/jupyterhub/binderhub/compare/{}...{}".format(
-                self.bhub_live, self.bhub_latest
-            )
+        commit_message = "Update from bot"
 
         subprocess.check_call(["git", "config", "user.name", GITLAB_BOT_NAME])
         subprocess.check_call(["git", "config", "user.email", GITLAB_BOT_EMAIL])
@@ -308,41 +356,6 @@ class Bot:
                 headers=GITLAB_API_AUTHORIZATION_HEADER,
             )
         logging.info(f"PR done: {title}")
-
-    def update_repos(self, repos):
-        """
-        Main method to check/create upgrades
-        """
-        for repo in repos:
-            self.branch_name = repo + "_bump"
-            if self.commit_info[repo]["live"] != self.commit_info[repo]["latest"]:
-                logging.info(
-                    f"{repo}:{self.commit_info[repo]['live']}-->{self.commit_info[repo]['latest']}"
-                )
-                self.set_gitlab_project_id(GITLAB_REPO_NAME)
-                existing_pr = self.check_existing_prs(repo)
-                logging.info(f"existing_pr: {existing_pr}")
-                if existing_pr is None:
-                    # there is a PR with same update, it is not merged yet
-                    continue
-                elif existing_pr is False:
-                    # no PR exists for this repo
-                    self.delete_old_branch_if_exists()
-
-                subprocess.check_call(["git", "clone", f"{GITLAB_REPO_URL}.git"])
-                os.chdir(GITLAB_REPO_NAME)
-                subprocess.check_call(["git", "checkout", "-b", self.branch_name])
-
-                files_changed = self.edit_files(repo)
-                logging.info(f"files_changed: {files_changed}")
-
-                self.add_commit_push(files_changed, repo)
-                os.chdir("..")
-                shutil.rmtree(GITLAB_REPO_NAME)
-
-                self.create_update_pr(repo, existing_pr)
-            else:
-                logging.info(f"{repo}: already up-to-date")
 
     def get_repo2docker_live(self):
         """
@@ -486,5 +499,17 @@ class Bot:
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(
+        prog="GESIS Notebooks Sync Bot",
+        description="Sync Helm Chart with mybinder.org",
+    )
+    parser.add_argument("-v", "--verbose", action="store_true")
+    parser.add_argument("-vv", "--debug", action="store_true")
+    args = parser.parse_args()
+    if args.verbose:
+        logging.getLogger().setLevel(logging.INFO)
+    if args.debug:
+        logging.getLogger().setLevel(logging.DEBUG)
+
     b = Bot()
-    b.update_repos(["repo2docker", "binderhub"])
+    b.update_repo()
