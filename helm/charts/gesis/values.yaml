@@ -240,20 +240,6 @@ binderhub:
         pdb:
           minAvailable: 0
     singleuser:
-      initContainers:
-        - name: tc-init
-          image: jupyterhub/mybinder.org-tc-init:set-by-chartpress
-          imagePullPolicy: IfNotPresent
-          env:
-            - name: WHITELIST_CIDR
-              value: 10.0.0.0/8
-            - name: EGRESS_BANDWIDTH
-              value: 1mbit
-          securityContext:
-            runAsUser: 0
-            capabilities:
-              add:
-                - NET_ADMIN
       networkPolicy:
         enabled: true
         # z2jh chart has a default ingress rule which allows inbound traffic
