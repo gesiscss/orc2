@@ -14,7 +14,7 @@ assignees: '@rgaiacs'
 
 ## What is the expected correct behavior?
 
-repo2docker build container successfuly.
+repo2docker builds container successfuly.
 
 ## Steps to reproduce
 

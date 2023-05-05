@@ -1,4 +1,4 @@
-[repo2docker](https://github.com/jupyterhub/repo2docker) failed to build <failed-repository-url>.
+[BinderHub]https://github.com/jupyterhub/binderhub) failed to launch <failed-repository-url>.
 
 ## What is the current bug behavior?
 
@@ -6,7 +6,7 @@
 
 ## What is the expected correct behavior?
 
-repo2docker builds container successfuly.
+BinderHub launches container successfuly.
 
 ## Steps to reproduce
 

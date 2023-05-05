@@ -1,4 +1,12 @@
-[repo2docker](https://github.com/jupyterhub/repo2docker) failed to build <failed-repository-url>.
+---
+name: Repository launch failure
+about: Report a Git repository that fail at notebooks.gesis.org
+title: ''
+labels: ''
+assignees: '@rgaiacs'
+---
+
+[BinderHub]https://github.com/jupyterhub/binderhub) failed to build <failed-repository-url>.
 
 ## What is the current bug behavior?
 
@@ -6,7 +14,7 @@
 
 ## What is the expected correct behavior?
 
-repo2docker builds container successfuly.
+BinderHub launches container successfuly.
 
 ## Steps to reproduce
 
@@ -21,3 +29,4 @@ repo2docker builds container successfuly.
 3. Click `launch`
 
 resulted in <!-- same issue / different issue / no issue -->.
+
