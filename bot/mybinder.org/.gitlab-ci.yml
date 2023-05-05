@@ -1,0 +1,11 @@
+mybinder.org bot script lint:
+  stage: test
+  rules:
+    - if: (($CI_PIPELINE_SOURCE != "schedule") && $CI_COMMIT_BRANCH == 'main') || $CI_PIPELINE_SOURCE == 'merge_request_event'
+      changes:
+        - bot/mybinder.org/bot.py
+  image: 
+    name: docker-private-snapshots.gesis.intra/gesis/ilcm/orc2/test:latest
+  dependencies: []
+  script:
+    - black --check bot/mybinder.org/

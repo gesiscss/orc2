@@ -13,23 +13,23 @@ import re
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 
-GL_BOT_NAME = os.environ["GL_BOT_NAME"].strip()
-GL_BOT_EMAIL = os.environ["GL_BOT_EMAIL"].strip()
-GL_BOT_TOKEN = os.environ["GL_BOT_TOKEN"].strip()
+GITLAB_BOT_NAME = os.environ["GITLAB_BOT_NAME"].strip()
+GITLAB_BOT_EMAIL = os.environ["GITLAB_BOT_EMAIL"].strip()
+GITLAB_BOT_TOKEN = os.environ["GITLAB_BOT_TOKEN"].strip()
 
 # https://docs.gitlab.com/ee/api/#personal-access-tokens
-GL_API_AUTHORIZATION_HEADER = {"PRIVATE-TOKEN": GL_BOT_TOKEN}
-GL_API_URL = f"https://git.gesis.org/api/v4/"
-GL_ORG_NAME = os.environ.get("GL_ORG_NAME", "ilcm")
-GL_REPO_NAME = os.environ.get("GL_REPO_NAME", "orc")
-GL_REPO_URL = (
-    f"https://oauth2:{GL_BOT_TOKEN}@git.gesis.org/{GL_ORG_NAME}/{GL_REPO_NAME}"
+GITLAB_API_AUTHORIZATION_HEADER = {"PRIVATE-TOKEN": GITLAB_BOT_TOKEN}
+GITLAB_API_URL = f"https://git.gesis.org/api/v4/"
+GITLAB_ORG_NAME = os.environ.get("GITLAB_ORG_NAME", "ilcm")
+GITLAB_REPO_NAME = os.environ.get("GITLAB_REPO_NAME", "orc2")
+GITLAB_REPO_URL = (
+    f"https://oauth2:{GITLAB_BOT_TOKEN}@git.gesis.org/{GITLAB_ORG_NAME}/{GITLAB_REPO_NAME}"
 )
 
-GH_ORG_NAME = os.environ.get("GH_ORG_NAME", "gesiscss")
-GH_REPO_NAME = os.environ.get("GH_REPO_NAME", "orc")
-GH_REPO_RAW_URL = (
-    f"https://raw.githubusercontent.com/{GH_ORG_NAME}/{GH_REPO_NAME}/master/"
+GITHUB_ORG_NAME = os.environ.get("GITHUB_ORG_NAME", "gesiscss")
+GITHUB_REPO_NAME = os.environ.get("GITHUB_REPO_NAME", "orc2")
+GITHUB_REPO_RAW_URL = (
+    f"https://raw.githubusercontent.com/{GITHUB_ORG_NAME}/{GITHUB_REPO_NAME}/master/"
 )
 
 BHUB_RAW_URL = "https://raw.githubusercontent.com/jupyterhub/binderhub/"
@@ -78,8 +78,8 @@ class Bot:
 
     def set_gitlab_project_id(self, repo_name):
         projects = requests.get(
-            f"{GL_API_URL}projects?search={repo_name}",
-            headers=GL_API_AUTHORIZATION_HEADER,
+            f"{GITLAB_API_URL}projects?search={repo_name}",
+            headers=GITLAB_API_AUTHORIZATION_HEADER,
         ).json()
         for project in projects:
             if project["name"] == repo_name:
@@ -92,8 +92,8 @@ class Bot:
         """
         # https://docs.gitlab.com/ee/api/merge_requests.html#list-merge-requests
         prs = requests.get(
-            GL_API_URL + "merge_requests?state=opened",
-            headers=GL_API_AUTHORIZATION_HEADER,
+            GITLAB_API_URL + "merge_requests?state=opened",
+            headers=GITLAB_API_AUTHORIZATION_HEADER,
         ).json()
         for pr in prs:
             if repo in pr["title"].lower():
@@ -109,8 +109,8 @@ class Bot:
     def check_branch_exists(self):
         # https://docs.gitlab.com/ee/api/branches.html#list-repository-branches
         branches = requests.get(
-            f"{GL_API_URL}/projects/{self.gitlab_project_id}/repository/branches",
-            headers=GL_API_AUTHORIZATION_HEADER,
+            f"{GITLAB_API_URL}/projects/{self.gitlab_project_id}/repository/branches",
+            headers=GITLAB_API_AUTHORIZATION_HEADER,
         ).json()
         return self.branch_name in [b["name"] for b in branches]
 
@@ -118,8 +118,8 @@ class Bot:
         if self.check_branch_exists():
             # https://docs.gitlab.com/ee/api/branches.html#delete-repository-branch
             res = requests.delete(
-                f"{GL_API_URL}/projects/{self.gitlab_project_id}/repository/branches/{self.branch_name}",
-                headers=GL_API_AUTHORIZATION_HEADER,
+                f"{GITLAB_API_URL}/projects/{self.gitlab_project_id}/repository/branches/{self.branch_name}",
+                headers=GITLAB_API_AUTHORIZATION_HEADER,
             )
             assert res.status_code == 204
 
@@ -199,14 +199,14 @@ class Bot:
                 self.bhub_live, self.bhub_latest
             )
 
-        subprocess.check_call(["git", "config", "user.name", GL_BOT_NAME])
-        subprocess.check_call(["git", "config", "user.email", GL_BOT_EMAIL])
+        subprocess.check_call(["git", "config", "user.name", GITLAB_BOT_NAME])
+        subprocess.check_call(["git", "config", "user.email", GITLAB_BOT_EMAIL])
         subprocess.check_call(["git", "commit", "-m", commit_message])
         if self.check_branch_exists():
             # there is an open PR for this repo, so update it
-            subprocess.check_call(["git", "push", "-f", GL_REPO_URL, self.branch_name])
+            subprocess.check_call(["git", "push", "-f", GITLAB_REPO_URL, self.branch_name])
         else:
-            subprocess.check_call(["git", "push", GL_REPO_URL, self.branch_name])
+            subprocess.check_call(["git", "push", GITLAB_REPO_URL, self.branch_name])
 
     def get_associated_prs(self, compare_url):
         """
@@ -296,16 +296,16 @@ class Bot:
             # update title and description of existing PR
             # https://docs.gitlab.com/ee/api/merge_requests.html#update-mr
             res = requests.put(
-                f"{GL_API_URL}projects/{self.gitlab_project_id}/merge_requests/{existing_pr['iid']}",
+                f"{GITLAB_API_URL}projects/{self.gitlab_project_id}/merge_requests/{existing_pr['iid']}",
                 params=params,
-                headers=GL_API_AUTHORIZATION_HEADER,
+                headers=GITLAB_API_AUTHORIZATION_HEADER,
             )
         else:
             # https://docs.gitlab.com/ee/api/merge_requests.html#create-mr
             res = requests.post(
-                f"{GL_API_URL}projects/{self.gitlab_project_id}/merge_requests",
+                f"{GITLAB_API_URL}projects/{self.gitlab_project_id}/merge_requests",
                 params=params,
-                headers=GL_API_AUTHORIZATION_HEADER,
+                headers=GITLAB_API_AUTHORIZATION_HEADER,
             )
         logging.info(f"PR done: {title}")
 
@@ -319,7 +319,7 @@ class Bot:
                 logging.info(
                     f"{repo}:{self.commit_info[repo]['live']}-->{self.commit_info[repo]['latest']}"
                 )
-                self.set_gitlab_project_id(GL_REPO_NAME)
+                self.set_gitlab_project_id(GITLAB_REPO_NAME)
                 existing_pr = self.check_existing_prs(repo)
                 logging.info(f"existing_pr: {existing_pr}")
                 if existing_pr is None:
@@ -329,8 +329,8 @@ class Bot:
                     # no PR exists for this repo
                     self.delete_old_branch_if_exists()
 
-                subprocess.check_call(["git", "clone", f"{GL_REPO_URL}.git"])
-                os.chdir(GL_REPO_NAME)
+                subprocess.check_call(["git", "clone", f"{GITLAB_REPO_URL}.git"])
+                os.chdir(GITLAB_REPO_NAME)
                 subprocess.check_call(["git", "checkout", "-b", self.branch_name])
 
                 files_changed = self.edit_files(repo)
@@ -338,7 +338,7 @@ class Bot:
 
                 self.add_commit_push(files_changed, repo)
                 os.chdir("..")
-                shutil.rmtree(GL_REPO_NAME)
+                shutil.rmtree(GITLAB_REPO_NAME)
 
                 self.create_update_pr(repo, existing_pr)
             else:
@@ -349,7 +349,7 @@ class Bot:
         Get the live r2d SHA from GESIS Notebooks
         """
         # Load master repo2docker
-        url_helm_chart = f"{GH_REPO_RAW_URL}gesisbinder/gesisbinder/values.yaml"
+        url_helm_chart = f"{GITHUB_REPO_RAW_URL}gesisbinder/gesisbinder/values.yaml"
         helm_chart = requests.get(url_helm_chart)
         helm_chart = load(helm_chart.text)
         r2d_live = helm_chart["binderhub"]["config"]["BinderHub"]["build_image"].split(
@@ -362,7 +362,7 @@ class Bot:
         Get the latest BinderHub SHA from GESIS Notebooks
         """
         # Load master requirements
-        url_requirements = f"{GH_REPO_RAW_URL}gesisbinder/gesisbinder/requirements.yaml"
+        url_requirements = f"{GITHUB_REPO_RAW_URL}gesisbinder/gesisbinder/requirements.yaml"
         requirements = load(requests.get(url_requirements).text)
         binderhub_dep = [
             ii for ii in requirements["dependencies"] if ii["name"] == "binderhub"
