@@ -1,4 +1,4 @@
-mybinder.org bot script lint:
+mybinder dot org bot script lint:
   stage: test
   rules:
     - if: (($CI_PIPELINE_SOURCE != "schedule") && $CI_COMMIT_BRANCH == 'main') || $CI_PIPELINE_SOURCE == 'merge_request_event'
