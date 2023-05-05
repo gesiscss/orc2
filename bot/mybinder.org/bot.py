@@ -2,8 +2,6 @@
 Derived from henchbot.py script: https://github.com/henchbot/mybinder.org-upgrades/blob/master/src/mybinder-upgrades/henchbot.py
 """
 
-from yaml import load, dump
-
 try:
     from yaml import CLoader as Loader, CDumper as Dumper
 except ImportError:
