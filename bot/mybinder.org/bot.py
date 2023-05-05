@@ -22,9 +22,7 @@ GITLAB_API_AUTHORIZATION_HEADER = {"PRIVATE-TOKEN": GITLAB_BOT_TOKEN}
 GITLAB_API_URL = f"https://git.gesis.org/api/v4/"
 GITLAB_ORG_NAME = os.environ.get("GITLAB_ORG_NAME", "ilcm")
 GITLAB_REPO_NAME = os.environ.get("GITLAB_REPO_NAME", "orc2")
-GITLAB_REPO_URL = (
-    f"https://oauth2:{GITLAB_BOT_TOKEN}@git.gesis.org/{GITLAB_ORG_NAME}/{GITLAB_REPO_NAME}"
-)
+GITLAB_REPO_URL = f"https://oauth2:{GITLAB_BOT_TOKEN}@git.gesis.org/{GITLAB_ORG_NAME}/{GITLAB_REPO_NAME}"
 
 GITHUB_ORG_NAME = os.environ.get("GITHUB_ORG_NAME", "gesiscss")
 GITHUB_REPO_NAME = os.environ.get("GITHUB_REPO_NAME", "orc2")
@@ -204,7 +202,9 @@ class Bot:
         subprocess.check_call(["git", "commit", "-m", commit_message])
         if self.check_branch_exists():
             # there is an open PR for this repo, so update it
-            subprocess.check_call(["git", "push", "-f", GITLAB_REPO_URL, self.branch_name])
+            subprocess.check_call(
+                ["git", "push", "-f", GITLAB_REPO_URL, self.branch_name]
+            )
         else:
             subprocess.check_call(["git", "push", GITLAB_REPO_URL, self.branch_name])
 
@@ -362,7 +362,9 @@ class Bot:
         Get the latest BinderHub SHA from GESIS Notebooks
         """
         # Load master requirements
-        url_requirements = f"{GITHUB_REPO_RAW_URL}gesisbinder/gesisbinder/requirements.yaml"
+        url_requirements = (
+            f"{GITHUB_REPO_RAW_URL}gesisbinder/gesisbinder/requirements.yaml"
+        )
         requirements = load(requests.get(url_requirements).text)
         binderhub_dep = [
             ii for ii in requirements["dependencies"] if ii["name"] == "binderhub"
