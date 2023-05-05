@@ -1,2 +1,3 @@
 _secret* filter=git-crypt diff=git-crypt
 **/secrets/** filter=git-crypt diff=git-crypt
+_secret-bot/** filter=git-crypt diff=git-crypt
