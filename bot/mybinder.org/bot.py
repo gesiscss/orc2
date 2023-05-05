@@ -2,21 +2,21 @@
 Derived from henchbot.py script: https://github.com/henchbot/mybinder.org-upgrades/blob/master/src/mybinder-upgrades/henchbot.py
 """
 
+import argparse
+import copy
+import logging
+import os
+import re
+import shutil
+import subprocess
+import time
+
+import requests
+
 try:
     from yaml import CLoader as Loader, CDumper as Dumper
 except ImportError:
     from yaml import Loader, Dumper
-
-import requests
-import subprocess
-import os
-import shutil
-import time
-import logging
-import re
-import copy
-
-import argparse
 
 logging.basicConfig(level=logging.WARNING)
 
