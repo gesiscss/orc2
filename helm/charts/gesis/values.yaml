@@ -240,6 +240,12 @@ binderhub:
         pdb:
           minAvailable: 0
     singleuser:
+      memory:
+        guarantee: 450M
+        limit: 2G
+      cpu:
+        guarantee: 0.01
+        limit: 1
       networkPolicy:
         enabled: true
         # z2jh chart has a default ingress rule which allows inbound traffic
