@@ -1,4 +1,4 @@
-mybinder.org bot script lint:
+mybinder.org sync bot script lint:
   stage: test
   rules:
     - if: (($CI_PIPELINE_SOURCE != "schedule") && $CI_COMMIT_BRANCH == 'main') || $CI_PIPELINE_SOURCE == 'merge_request_event'
@@ -10,7 +10,7 @@ mybinder.org bot script lint:
   script:
     - black --check bot/mybinder.org/
 
-mybinder.org bot execution:
+mybinder.org sync bot execution:
   stage: deploy
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule" && $GITLAB_CI_SCHEDULE_NAME == 'sync-mybinder.org'
