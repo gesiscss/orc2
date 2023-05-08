@@ -75,10 +75,6 @@ gesis helm lint:
     - helm dependency update ./helm/charts/gesis
     - helm lint ./helm/charts/gesis
     - helm template gesis ./helm/charts/gesis > gesis.helm.chart.yaml
-  artifacts:
-    paths:
-      - gesis.helm.chart.yaml
-    expire_in: "1 day"
 
 gesis helm deploy:
   stage: deploy
