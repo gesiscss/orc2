@@ -78,6 +78,7 @@ gesis helm lint:
   artifacts:
     paths:
       - gesis.helm.chart.yaml
+    expire_in: "1 day"
 
 gesis helm deploy:
   stage: deploy
