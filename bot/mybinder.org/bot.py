@@ -9,6 +9,8 @@ import time
 
 import requests
 
+from yaml import load, dump
+
 try:
     from yaml import CLoader as Loader, CDumper as Dumper
 except ImportError:
@@ -34,9 +36,9 @@ GITHUB_REPO_RAW_URL = (
     f"https://raw.githubusercontent.com/{GITHUB_ORG_NAME}/{GITHUB_REPO_NAME}/main/"
 )
 
-MYBINDER_REPO_URL = f"https://github.com/jupyterhub/mybinder.org-deploy/"
+MYBINDER_REPO_URL = "https://github.com/jupyterhub/mybinder.org-deploy/"
 MYBINDER_REPO_RAW_URL = (
-    f"https://raw.githubusercontent.com/jupyterhub/mybinder.org-deploy/"
+    "https://raw.githubusercontent.com/jupyterhub/mybinder.org-deploy/"
 )
 
 
@@ -70,9 +72,9 @@ class Bot:
         self.orc2_config = load(response.text, Loader=Loader)
         self.orc2_config_new = copy.deepcopy(self.orc2_config)
 
-        response = requests.get(f"{MYBINDER_REPO_RAW_URL}mybinder/Chart.yaml")
+        response = requests.get(f"{MYBINDER_REPO_RAW_URL}main/mybinder/Chart.yaml")
         self.mybinder_chart = load(response.text, Loader=Loader)
-        response = requests.get(f"{MYBINDER_REPO_RAW_URL}mybinder/values.yaml")
+        response = requests.get(f"{MYBINDER_REPO_RAW_URL}main/mybinder/values.yaml")
         self.mybinder_config = load(response.text, Loader=Loader)
 
     def update_repo(self):
