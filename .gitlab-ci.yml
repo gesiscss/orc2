@@ -9,7 +9,7 @@ stages:
 Build container with Kubernetes and git-crypt:
   stage: build
   rules:
-    - if: ($CI_PIPELINE_SOURCE != "schedule") && $CI_COMMIT_BRANCH == 'main'
+    - if: (($CI_PIPELINE_SOURCE != "schedule") && $CI_COMMIT_BRANCH == 'main') || $CI_PIPELINE_SOURCE == 'merge_request_event'
       changes:
         - Dockerfile
   image: docker-private.gesis.intra/gesis/dc:5.7
@@ -18,8 +18,23 @@ Build container with Kubernetes and git-crypt:
       alias: docker
   dependencies: []
   script:
-    - docker build --no-cache --pull -t docker-private-snapshots.gesis.intra/gesis/ilcm/orc2:latest .
-    - docker push docker-private-snapshots.gesis.intra/gesis/ilcm/orc2:latest
+    - docker build --target k8s --no-cache --pull -t docker-private-snapshots.gesis.intra/gesis/ilcm/orc2/k8s:latest .
+    - docker push docker-private-snapshots.gesis.intra/gesis/ilcm/orc2/k8s:latest
+
+Build container with Ansible and git-crypt:
+  stage: build
+  rules:
+    - if: (($CI_PIPELINE_SOURCE != "schedule") && $CI_COMMIT_BRANCH == 'main') || $CI_PIPELINE_SOURCE == 'merge_request_event'
+      changes:
+        - Dockerfile
+  image: docker-private.gesis.intra/gesis/dc:5.7
+  services:
+    - name:  docker-private.gesis.intra/gesis/dind:5.5
+      alias: docker
+  dependencies: []
+  script:
+    - docker build --target ansible --no-cache --pull -t docker-private-snapshots.gesis.intra/gesis/ilcm/orc2/ansible:latest .
+    - docker push docker-private-snapshots.gesis.intra/gesis/ilcm/orc2/ansible:latest
 
 gesis ansible lint:
   stage: test
