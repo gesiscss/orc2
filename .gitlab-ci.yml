@@ -67,6 +67,11 @@ gesis ansible lint:
     - echo $ANSIBLE_VAULT > ansible/.ansible-vault-password-file
     - ansible --version
     - >
+      ansible
+      --inventory ansible/inventories/$ANSIBLE_INVENTORY
+      --user ansible
+      all -m ping
+    - >
       ansible-playbook
       --vault-password-file ansible/.ansible-vault-password-file
       --extra-vars @ansible/vault/prometheus.yml
