@@ -65,7 +65,7 @@ gesis ansible lint:
 gesis ansible stage deploy:
   stage: deploy-stage
   rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_COMMIT_BRANCH == 'main'
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
         - ansible/**/*
         - nginx/**/*
