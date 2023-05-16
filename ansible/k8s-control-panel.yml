@@ -1,0 +1,26 @@
+- name: Configure Kubernetes
+  hosts: kubernetes_control_panel
+  become: true
+  tasks:
+    - name: Disable swap
+      ansible.builtin.shell: swapoff -a
+    - name: Disable Firewall
+      ansible.builtin.shell: ufw disable
+    - name: Install dependencies
+      ansible.builtin.apt:
+        update_cache: yes
+        pkg:
+        - apt-transport-https
+        - ca-certificates
+        - curl
+    - name: Add Kubernetes repository
+      ansible.builtin.apt_repository:
+        repo: deb https://apt.kubernetes.io/ kubernetes-xenial main
+        state: present
+    - name: Install dependencies
+      ansible.builtin.apt:
+        update_cache: yes
+        pkg:
+        - kubelet 
+        - kubeadm 
+        - kubectl
