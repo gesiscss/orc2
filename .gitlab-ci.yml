@@ -60,6 +60,8 @@ gesis ansible lint:
   script:
     - echo $ANSIBLE_VAULT > ansible/.ansible-vault-password-file
     - ansible --version
+    - echo $ANSIBLE_SSH_PRIVATE_KEY
+    - cat $ANSIBLE_SSH_PRIVATE_KEY
     - >
       ansible
       --inventory ansible/inventories/$ANSIBLE_INVENTORY
