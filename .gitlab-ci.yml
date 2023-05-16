@@ -74,7 +74,7 @@ gesis ansible lint:
     - >
       ansible-playbook
       --vault-password-file ansible/.ansible-vault-password-file
-      --extra-vars @ansible/vault/prometheus.yml
+      --extra-vars @ansible/vault/$ANSIBLE_INVENTORY.yml
       --inventory ansible/inventories/$ANSIBLE_INVENTORY
       --user ansible
       ansible/k8s-control-panel.yml
