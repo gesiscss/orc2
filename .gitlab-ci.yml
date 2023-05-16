@@ -68,6 +68,8 @@ gesis ansible lint:
     - ansible --version
     - >
       ansible
+      --vault-password-file ansible/.ansible-vault-password-file
+      --extra-vars @ansible/vault/$ANSIBLE_INVENTORY.yml
       --inventory ansible/inventories/$ANSIBLE_INVENTORY
       --user ansible
       all -m ping
