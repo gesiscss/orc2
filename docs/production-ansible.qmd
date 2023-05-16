@@ -40,42 +40,6 @@ sudo usermod -aG sudo ansible
 
 :::
 
-Avoid ask for password to user `ansible`:
-
-::: {.panel-tabset}
-
-## Master machine at `194.95.75.20`
-
-Use `sudoedit /etc/sudoers.d/20_servers_admins` to add
-
-```
-ansible ALL=(ALL) NOPASSWD: ALL
-```
-
-## Worker machine at `194.95.75.14`
-
-Use `sudoedit /etc/sudoers.d/20_servers_admins` to add
-
-```
-ansible ALL=(ALL) NOPASSWD: ALL
-```
-
-:::
-
-To test if `sudo` without password is working, you can first disable current `sudo` with
-
-```
-sudo -k
-```
-
-and run
-
-```
-sudo cat /etc/sudoers.d/20_servers_admins
-```
-
-or any other shell command prepended with `sudo`.
-
 Create SSH key for user `ansible`:
 
 ::: {.panel-tabset}
@@ -146,16 +110,11 @@ sudo systemctl restart ssh
 
 ## Installation
 
-In the control panel server (`194.95.75.10`), run
-
-```bash
-sudo apt install -y \
-    ansible
-```
+We will use GitLab CI to deploy changes to the machines.
 
 ## Inventory
 
-Ansible requires a list of servers that it can access. Edit `/etc/ansible/hosts` to be like
+Ansible requires a list of servers that it can access. Edit `ansible/inventories/production` to be like
 
 ```ansible
 [notebooks_gesis_org]
@@ -165,7 +124,9 @@ Ansible requires a list of servers that it can access. Edit `/etc/ansible/hosts`
 Check that your inventory is correct:
 
 ```bash
-ansible all --list-hosts
+ansible \
+    -i ansible/inventories/production \
+    all --list-hosts
 ```
 
 ```
@@ -176,7 +137,11 @@ ansible all --list-hosts
 Check that the servers are accessible:
 
 ```bash
-ansible all -m ping
+ansible \
+    -i ansible/inventories/stage \
+    --user ansible \
+    --private-key ~/.ssh/id_ed25519 \
+    all -m ping
 ```
 
 ```
