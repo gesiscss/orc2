@@ -15,7 +15,7 @@
           - curl
     - name: Add Kubernetes public GPG key
       ansible.builtin.get_url:
-        url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+        url: https://dl.k8s.io/apt/doc/apt-key.gpg
         dest: /etc/apt/trusted.gpg.d/kubernetes-archive-keyring.asc
         mode: '0644'
         force: true
