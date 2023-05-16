@@ -58,6 +58,7 @@ gesis ansible lint:
   variables:
     ANSIBLE_INVENTORY: template
   script:
+    - chmod 600 $ANSIBLE_SSH_PRIVATE_KEY
     - echo $ANSIBLE_VAULT > ansible/.ansible-vault-password-file
     - ansible --version
     - mkdir ~/.ssh/
