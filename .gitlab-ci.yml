@@ -70,7 +70,7 @@ gesis ansible stage deploy:
         - ansible/**/*
         - nginx/**/*
   variables:
-    ANSIBLE_INVENTORY: test
+    ANSIBLE_INVENTORY: stage
   extends:
     - .gesis ansible deploy
 
