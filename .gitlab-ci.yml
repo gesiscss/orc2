@@ -62,7 +62,7 @@ gesis ansible lint:
     - echo StrictHostKeyChecking no > ~/.ssh/config
     - cp $ANSIBLE_SSH_PUBLIC_KEY ~/.ssh/id_ed25519.pub
     - cp $ANSIBLE_SSH_PRIVATE_KEY ~/.ssh/id_ed25519
-    - chmod 600 $ANSIBLE_SSH_PRIVATE_KEY
+    - chmod 600 ~/.ssh/id_ed25519
   script:
     - echo $ANSIBLE_VAULT > ansible/.ansible-vault-password-file
     - ansible --version
