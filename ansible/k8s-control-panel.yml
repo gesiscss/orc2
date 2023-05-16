@@ -8,19 +8,19 @@
       ansible.builtin.shell: ufw disable
     - name: Install dependencies
       ansible.builtin.apt:
-        update_cache: yes
+        update_cache: true
         pkg:
-        - apt-transport-https
-        - ca-certificates
-        - curl
+          - apt-transport-https
+          - ca-certificates
+          - curl
     - name: Add Kubernetes repository
       ansible.builtin.apt_repository:
         repo: deb https://apt.kubernetes.io/ kubernetes-xenial main
         state: present
     - name: Install dependencies
       ansible.builtin.apt:
-        update_cache: yes
+        update_cache: true
         pkg:
-        - kubelet 
-        - kubeadm 
-        - kubectl
+          - kubelet
+          - kubeadm
+          - kubectl
