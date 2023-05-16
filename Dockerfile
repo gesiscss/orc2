@@ -6,7 +6,7 @@ rm -rf /var/lib/apt/lists/*
 
 FROM ubuntu:22.04 as ansible
 RUN apt-get update && \
-apt install -y ansible git-crypt && \
+apt install -y ansible ansible-lint git-crypt && \
 apt-get clean && \
 rm -rf /var/lib/apt/lists/*
 
