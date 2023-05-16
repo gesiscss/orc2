@@ -1,6 +1,3 @@
-include:
-  - local: bot/mybinder.org/.gitlab-ci.yml
-
 Build container with Kubernetes and git-crypt:
   stage: build
   rules:
