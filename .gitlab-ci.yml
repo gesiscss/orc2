@@ -60,7 +60,11 @@ gesis ansible lint:
   script:
     - echo $ANSIBLE_VAULT > ansible/.ansible-vault-password-file
     - ansible --version
-    - ansible --user ansible all -m ping
+    - >
+      ansible
+      --user ansible
+      --inventory ansible/inventories/$ANSIBLE_INVENTORY
+      all -m ping
 
 gesis ansible stage deploy:
   stage: deploy-stage
