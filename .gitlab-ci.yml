@@ -60,7 +60,7 @@ gesis ansible lint:
   script:
     - echo $ANSIBLE_VAULT > ansible/.ansible-vault-password-file
     - ansible --version
-    - ansible-playbook --vault-password-file ansible/.ansible-vault-password-file --extra-vars @ansible/vault/prometheus.yml --extra-vars ansible_become_password=${ANSIBLE_BECOME_PASSWORD} --inventory ansible/inventories/$ANSIBLE_INVENTORY ansible/orc2.yml
+    - ansible --user ansible all -m ping
 
 gesis ansible stage deploy:
   stage: deploy-stage
