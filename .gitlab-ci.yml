@@ -62,8 +62,9 @@ gesis ansible lint:
     - ansible --version
     - >
       ansible
-      --user ansible
       --inventory ansible/inventories/$ANSIBLE_INVENTORY
+      --user ansible
+      --private-key $ANSIBLE_SSH_PRIVATE_KEY
       all -m ping
 
 gesis ansible stage deploy:
