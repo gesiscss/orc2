@@ -39,11 +39,6 @@ gesis ansible lint:
   tags:
     - notebooks_gesis_org
   stage: deploy
-  rules:
-    - if: ($CI_PIPELINE_SOURCE != "schedule") && $CI_COMMIT_BRANCH == 'main'
-      changes:
-        - ansible/**/*
-        - nginx/**/*
   variables:
     ANSIBLE_INVENTORY: template
   script:
@@ -53,6 +48,11 @@ gesis ansible lint:
 
 gesis ansible stage deploy:
   stage: deploy-stage
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_COMMIT_BRANCH == 'main'
+      changes:
+        - ansible/**/*
+        - nginx/**/*
   variables:
     ANSIBLE_INVENTORY: test
   extends:
@@ -60,6 +60,11 @@ gesis ansible stage deploy:
 
 gesis ansible production deploy:
   stage: deploy-prod
+  rules:
+    - if: $CI_PIPELINE_SOURCE != "merge_request_event" && $CI_COMMIT_BRANCH == 'main'
+      changes:
+        - ansible/**/*
+        - nginx/**/*
   variables:
     ANSIBLE_INVENTORY: production
   extends:
