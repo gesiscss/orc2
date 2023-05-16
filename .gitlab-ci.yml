@@ -60,6 +60,7 @@ gesis ansible lint:
   before_script:
     - mkdir ~/.ssh/
     - echo StrictHostKeyChecking no > ~/.ssh/config
+    - eval `ssh-agent -s`
     - ssh-add $ANSIBLE_SSH_PRIVATE_KEY
   script:
     - echo $ANSIBLE_VAULT > ansible/.ansible-vault-password-file
