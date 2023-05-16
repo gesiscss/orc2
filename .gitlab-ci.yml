@@ -13,24 +13,8 @@ Build container with Kubernetes and git-crypt:
       alias: docker
   dependencies: []
   script:
-    - docker build --no-cache --pull --target kubernetes -t docker-private-snapshots.gesis.intra/gesis/ilcm/orc2/k8s:latest .
-    - docker push docker-private-snapshots.gesis.intra/gesis/ilcm/orc2/k8s:latest
-
-Build container with Python for test:
-  stage: build
-  rules:
-    - if: ($CI_PIPELINE_SOURCE != "schedule") && $CI_COMMIT_BRANCH == 'main'
-      changes:
-        - Dockerfile
-        - test/env.yaml
-  image: docker-private.gesis.intra/gesis/dc:5.7
-  services:
-    - name:  docker-private.gesis.intra/gesis/dind:5.5
-      alias: docker
-  dependencies: []
-  script:
-    - docker build --no-cache --pull --target test -t docker-private-snapshots.gesis.intra/gesis/ilcm/orc2/test:latest .
-    - docker push docker-private-snapshots.gesis.intra/gesis/ilcm/orc2/test:latest
+    - docker build --no-cache --pull -t docker-private-snapshots.gesis.intra/gesis/ilcm/orc2:latest .
+    - docker push docker-private-snapshots.gesis.intra/gesis/ilcm/orc2:latest
 
 gesis ansible lint:
   stage: test
@@ -67,7 +51,7 @@ gesis helm lint:
       changes:
         - helm/**/*
   image: 
-    name: docker-private-snapshots.gesis.intra/gesis/ilcm/orc2/k8s:latest
+    name: docker-private-snapshots.gesis.intra/gesis/ilcm/orc2:latest
     entrypoint: [""]
   dependencies: []
   script:
@@ -83,7 +67,7 @@ gesis helm deploy:
       changes:
         - helm/**/*
   image:
-    name: docker-private-snapshots.gesis.intra/gesis/ilcm/orc2/k8s:latest
+    name: docker-private-snapshots.gesis.intra/gesis/ilcm/orc2:latest
     entrypoint: ['']
   dependencies: []
   script:
@@ -100,32 +84,6 @@ gesis helm deploy:
       -f ./helm/config/prod.yaml \
       -f ./helm/config/_secret-prod.yaml \
       -f ./helm/config/common/_secret-mybinder.org-common.yaml
-
-Test script lint:
-  stage: test
-  rules:
-    - if: (($CI_PIPELINE_SOURCE != "schedule") && $CI_COMMIT_BRANCH == 'main') || $CI_PIPELINE_SOURCE == 'merge_request_event'
-      changes:
-        - test/**/*
-  image: 
-    name: docker-private-snapshots.gesis.intra/gesis/ilcm/orc2/test:latest
-  dependencies: []
-  script:
-    - black --check test
-    - pylint test/*.py
-
-Test script run:
-  stage: deploy
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "schedule" && $GITLAB_CI_SCHEDULE_NAME == 'check-health'
-    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
-      changes:
-        - test/**/*
-  image: 
-    name: docker-private-snapshots.gesis.intra/gesis/ilcm/orc2/test:latest
-  dependencies: []
-  script:
-    - pytest --binder-url https://notebooks.gesis.org/binder/ --hub-url https://notebooks.gesis.org/binder/jupyter/ test
 
 pages:
   stage: build
