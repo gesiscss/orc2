@@ -1,0 +1,67 @@
+# Use https://github.com/jupyterhub/mybinder.org-deploy/blob/main/config/prod.yaml as reference
+
+url: https://notebooks-test.gesis.org/binder/
+
+binderhub:
+  config:
+    BinderHub:
+      hub_url: https://notebooks-test.gesis.org/binder/jupyter/
+
+    LaunchQuota:
+      total_quota: 10
+
+  extraConfig:
+    02-badge-base-url: |
+      c.BinderHub.badge_base_url = "https://mybinder.org/"
+
+prometheus:
+  enabled: true
+  server:
+    service:
+      type: NodePort
+      nodePort: 30073
+      servicePort: 80
+    livenessProbeInitialDelay: 800
+    resources:
+      requests:
+        cpu: "1"
+        memory: 1Gi
+      limits:
+        cpu: "1"
+        memory: 1Gi
+    persistentVolume:
+      size: 10Gi
+      storageClass: standard
+    retention: 30d
+    ingress:
+      hosts:
+        - notebooks-test.gesis.org/prometheus
+
+grafana:
+  enabled: true
+  resources:
+    requests:
+      cpu: "0"
+      memory: 128Mi
+    limits:
+      cpu: "0.25"
+      memory: 128Mi
+  ingress:
+    path: /grafana
+    hosts:
+      - notebooks-test.gesis.org
+  datasources:
+    datasources.yaml:
+      apiVersion: 1
+      datasources:
+        - name: prometheus
+          orgId: 1
+          type: prometheus
+          url: https://notebooks-test.gesis.org/prometheus
+          isDefault: true
+          editable: false
+  persistence:
+    storageClassName: standard
+
+cryptnono:
+  enabled: true

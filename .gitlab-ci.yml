@@ -120,6 +120,8 @@ gesis helm lint:
   image: 
     name: docker-private-snapshots.gesis.intra/gesis/ilcm/orc2/k8s:latest
     entrypoint: [""]
+  variables:
+    HELM_ENVIRONMENT: template
   dependencies: []
   script:
     - cat $git_crypt_secret_key | base64 -d > git_crypt_secret_key
@@ -132,19 +134,20 @@ gesis helm lint:
       --install binderhub ./helm/charts/gesis \
       --namespace=gesis \
       --create-namespace \
-      -f ./helm/config/prod.yaml \
-      -f ./helm/config/_secret-prod.yaml \
+      -f ./helm/config/${HELM_ENVIRONMENT}.yaml \
+      -f ./helm/config/_secret-${HELM_ENVIRONMENT}.yaml \
       -f ./helm/config/common/_secret-mybinder.org-common.yaml
 
 gesis helm stage deploy:
   stage: deploy-stage-helm
-  rules:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
         - helm/**/*
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       when: manual
+  variables:
+    HELM_ENVIRONMENT: stage
   extends:
     - .gesis helm deploy
 
@@ -155,6 +158,8 @@ gesis helm production deploy:
     - if: $CI_PIPELINE_SOURCE != "merge_request_event" && $CI_COMMIT_BRANCH == 'main'
       changes:
         - helm/**/*
+  variables:
+    HELM_ENVIRONMENT: production
   extends:
     - .gesis ansible deploy
 
