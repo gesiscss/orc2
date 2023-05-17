@@ -30,7 +30,7 @@
         kubeadm token create --print-join-command
       register: kubernetes_join_command
     - debug:
-      msg: "{{ kubernetes_join_command.stdout }}"
+        msg: "{{ kubernetes_join_command.stdout }}"
     - name: Create temporary file
       ansible.builtin.file:
         path: /tmp/kubernetes_join_command
