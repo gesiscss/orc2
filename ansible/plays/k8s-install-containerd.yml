@@ -33,4 +33,4 @@
       ansible.builtin.systemd:
         name: containerd
         enabled: true
-        masked: no
+        masked: false
