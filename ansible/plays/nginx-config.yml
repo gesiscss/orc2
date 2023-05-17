@@ -7,23 +7,23 @@
       ansible.builtin.copy:
         src: ../../nginx/static/
         dest: /var/www/orc2
-        owner: nginx
-        group: nginx
+        owner: www-data
+        group: www-data
         mode: u=rw,g=r,o=r
     - name: Copy configuration files
       ansible.builtin.copy:
         src: ../../nginx/sites-available/
         dest: /etc/nginx/sites-available/
-        owner: nginx
-        group: nginx
+        owner: www-data
+        group: www-data
         mode: u=rw,g=r,o=r
     - name: Create HTTP Basic Authentication for Prometheus
       community.general.htpasswd:
         path: /etc/nginx/passwdfile
         name: gesis
         password: "{{ PROMETHEUS_PASSWORD }}"
-        owner: nginx
-        group: nginx
+        owner: www-data
+        group: www-data
         mode: u=rw,g=r
     - name: Create a symbolic link
       ansible.builtin.file:
