@@ -6,7 +6,7 @@
   tasks:
     - name: Copy join command
       ansible.builtin.copy:
-        src: /tmp/10.6.13.81/tmp/kubernetes_join_command
+        src: '{{ ANSIBLE_CONTROL_NODE_TMP }}/k8s/tmp/kubernetes_join_command'
         dest: /tmp/kubernetes_join_command
         mode: u=rwx,g=rx,o=rx
     - name: Execute join command

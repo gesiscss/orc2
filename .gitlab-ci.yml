@@ -63,6 +63,7 @@ gesis ansible lint:
     - cp $ANSIBLE_SSH_PUBLIC_KEY ~/.ssh/id_ed25519.pub
     - cp $ANSIBLE_SSH_PRIVATE_KEY ~/.ssh/id_ed25519
     - chmod 600 ~/.ssh/id_ed25519
+    - mkdir tmp
   script:
     - echo $ANSIBLE_VAULT > ansible/.ansible-vault-password-file
     - ansible --version
@@ -71,6 +72,7 @@ gesis ansible lint:
       --vault-password-file ansible/.ansible-vault-password-file
       --extra-vars @ansible/vault/$ANSIBLE_INVENTORY.yml
       --extra-vars "INVENTORY_NAME=$ANSIBLE_INVENTORY"
+      --extra-vars "ANSIBLE_CONTROL_NODE_TMP=$(pwd)/tmp"
       --inventory ansible/inventories/$ANSIBLE_INVENTORY
       --user ansible
       ansible/orc2.yml
