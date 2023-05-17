@@ -9,5 +9,9 @@
         src: '{{ ANSIBLE_CONTROL_NODE_TMP }}/k8s/tmp/kubernetes_join_command'
         dest: /tmp/kubernetes_join_command
         mode: u=rwx,g=rx,o=rx
-    - name: Execute join command
+    - name: Attempt to join cluster
       ansible.builtin.shell: /tmp/kubernetes_join_command
+      register: kubernetes_join_attempt
+      failed_when:
+        - kubernetes_join_attempt.rc != 0
+        - '"already exists" not it kubernetes_join_attempt.stdout'
