@@ -1,4 +1,4 @@
-- include: plays/k8s-prepare-node.yml
-- include: plays/k8s-install.yml
-- include: plays/nginx-install.yml
-- include: plays/nginx-config.yml
+- import_playbook: plays/k8s-prepare-node.yml
+- import_playbook: plays/k8s-install.yml
+- import_playbook: plays/nginx-install.yml
+- import_playbook: plays/nginx-config.yml
