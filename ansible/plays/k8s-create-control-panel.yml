@@ -29,13 +29,15 @@
       ansible.builtin.shell: >
         kubeadm token create --print-join-command
       register: kubernetes_join_command
+    - debug:
+      msg: "{{ kubernetes_join_command.stdout }}"
     - name: Create temporary file
       ansible.builtin.file:
         path: /tmp/kubernetes_join_command
         state: touch
     - name: Save content of join command
       ansible.builtin.copy:
-        content: "{{ kubernetes_join_command }}"
+        content: "{{ kubernetes_join_command.stdout }}"
         dest: /tmp/kubernetes_join_command
     - name: Copy join command to local file
       ansible.builtin.fetch:
