@@ -70,6 +70,7 @@ gesis ansible lint:
       ansible-playbook
       --vault-password-file ansible/.ansible-vault-password-file
       --extra-vars @ansible/vault/$ANSIBLE_INVENTORY.yml
+      --extra-vars "INVENTORY_NAME=$ANSIBLE_INVENTORY"
       --inventory ansible/inventories/$ANSIBLE_INVENTORY
       --user ansible
       ansible/orc2.yml
