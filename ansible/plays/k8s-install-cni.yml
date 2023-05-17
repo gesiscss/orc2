@@ -3,7 +3,7 @@
     - kubernetes_control_panel
   become: true
   tasks:
-    - name: Apply resource file
-      ansible.builtin.shell: >
-        kubectl apply
-        -f https://github.com/coreos/flannel/raw/master/Documentation/kube-flannel.yml
+    - name: Create a Deployment
+      kubernetes.core.k8s:
+        state: present
+        src: https://github.com/coreos/flannel/raw/master/Documentation/kube-flannel.yml
