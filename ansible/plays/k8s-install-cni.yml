@@ -1,7 +1,6 @@
 - name: Install Container Network Interface (CNI) Flannel
   hosts:
     - kubernetes_control_panel
-  become: true
   tasks:
     - name: Create a Deployment
       kubernetes.core.k8s:
