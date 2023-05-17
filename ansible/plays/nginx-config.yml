@@ -7,7 +7,7 @@
       ansible.builtin.file:
         state: absent
         path: /etc/nginx/sites-enabled/
-        force: true 
+        force: true
     - name: Recreate directory
       ansible.builtin.file:
         state: directory
