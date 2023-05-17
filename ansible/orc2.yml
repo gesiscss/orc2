@@ -1,4 +1,6 @@
 - ansible.builtin.import_playbook: plays/k8s-prepare-node.yml
 - ansible.builtin.import_playbook: plays/k8s-install.yml
+- ansible.builtin.import_playbook: plays/k8s-bridge-traffic.yml
+- ansible.builtin.import_playbook: plays/k8s-install-containerd.yml
 - ansible.builtin.import_playbook: plays/nginx-install.yml
 - ansible.builtin.import_playbook: plays/nginx-config.yml

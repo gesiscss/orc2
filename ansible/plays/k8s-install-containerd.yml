@@ -1,0 +1,23 @@
+- name: Install containerd on Nodes
+  hosts:
+    - kubernetes_control_panel
+    - jupyterhub
+    - jupyterhub_single_user
+  become: true
+  tasks:
+    - name: Add Docker public GPG key
+      ansible.builtin.get_url:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        dest: /etc/apt/trusted.gpg.d/docker.gpg
+        mode: '0644'
+        force: true
+    - name: Add Docker repository
+      ansible.builtin.apt_repository:
+        repo: "deb [signed-by=/etc/apt/trusted.gpg.d/docker.gpg] https://download.docker.com/linux/ubuntu jammy stable"
+        filename: docker
+        state: present
+    - name: Install dependencies
+      ansible.builtin.apt:
+        update_cache: true
+        pkg:
+          - containerd.io
