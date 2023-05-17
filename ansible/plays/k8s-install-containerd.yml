@@ -21,3 +21,7 @@
         update_cache: true
         pkg:
           - containerd.io
+    - name: Copy configuration file
+      ansible.builtin.copy:
+        src: ../../etc/containerd/config.toml
+        dest: /etc/containerd/config.toml
