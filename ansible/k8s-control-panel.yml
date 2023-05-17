@@ -16,12 +16,13 @@
     - name: Add Kubernetes public GPG key
       ansible.builtin.get_url:
         url: https://dl.k8s.io/apt/doc/apt-key.gpg
-        dest: /etc/apt/trusted.gpg.d/kubernetes-archive-keyring.asc
+        dest: /etc/apt/trusted.gpg.d/kubernetes-archive-keyring.gpg
         mode: '0644'
         force: true
     - name: Add Kubernetes repository
       ansible.builtin.apt_repository:
-        repo: "deb [signed-by=/etc/apt/trusted.gpg.d/kubernetes-archive-keyring.asc] https://apt.kubernetes.io/ kubernetes-xenial main"
+        repo: "deb [signed-by=/etc/apt/trusted.gpg.d/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main"
+        filename: kubernetes
         state: present
     - name: Install dependencies
       ansible.builtin.apt:
