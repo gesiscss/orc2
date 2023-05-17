@@ -28,7 +28,7 @@
     - name: Reload service containerd
       ansible.builtin.systemd:
         name: containerd
-        state: reloaded
+        state: restart
     - name: Enable service containerd
       ansible.builtin.systemd:
         name: containerd=1.6.*
