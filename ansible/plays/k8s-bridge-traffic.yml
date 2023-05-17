@@ -6,9 +6,9 @@
   become: true
   tasks:
     - name: modprobe overlay
-      ansible.builtin.shell: sudo modprobe overlay
+      ansible.builtin.shell: modprobe overlay
     - name: modprobe br_netfilter
-      ansible.builtin.shell: sudo modprobe br_netfilter
+      ansible.builtin.shell: modprobe br_netfilter
     - name: Create conf file
       ansible.builtin.file:
         path: "/etc/modules-load.d/containerd.conf"
