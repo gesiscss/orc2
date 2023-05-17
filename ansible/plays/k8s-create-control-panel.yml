@@ -3,11 +3,17 @@
     - kubernetes_control_panel
   become: true
   tasks:
+    - name: Check if Kubernetes is running
+      ansible.builtin.shell: >
+        kubectl get nodes || /bin/true
+      register: kubernetes_nodes
     - name: Pull kubernetes images
+      when: kubernetes_nodes.stdout.find('control-plane') != -1
       ansible.builtin.shell: >
         kubeadm config images pull
         --cri-socket unix:///run/containerd/containerd.sock
     - name: Initialize the cluster
+      when: kubernetes_nodes.stdout.find('control-plane') != -1
       ansible.builtin.shell: >
         kubeadm init
         --pod-network-cidr=10.244.0.0/16
