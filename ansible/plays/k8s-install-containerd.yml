@@ -20,7 +20,7 @@
       ansible.builtin.apt:
         update_cache: true
         pkg:
-          - containerd.io
+          - containerd.io=1.6.*
     - name: Copy configuration file
       ansible.builtin.copy:
         src: ../etc/containerd/config.toml
@@ -31,6 +31,6 @@
         state: restarted
     - name: Enable service containerd
       ansible.builtin.systemd:
-        name: containerd=1.6.*
+        name: containerd
         enabled: true
         masked: false
