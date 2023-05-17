@@ -17,7 +17,7 @@
           - ca-certificates
           - curl
     - name: Allow IP forward
-      copy:
-        dest: /proc/sys/net/ipv4/ip_forward
-        content: |
-          1
+      ansible.posix.sysctl:
+        name: net.ipv4.ip_forward
+        value: '1'
+        state: present
