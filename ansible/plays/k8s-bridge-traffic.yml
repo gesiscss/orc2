@@ -9,6 +9,10 @@
       ansible.builtin.shell: sudo modprobe overlay
     - name: modprobe br_netfilter
       ansible.builtin.shell: sudo modprobe br_netfilter
+    - name: create conf file
+      ansible.builtin.file:
+        path: "/etc/modules-load.d/containerd.conf"
+        state: "touch"
     - name: add conf
       ansible.builtin.blockinfile:
         path: "/etc/modules-load.d/containerd.conf"
