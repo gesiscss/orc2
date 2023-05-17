@@ -31,6 +31,6 @@
         state: reloaded
     - name: Enable service containerd
       ansible.builtin.systemd:
-        name: containerd
+        name: containerd=1.6.*
         enabled: true
         masked: false
