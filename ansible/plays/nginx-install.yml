@@ -7,4 +7,5 @@
       ansible.builtin.apt:
         update_cache: true
         pkg:
-          - nginx
+          - nginx=1.18.*
+          - python3-passlib
