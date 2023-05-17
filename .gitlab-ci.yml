@@ -71,7 +71,6 @@ gesis ansible lint:
       ansible-playbook
       --vault-password-file ansible/.ansible-vault-password-file
       --extra-vars @ansible/vault/$ANSIBLE_INVENTORY.yml
-      --extra-vars "INVENTORY_NAME=$ANSIBLE_INVENTORY"
       --extra-vars "ANSIBLE_CONTROL_NODE_TMP=$(pwd)/tmp"
       --inventory ansible/inventories/$ANSIBLE_INVENTORY
       --user ansible

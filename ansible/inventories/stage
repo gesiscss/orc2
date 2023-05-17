@@ -1,4 +1,5 @@
 [all:vars]
+INVENTORY_NAME=stage
 K8S_CONTROL_PLANE_ENDPOINT=10.6.13.81
 
 [notebooks_gesis_org]
