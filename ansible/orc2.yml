@@ -2,6 +2,8 @@
 - ansible.builtin.import_playbook: plays/k8s-install.yml
 - ansible.builtin.import_playbook: plays/k8s-bridge-traffic.yml
 - ansible.builtin.import_playbook: plays/k8s-install-containerd.yml
-- ansible.builtin.import_playbook: plays/k8s-create-cluster.yml
+- ansible.builtin.import_playbook: plays/k8s-create-control-panel.yml
+- ansible.builtin.import_playbook: plays/k8s-install-cni.yml
+- ansible.builtin.import_playbook: plays/k8s-create-worker-nodes.yml
 - ansible.builtin.import_playbook: plays/nginx-install.yml
 - ansible.builtin.import_playbook: plays/nginx-config.yml

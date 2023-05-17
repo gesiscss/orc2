@@ -1,0 +1,9 @@
+- name: Install Container Network Interface (CNI) Flannel
+  hosts:
+    - kubernetes_control_panel
+  become: true
+  tasks:
+    - name: Apply resource file
+      ansible.builtin.shell: >
+        kubectl apply
+        -f https://github.com/coreos/flannel/raw/master/Documentation/kube-flannel.yml
