@@ -1,4 +1,4 @@
-- import_playbook: plays/k8s-prepare-node.yml
-- import_playbook: plays/k8s-install.yml
-- import_playbook: plays/nginx-install.yml
-- import_playbook: plays/nginx-config.yml
+- ansible.builtin.import_playbook: plays/k8s-prepare-node.yml
+- ansible.builtin.import_playbook: plays/k8s-install.yml
+- ansible.builtin.import_playbook: plays/nginx-install.yml
+- ansible.builtin.import_playbook: plays/nginx-config.yml
