@@ -14,4 +14,4 @@
       register: kubernetes_join_attempt
       failed_when:
         - kubernetes_join_attempt.rc != 0
-        - '"already exists" not it kubernetes_join_attempt.stdout'
+        - '"already exists" not in kubernetes_join_attempt.stdout'
