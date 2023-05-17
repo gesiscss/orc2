@@ -1,8 +1,6 @@
 stages:
   - build
   - test
-  - test-stage
-  - test-prod
   - deploy-stage
   - deploy-prod
 
@@ -90,6 +88,7 @@ gesis ansible stage deploy:
 
 gesis ansible production deploy:
   stage: deploy-prod
+  when: manual
   rules:
     - if: $CI_PIPELINE_SOURCE != "merge_request_event" && $CI_COMMIT_BRANCH == 'main'
       changes:
@@ -116,12 +115,8 @@ gesis helm lint:
     - helm lint ./helm/charts/gesis
     - helm template gesis ./helm/charts/gesis > gesis.helm.chart.yaml
 
-gesis helm deploy:
+.gesis helm deploy:
   stage: deploy-prod
-  rules:
-    - if: ($CI_PIPELINE_SOURCE != "schedule") && $CI_COMMIT_BRANCH == 'main'
-      changes:
-        - helm/**/*
   image: 
     name: docker-private-snapshots.gesis.intra/gesis/ilcm/orc2/k8s:latest
     entrypoint: [""]
@@ -140,6 +135,26 @@ gesis helm deploy:
       -f ./helm/config/prod.yaml \
       -f ./helm/config/_secret-prod.yaml \
       -f ./helm/config/common/_secret-mybinder.org-common.yaml
+
+gesis helm stage deploy:
+  stage: deploy-stage
+  rules:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
+        - helm/**/*
+  extends:
+    - .gesis helm deploy
+
+gesis helm production deploy:
+  stage: deploy-prod
+  when: manual
+  rules:
+    - if: $CI_PIPELINE_SOURCE != "merge_request_event" && $CI_COMMIT_BRANCH == 'main'
+      changes:
+        - helm/**/*
+  extends:
+    - .gesis ansible deploy
 
 pages:
   stage: build
