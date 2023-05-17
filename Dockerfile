@@ -1,6 +1,10 @@
 FROM ubuntu:22.04 as k8s
-RUN apt-get update && \
-apt install -y kubernetes git-crypt && \
+RUN apt update && \
+apt install -y curl && \
+curl https://baltocdn.com/helm/signing.asc --output /etc/apt/trusted.gpg.d/helm.asc && \
+echo "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/helm.asc] https://baltocdn.com/helm/stable/debian/ all main" > /etc/apt/sources.list.d/helm-stable-debian.list && \
+apt update && \
+apt install -y kubernetes helm git-crypt && \
 apt-get clean && \
 rm -rf /var/lib/apt/lists/*
 
