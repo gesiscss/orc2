@@ -67,26 +67,12 @@ gesis ansible lint:
     - echo $ANSIBLE_VAULT > ansible/.ansible-vault-password-file
     - ansible --version
     - >
-      ansible
-      --vault-password-file ansible/.ansible-vault-password-file
-      --extra-vars @ansible/vault/$ANSIBLE_INVENTORY.yml
-      --inventory ansible/inventories/$ANSIBLE_INVENTORY
-      --user ansible
-      all -m ping
-    - >
       ansible-playbook
       --vault-password-file ansible/.ansible-vault-password-file
       --extra-vars @ansible/vault/$ANSIBLE_INVENTORY.yml
       --inventory ansible/inventories/$ANSIBLE_INVENTORY
       --user ansible
-      ansible/k8s-jupyterhub.yml
-    - >
-      ansible-playbook
-      --vault-password-file ansible/.ansible-vault-password-file
-      --extra-vars @ansible/vault/$ANSIBLE_INVENTORY.yml
-      --inventory ansible/inventories/$ANSIBLE_INVENTORY
-      --user ansible
-      ansible/k8s-control-panel.yml
+      ansible/orc2.yml
 
 gesis ansible stage deploy:
   stage: deploy-stage
