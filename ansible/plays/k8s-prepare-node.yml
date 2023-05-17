@@ -16,3 +16,8 @@
           - apt-transport-https
           - ca-certificates
           - curl
+    - name: Allow IP forward
+      copy:
+        dest: /proc/sys/net/ipv4/ip_forward
+        content: |
+          1
