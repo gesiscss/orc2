@@ -1,0 +1,15 @@
+[all:vars]
+INVENTORY_NAME=stage
+K8S_CONTROL_PLANE_ENDPOINT=10.6.13.81
+
+[notebooks_gesis_org]
+nginx ansible_host=194.95.75.20 ansible_ssh_user=ansible ansible_become_pass='{{ become_pass_194_95_75_20 }}'
+
+[kubernetes_control_panel]
+k8s ansible_host=10.6.13.81 ansible_ssh_user=ansible ansible_become_pass='{{ become_pass_10_6_13_81 }}'
+
+[jupyterhub]
+jupyterhub_single_user01 ansible_host=10.6.13.82 ansible_ssh_user=ansible ansible_become_pass='{{ become_pass_10_6_13_82 }}'
+
+[jupyterhub_single_user]
+jupyterhub_single_user02 ansible_host=10.6.13.83 ansible_ssh_user=ansible ansible_become_pass='{{ become_pass_10_6_13_83 }}'

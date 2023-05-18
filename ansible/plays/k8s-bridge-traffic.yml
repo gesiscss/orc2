@@ -1,0 +1,21 @@
+- name: Configure bridge traffic
+  hosts:
+    - kubernetes_control_panel
+    - jupyterhub
+    - jupyterhub_single_user
+  become: true
+  tasks:
+    - name: modprobe overlay
+      ansible.builtin.shell: modprobe overlay
+    - name: modprobe br_netfilter
+      ansible.builtin.shell: modprobe br_netfilter
+    - name: Create conf file
+      ansible.builtin.file:
+        path: "/etc/modules-load.d/containerd.conf"
+        state: "touch"
+    - name: Add conf
+      ansible.builtin.blockinfile:
+        path: "/etc/modules-load.d/containerd.conf"
+        block: |
+          overlay
+          br_netfilter

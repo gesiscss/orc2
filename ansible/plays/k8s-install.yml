@@ -1,0 +1,38 @@
+- name: Install Kubernetes on Nodes
+  hosts:
+    - kubernetes_control_panel
+    - jupyterhub
+    - jupyterhub_single_user
+  become: true
+  tasks:
+    - name: Add Kubernetes public GPG key
+      ansible.builtin.get_url:
+        url: https://dl.k8s.io/apt/doc/apt-key.gpg
+        dest: /etc/apt/trusted.gpg.d/kubernetes-archive-keyring.gpg
+        mode: '0644'
+        force: true
+    - name: Add Kubernetes repository
+      ansible.builtin.apt_repository:
+        repo: "deb [signed-by=/etc/apt/trusted.gpg.d/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main"
+        filename: kubernetes
+        state: present
+    - name: Add Helm public GPG key
+      ansible.builtin.get_url:
+        url: https://baltocdn.com/helm/signing.asc
+        dest: /etc/apt/trusted.gpg.d/helm.asc
+        mode: '0644'
+        force: true
+    - name: Add Helm repository
+      ansible.builtin.apt_repository:
+        repo: "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/helm.asc] https://baltocdn.com/helm/stable/debian/ all main"
+        filename: kubernetes
+        state: present
+    - name: Install dependencies
+      ansible.builtin.apt:
+        update_cache: true
+        pkg:
+          - kubelet=1.27.*
+          - kubeadm=1.27.*
+          - kubectl=1.27.*
+          - helm=3.11.*
+          - python3-kubernetes

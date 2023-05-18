@@ -1,0 +1,8 @@
+- name: Install Container Network Interface (CNI) Flannel
+  hosts:
+    - kubernetes_control_panel
+  tasks:
+    - name: Create a Deployment
+      kubernetes.core.k8s:
+        state: present
+        src: https://github.com/coreos/flannel/raw/master/Documentation/kube-flannel.yml

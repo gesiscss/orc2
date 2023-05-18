@@ -1,17 +1,54 @@
+stages:
+  - prepare
+  - build
+  - test
+  - deploy-stage-ansible
+  - deploy-stage-helm
+  - deploy-prod-ansible
+  - deploy-prod-helm
+
+Assign Docker image tag:
+  stage: prepare
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      variables:
+        DOCKER_IMAGE_TAG: $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME
+    - if:  ($CI_PIPELINE_SOURCE != "merge_request_event" && $CI_COMMIT_BRANCH == 'main')
+      variables:
+        DOCKER_IMAGE_TAG: latest
+  script:
+    - echo "DOCKER_IMAGE_TAG=${DOCKER_IMAGE_TAG}" >> docker.env
+  artifacts:
+    reports:
+      dotenv: docker.env
+
 Build container with Kubernetes and git-crypt:
   stage: build
   rules:
-    - if: ($CI_PIPELINE_SOURCE != "schedule") && $CI_COMMIT_BRANCH == 'main'
+    - if: ($CI_PIPELINE_SOURCE != "schedule" && $CI_COMMIT_BRANCH == 'main') || $CI_PIPELINE_SOURCE == 'merge_request_event'
       changes:
         - Dockerfile
   image: docker-private.gesis.intra/gesis/dc:5.7
   services:
     - name:  docker-private.gesis.intra/gesis/dind:5.5
       alias: docker
-  dependencies: []
   script:
-    - docker build --no-cache --pull -t docker-private-snapshots.gesis.intra/gesis/ilcm/orc2:latest .
-    - docker push docker-private-snapshots.gesis.intra/gesis/ilcm/orc2:latest
+    - docker build --target k8s --no-cache --pull -t docker-private-snapshots.gesis.intra/gesis/ilcm/orc2/k8s:${DOCKER_IMAGE_TAG} .
+    - docker push docker-private-snapshots.gesis.intra/gesis/ilcm/orc2/k8s:${DOCKER_IMAGE_TAG}
+
+Build container with Ansible and git-crypt:
+  stage: build
+  rules:
+    - if: ($CI_PIPELINE_SOURCE != "schedule" && $CI_COMMIT_BRANCH == 'main') || $CI_PIPELINE_SOURCE == 'merge_request_event'
+      changes:
+        - Dockerfile
+  image: docker-private.gesis.intra/gesis/dc:5.7
+  services:
+    - name:  docker-private.gesis.intra/gesis/dind:5.5
+      alias: docker
+  script:
+    - docker build --target ansible --no-cache --pull -t docker-private-snapshots.gesis.intra/gesis/ilcm/orc2/ansible:${DOCKER_IMAGE_TAG} .
+    - docker push docker-private-snapshots.gesis.intra/gesis/ilcm/orc2/ansible:${DOCKER_IMAGE_TAG}
 
 gesis ansible lint:
   stage: test
@@ -20,26 +57,61 @@ gesis ansible lint:
       changes:
         - ansible/**/*
   image: 
-    name: pipelinecomponents/ansible-lint
+    name: docker-private-snapshots.gesis.intra/gesis/ilcm/orc2/ansible:${DOCKER_IMAGE_TAG}
     entrypoint: [""]
-  dependencies: []
   script:
     - ansible-lint --version
     - ansible-lint --show-relpath ansible
 
-gesis ansible deploy:
-  tags:
-    - notebooks_gesis_org
-  stage: deploy
-  rules:
-    - if: ($CI_PIPELINE_SOURCE != "schedule") && $CI_COMMIT_BRANCH == 'main'
-      changes:
-        - ansible/**/*
-        - nginx/**/*
+.gesis ansible deploy:
+  image: 
+    name: docker-private-snapshots.gesis.intra/gesis/ilcm/orc2/ansible:${DOCKER_IMAGE_TAG}
+    entrypoint: [""]
+  variables:
+    ANSIBLE_INVENTORY: template
+  before_script:
+    - mkdir ~/.ssh/
+    - echo StrictHostKeyChecking no > ~/.ssh/config
+    - cp $ANSIBLE_SSH_PUBLIC_KEY ~/.ssh/id_ed25519.pub
+    - cp $ANSIBLE_SSH_PRIVATE_KEY ~/.ssh/id_ed25519
+    - chmod 600 ~/.ssh/id_ed25519
+    - mkdir tmp
   script:
     - echo $ANSIBLE_VAULT > ansible/.ansible-vault-password-file
     - ansible --version
-    - ansible-playbook --vault-password-file ansible/.ansible-vault-password-file --extra-vars @ansible/vault/prometheus.yml --extra-vars ansible_become_password=${ANSIBLE_BECOME_PASSWORD} --inventory ansible/inventories/production ansible/orc2.yml
+    - >
+      ansible-playbook
+      --vault-password-file ansible/.ansible-vault-password-file
+      --extra-vars @ansible/vault/${ANSIBLE_INVENTORY}.yml
+      --extra-vars "ANSIBLE_CONTROL_NODE_TMP=$(pwd)/tmp"
+      --inventory ansible/inventories/${ANSIBLE_INVENTORY}
+      --user ansible
+      ansible/orc2.yml
+
+gesis ansible stage deploy:
+  stage: deploy-stage-ansible
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
+        - ansible/**/*
+        - nginx/**/*
+  variables:
+    ANSIBLE_INVENTORY: stage
+  extends:
+    - .gesis ansible deploy
+
+gesis ansible production deploy:
+  stage: deploy-prod-ansible
+  when: manual
+  rules:
+    - if: $CI_PIPELINE_SOURCE != "merge_request_event" && $CI_COMMIT_BRANCH == 'main'
+      changes:
+        - ansible/**/*
+        - nginx/**/*
+  variables:
+    ANSIBLE_INVENTORY: production
+  extends:
+    - .gesis ansible deploy
 
 gesis helm lint:
   stage: test
@@ -48,29 +120,24 @@ gesis helm lint:
       changes:
         - helm/**/*
   image: 
-    name: docker-private-snapshots.gesis.intra/gesis/ilcm/orc2:latest
+    name: docker-private-snapshots.gesis.intra/gesis/ilcm/orc2/k8s:${DOCKER_IMAGE_TAG}
     entrypoint: [""]
-  dependencies: []
   script:
     - helm version
     - helm dependency update ./helm/charts/gesis
     - helm lint ./helm/charts/gesis
     - helm template gesis ./helm/charts/gesis > gesis.helm.chart.yaml
 
-gesis helm deploy:
-  stage: deploy
-  rules:
-    - if: ($CI_PIPELINE_SOURCE != "schedule") && $CI_COMMIT_BRANCH == 'main'
-      changes:
-        - helm/**/*
-  image:
-    name: docker-private-snapshots.gesis.intra/gesis/ilcm/orc2:latest
-    entrypoint: ['']
-  dependencies: []
+.gesis helm deploy:
+  image: 
+    name: docker-private-snapshots.gesis.intra/gesis/ilcm/orc2/k8s:${DOCKER_IMAGE_TAG}
+    entrypoint: [""]
+  variables:
+    HELM_ENVIRONMENT: template
   script:
     - cat $git_crypt_secret_key | base64 -d > git_crypt_secret_key
     - git-crypt unlock git_crypt_secret_key
-    - kubectl config use-context ilcm/orc2:kubernetes
+    - kubectl config use-context ilcm/orc2:${HELM_ENVIRONMENT}
     - helm version
     - helm dependency update ./helm/charts/gesis
     - |
@@ -78,9 +145,32 @@ gesis helm deploy:
       --install binderhub ./helm/charts/gesis \
       --namespace=gesis \
       --create-namespace \
-      -f ./helm/config/prod.yaml \
-      -f ./helm/config/_secret-prod.yaml \
+      -f ./helm/config/${HELM_ENVIRONMENT}.yaml \
+      -f ./helm/config/_secret-${HELM_ENVIRONMENT}.yaml \
       -f ./helm/config/common/_secret-mybinder.org-common.yaml
+
+gesis helm stage deploy:
+  stage: deploy-stage-helm
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
+        - helm/**/*
+  variables:
+    HELM_ENVIRONMENT: stage
+  extends:
+    - .gesis helm deploy
+
+gesis helm production deploy:
+  stage: deploy-prod-helm
+  when: manual
+  rules:
+    - if: $CI_PIPELINE_SOURCE != "merge_request_event" && $CI_COMMIT_BRANCH == 'main'
+      changes:
+        - helm/**/*
+  variables:
+    HELM_ENVIRONMENT: production
+  extends:
+    - .gesis ansible deploy
 
 pages:
   stage: build
