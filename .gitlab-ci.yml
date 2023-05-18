@@ -11,8 +11,13 @@ Assign Docker image tag:
   stage: prepare
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
+        - Dockerfile
       variables:
         DOCKER_IMAGE_TAG: $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      variables:
+        DOCKER_IMAGE_TAG: latest
     - if:  ($CI_PIPELINE_SOURCE != "merge_request_event" && $CI_COMMIT_BRANCH == 'main')
       variables:
         DOCKER_IMAGE_TAG: latest
