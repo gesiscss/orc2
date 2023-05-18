@@ -7,4 +7,4 @@
         kubectl label nodes svko-k8s-test02 binderhub=true
     - name: Add database label
       ansible.builtin.shell: >
-      kubectl label nodes svko-k8s-test03 database=postgresql
+        kubectl label nodes svko-k8s-test03 database=postgresql
