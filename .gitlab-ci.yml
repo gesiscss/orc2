@@ -69,9 +69,9 @@ gesis ansible lint:
     - >
       ansible-playbook
       --vault-password-file ansible/.ansible-vault-password-file
-      --extra-vars @ansible/vault/$ANSIBLE_INVENTORY.yml
+      --extra-vars @ansible/vault/${ANSIBLE_INVENTORY}.yml
       --extra-vars "ANSIBLE_CONTROL_NODE_TMP=$(pwd)/tmp"
-      --inventory ansible/inventories/$ANSIBLE_INVENTORY
+      --inventory ansible/inventories/${ANSIBLE_INVENTORY}
       --user ansible
       ansible/orc2.yml
 
@@ -126,7 +126,7 @@ gesis helm lint:
   script:
     - cat $git_crypt_secret_key | base64 -d > git_crypt_secret_key
     - git-crypt unlock git_crypt_secret_key
-    - kubectl config use-context ilcm/orc2:kubernetes
+    - kubectl config use-context ilcm/orc2:${HELM_ENVIRONMENT}
     - helm version
     - helm dependency update ./helm/charts/gesis
     - |
