@@ -1,10 +1,26 @@
 stages:
+  - prepare
   - build
   - test
   - deploy-stage-ansible
   - deploy-stage-helm
   - deploy-prod-ansible
   - deploy-prod-helm
+
+Assign Docker image tag:
+  stage: prepare
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      variables:
+        DOCKER_IMAGE_TAG: $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME
+    - if:  $CI_PIPELINE_SOURCE != "merge_request_event"
+      variables:
+        DOCKER_IMAGE_TAG: latest
+  script:
+    - echo "DOCKER_IMAGE_TAG=${DOCKER_IMAGE_TAG}" >> docker.env
+  artifacts:
+    reports:
+      dotenv: docker.env
 
 Build container with Kubernetes and git-crypt:
   stage: build
@@ -16,10 +32,9 @@ Build container with Kubernetes and git-crypt:
   services:
     - name:  docker-private.gesis.intra/gesis/dind:5.5
       alias: docker
-  dependencies: []
   script:
-    - docker build --target k8s --no-cache --pull -t docker-private-snapshots.gesis.intra/gesis/ilcm/orc2/k8s:latest .
-    - docker push docker-private-snapshots.gesis.intra/gesis/ilcm/orc2/k8s:latest
+    - docker build --target k8s --no-cache --pull -t docker-private-snapshots.gesis.intra/gesis/ilcm/orc2/k8s:${DOCKER_IMAGE_TAG} .
+    - docker push docker-private-snapshots.gesis.intra/gesis/ilcm/orc2/k8s:${DOCKER_IMAGE_TAG}
 
 Build container with Ansible and git-crypt:
   stage: build
@@ -31,10 +46,9 @@ Build container with Ansible and git-crypt:
   services:
     - name:  docker-private.gesis.intra/gesis/dind:5.5
       alias: docker
-  dependencies: []
   script:
-    - docker build --target ansible --no-cache --pull -t docker-private-snapshots.gesis.intra/gesis/ilcm/orc2/ansible:latest .
-    - docker push docker-private-snapshots.gesis.intra/gesis/ilcm/orc2/ansible:latest
+    - docker build --target ansible --no-cache --pull -t docker-private-snapshots.gesis.intra/gesis/ilcm/orc2/ansible:${DOCKER_IMAGE_TAG} .
+    - docker push docker-private-snapshots.gesis.intra/gesis/ilcm/orc2/ansible:${DOCKER_IMAGE_TAG}
 
 gesis ansible lint:
   stage: test
@@ -43,16 +57,15 @@ gesis ansible lint:
       changes:
         - ansible/**/*
   image: 
-    name: docker-private-snapshots.gesis.intra/gesis/ilcm/orc2/ansible:latest
+    name: docker-private-snapshots.gesis.intra/gesis/ilcm/orc2/ansible:${DOCKER_IMAGE_TAG}
     entrypoint: [""]
-  dependencies: []
   script:
     - ansible-lint --version
     - ansible-lint --show-relpath ansible
 
 .gesis ansible deploy:
   image: 
-    name: docker-private-snapshots.gesis.intra/gesis/ilcm/orc2/ansible:latest
+    name: docker-private-snapshots.gesis.intra/gesis/ilcm/orc2/ansible:${DOCKER_IMAGE_TAG}
     entrypoint: [""]
   variables:
     ANSIBLE_INVENTORY: template
@@ -107,9 +120,8 @@ gesis helm lint:
       changes:
         - helm/**/*
   image: 
-    name: docker-private-snapshots.gesis.intra/gesis/ilcm/orc2/k8s:latest
+    name: docker-private-snapshots.gesis.intra/gesis/ilcm/orc2/k8s:${DOCKER_IMAGE_TAG}
     entrypoint: [""]
-  dependencies: []
   script:
     - helm version
     - helm dependency update ./helm/charts/gesis
@@ -118,7 +130,7 @@ gesis helm lint:
 
 .gesis helm deploy:
   image: 
-    name: docker-private-snapshots.gesis.intra/gesis/ilcm/orc2/k8s:latest
+    name: docker-private-snapshots.gesis.intra/gesis/ilcm/orc2/k8s:${DOCKER_IMAGE_TAG}
     entrypoint: [""]
   variables:
     HELM_ENVIRONMENT: template
