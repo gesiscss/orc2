@@ -14,5 +14,5 @@
         dependency_update: true
         create_namespace: true
         set_values:
-          - value: 'config.token= {{ GITLAB_K8S_TOKEN }}'
+          - value: 'config.token={{ GITLAB_K8S_TOKEN }}'
           - value: config.kasAddress=wss://git.gesis.org/-/kubernetes-agent/
