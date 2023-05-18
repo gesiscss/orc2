@@ -6,7 +6,7 @@ echo "deb [signed-by=/etc/apt/trusted.gpg.d/kubernetes.gpg] https://apt.kubernet
 curl -fsSL https://baltocdn.com/helm/signing.asc --output /etc/apt/trusted.gpg.d/helm.asc && \
 echo "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/helm.asc] https://baltocdn.com/helm/stable/debian/ all main" > /etc/apt/sources.list.d/helm-stable-debian.list && \
 apt update && \
-apt install -y kubelet=1.27.* kubeadm=1.27.* kubectl=1.27.* helm=3.12.* git-crypt && \
+apt install -y kubelet=1.27.* kubeadm=1.27.* kubectl=1.27.* helm=3.11.* git-crypt && \
 apt-get clean && \
 rm -rf /var/lib/apt/lists/*
 

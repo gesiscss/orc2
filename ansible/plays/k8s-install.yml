@@ -34,5 +34,5 @@
           - kubelet=1.27.*
           - kubeadm=1.27.*
           - kubectl=1.27.*
-          - helm=3.12.*
+          - helm=3.11.*
           - python3-kubernetes
