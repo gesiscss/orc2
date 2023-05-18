@@ -21,3 +21,19 @@
         name: net.ipv4.ip_forward
         value: '1'
         state: present
+    - name: Create /ssd directory if it does not exist
+      ansible.builtin.file:
+        path: /ssd
+        state: directory
+    - name: Create /orc2_data/prometheus directory if it does not exist
+      ansible.builtin.file:
+        path: /orc2_data/prometheus
+        state: directory
+    - name: Create /orc2_data/grafana directory if it does not exist
+      ansible.builtin.file:
+        path: /orc2_data/grafana
+        state: directory
+    - name: Create /orc2_data/alertmanager directory if it does not exist
+      ansible.builtin.file:
+        path: /orc2_data/alertmanager
+        state: directory

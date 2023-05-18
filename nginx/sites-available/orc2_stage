@@ -14,23 +14,23 @@ map $request_uri $loggable {
 }
 
 upstream JupyterHub {
-  server 194.95.75.14:30080 max_fails=0;
+  server 10.6.13.83:30080 max_fails=0;
 }
 
 upstream BinderHub {
-  server 194.95.75.14:30081 max_fails=0;
+  server 10.6.13.83:30081 max_fails=0;
 }
 
 upstream BinderJupyterHub {
-  server 194.95.75.14:30082 max_fails=0;
+  server 10.6.13.83:30082 max_fails=0;
 }
 
 upstream prometheus {
-  server 194.95.75.14:30073;
+  server 10.6.13.83:30073;
 }
 
 upstream grafana {
-  server 194.95.75.14:30075;
+  server 10.6.13.83:30075;
 }
 
 # HTTP server to redirect notebooks.gesis.org 80 traffic to SSL/HTTPS

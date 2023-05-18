@@ -1,0 +1,10 @@
+- name: Configure Kubernetes Node Affinity
+  hosts:
+    - kubernetes_control_panel
+  tasks:
+    - name: Add binderhub label
+      ansible.builtin.shell: >
+        kubectl label nodes svko-k8s-test02 binderhub=true
+    - name: Add database label
+      ansible.builtin.shell: >
+        kubectl label nodes svko-k8s-test03 database=postgresql
