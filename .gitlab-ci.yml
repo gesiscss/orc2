@@ -144,8 +144,6 @@ gesis helm stage deploy:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
         - helm/**/*
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      when: manual
   variables:
     HELM_ENVIRONMENT: stage
   extends:
