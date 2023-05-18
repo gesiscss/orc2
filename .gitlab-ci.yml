@@ -134,7 +134,6 @@ gesis helm lint:
     entrypoint: [""]
   variables:
     HELM_ENVIRONMENT: template
-  dependencies: []
   script:
     - cat $git_crypt_secret_key | base64 -d > git_crypt_secret_key
     - git-crypt unlock git_crypt_secret_key
