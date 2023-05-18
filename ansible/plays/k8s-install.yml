@@ -16,6 +16,17 @@
         repo: "deb [signed-by=/etc/apt/trusted.gpg.d/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main"
         filename: kubernetes
         state: present
+    - name: Add Helm public GPG key
+      ansible.builtin.get_url:
+        url: https://baltocdn.com/helm/signing.asc
+        dest: /etc/apt/trusted.gpg.d/helm.asc
+        mode: '0644'
+        force: true
+    - name: Add Helm repository
+      ansible.builtin.apt_repository:
+        repo: "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/helm.asc] https://baltocdn.com/helm/stable/debian/ all main"
+        filename: kubernetes
+        state: present
     - name: Install dependencies
       ansible.builtin.apt:
         update_cache: true
@@ -23,4 +34,5 @@
           - kubelet=1.27.*
           - kubeadm=1.27.*
           - kubectl=1.27.*
+          - helm=3.12.*
           - python3-kubernetes
