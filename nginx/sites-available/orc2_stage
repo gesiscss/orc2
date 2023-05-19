@@ -49,7 +49,7 @@ server {
 
     listen 443 ssl http2;
     listen [::]:443 ssl http2;
-    server_name notebooks.gesis.org;
+    server_name notebooks-test.gesis.org;
     ssl_certificate /etc/letsencrypt/live/notebooks-test.gesis.org/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/notebooks-test.gesis.org/privkey.pem;
     include snippets/ssl.conf;
