@@ -327,7 +327,7 @@ prometheus:
   alertmanager:
     enabled: false
   prometheus-pushgateway:
-    enabled: false
+    enabled: true
   server:
     podLabels:
       # needs access to the Hub API
