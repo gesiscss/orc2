@@ -84,13 +84,13 @@ gesis ansible lint:
   script:
     - echo $ANSIBLE_VAULT > ansible/.ansible-vault-password-file
     - ansible --version
-    - >
-      ansible-playbook
-      --vault-password-file ansible/.ansible-vault-password-file
-      --extra-vars @ansible/vault/${ANSIBLE_INVENTORY}.yml
-      --extra-vars "ANSIBLE_CONTROL_NODE_TMP=$(pwd)/tmp"
-      --inventory ansible/inventories/${ANSIBLE_INVENTORY}
-      --user ansible
+    - |
+      ansible-playbook \
+      --vault-password-file ansible/.ansible-vault-password-file \
+      --extra-vars @ansible/vault/${ANSIBLE_INVENTORY}.yml \
+      --extra-vars "ANSIBLE_CONTROL_NODE_TMP=$(pwd)/tmp" \
+      --inventory ansible/inventories/${ANSIBLE_INVENTORY} \
+      --user ansible \
       ansible/orc2.yml
 
 gesis ansible stage deploy:
@@ -146,7 +146,10 @@ gesis helm lint:
     - helm version
     - helm dependency update ./helm/charts/gesis
     - |
-      helm upgrade --cleanup-on-fail \
+      helm upgrade \
+      --debug \
+      --cleanup-on-fail \
+      --history-max 3 \
       --install binderhub ./helm/charts/gesis \
       --namespace=gesis \
       --create-namespace \
