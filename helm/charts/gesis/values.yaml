@@ -158,7 +158,7 @@ binderhub:
     nodePort: 30081
     annotations:
       "prometheus.io/scrape": "true"
-      "prometheus.io/port": "80"
+      "prometheus.io/port": "8585"
       "prometheus.io/path": "/binder/metrics"
 
   imageBuilderType: dind
