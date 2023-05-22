@@ -167,7 +167,6 @@ gesis helm stage deploy:
 
 gesis helm production deploy:
   stage: deploy-prod-helm
-  when: manual
   rules:
     - if: $CI_PIPELINE_SOURCE != "merge_request_event" && $CI_COMMIT_BRANCH == 'main'
       changes:
@@ -175,7 +174,7 @@ gesis helm production deploy:
   variables:
     HELM_ENVIRONMENT: production
   extends:
-    - .gesis ansible deploy
+    - .gesis helm deploy
 
 pages:
   stage: build
