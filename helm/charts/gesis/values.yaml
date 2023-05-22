@@ -349,6 +349,10 @@ prometheus:
       - pods=[app,component]
       - nodes=[*]
 
+proxyPatches:
+  enabled: true
+  nodeSelector: {}
+
 grafana:
   enabled: true
   
