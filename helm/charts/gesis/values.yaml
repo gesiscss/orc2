@@ -18,11 +18,9 @@ binderhub:
     BinderHub:
       base_url: /binder/
       hub_url: https://notebooks.gesis.org/binder/jupyter/
-      
-      use_registry: true
       image_prefix: gesiscss/binder-r2d-g5b5b759-
-      build_node_selector:
-        docker_available: "true"
+
+      use_registry: true
 
       per_repo_quota: 100
       per_repo_quota_higher: 200
