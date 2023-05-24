@@ -42,44 +42,8 @@ binderhub:
         binderhub: "true"
 
     GitHubRepoProvider:
-      banned_specs:
-        - ^a2nk/.*
-        - ^imhajes/.*
-        - ^ines/spacy-binder.*
-        - ^soft4voip/rak.*
-        - ^hmharshit/cn-ait.*
-        - ^shishirchoudharygic/mltraining.*
-        - ^hmharshit/mltraining.*
-        - ^FDesnoyer/MathExp.*
-        - ^GuitarsAI/.*
-        - ^ferarussia/.*
-        - ^ayman107/.*
-        - ^Miner2008001/.*
-        - ^Sologanian/.*
-        - ^PiTi2k5/.*
-        - ^JayWalker512/.*
-        - ^KhetaguriDimitri/.*
-
       high_quota_specs:
         - ^gesiscss/.*
-
-    GitLabRepoProvider:
-      banned_specs:
-        - ^h4j3s1978%2F.*
-        - ^jasmt507%2F.*
-        - .*%2Fabooz.*
-
-    GitRepoProvider:
-      banned_specs:
-        - ^(git|https?)%3A%2F%2Fgithub.com%2Fa2nk%2F.*
-        - ^https%3A%2F%2Fbitbucket.org%2Fnikiubel%2Fnikiubel.bitbucket.io.git/.*
-        - ^https%3A%2F%2Fjovian.ml%2Fapi%2Fgit%2F.*
-        - ^https%3A%2F%2Fframagit.org%2FCecGhesq%2Flic_mdf_nsi_1.*
-        - ^(git|https?)%3A%2F%2Fnotabug.org%2FulslcuRux3Y%2F.*
-        - ^(git|https?)%3A%2F%2Fgitlab.com%2Fjasmt507%2F.*
-        - ^(git|https?)%3A%2F%2Fgitlab.com%2Fh4j3s1978%2F.*
-        - .*%2Fabooz.*
-        - .*%2Firw4ns1.*
 
   podAnnotations:
     rollme: "rollme"
