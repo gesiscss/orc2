@@ -129,7 +129,7 @@ binderhub:
 
   imageBuilderType: dind
   dind:
-    hostLibDir: /ssd
+    hostLibDir: /orc2_data/repo2docker
     resources:
       requests:
         cpu: "0.5"
