@@ -12,13 +12,20 @@
       ansible.builtin.file:
         state: directory
         path: /etc/nginx/sites-enabled/
-    - name: Copy static files
-      ansible.builtin.copy:
+    - name: Sync static files
+      ansible.posix.synchronize:
         src: ../../nginx/static/
         dest: /var/www/orc2
+        delete: true
+        dirs: true
+        recursive: true
+    - name: Change static files ownership, group and permissions
+      ansible.builtin.file:
+        path: /var/www/orc2
         owner: www-data
         group: www-data
         mode: u=rw,g=r,o=r
+        recurse : true
     - name: Copy configuration files
       ansible.builtin.copy:
         src: ../../nginx/sites-available/
