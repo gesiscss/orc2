@@ -1,0 +1,88 @@
+{{- if .Values.minesweeper.enabled -}}
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: minesweeper
+spec:
+  selector:
+    matchLabels:
+      name:  minesweeper
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        name: minesweeper
+        app: binder
+        component: minesweeper
+        release: {{ .Release.Name }}
+        heritage: {{ .Release.Service }}
+      annotations:
+        checksum/configmap: {{ include (print $.Template.BasePath "/minesweeper/configmap.yaml") . | sha256sum }}
+
+    spec:
+      hostPID: true
+      securityContext:
+        # runAsUser gets us most of the info we need for user pods
+        # nobody _might_ be enough there
+        # but for now, we need root to sweep dind
+        runAsUser: 0
+        # root group gets us read-only access to what we want for now
+        runAsGroup: 0
+      tolerations:
+      - effect: NoSchedule
+        key: hub.jupyter.org/dedicated
+        operator: Equal
+        value: user
+      - effect: NoSchedule
+        key: hub.jupyter.org_dedicated
+        operator: Equal
+        value: user
+      serviceAccountName: minesweeper
+
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+      {{- . | toYaml | nindent 8 }}
+      {{- end }}
+
+      containers:
+      - name: minesweeper
+        image: {{ .Values.minesweeper.image }}
+        securityContext:
+          # we are running with hostPID, but want extremely limited capabilities
+          # adding CAP_KILL doesn't seem to work without `privileged`, too
+          privileged: true
+          capabilities:
+            drop:
+              - all
+            add:
+              - KILL
+        {{- with .Values.minesweeper.resources }}
+        resources:
+          {{- . | toYaml | nindent 10 }}
+        {{- end }}
+        volumeMounts:
+        - name: config
+          mountPath: /etc/minesweeper
+          readOnly: true
+        - name: src
+          mountPath: /srv/minesweeper
+          readOnly: true
+        args:
+          - python
+          - /srv/minesweeper/minesweeper.py
+        env:
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: NAMESPACE
+          value: {{ .Release.Namespace }}
+      terminationGracePeriodSeconds: 0
+      volumes:
+      - name: src
+        configMap:
+          name: minesweeper-src
+      - name: config
+        configMap:
+          name: minesweeper-config
+{{- end }}
