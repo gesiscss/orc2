@@ -85,4 +85,7 @@ spec:
       - name: config
         configMap:
           name: minesweeper-config
+
+      nodeSelector:
+        {{- .Values.minesweeper.nodeSelector | toYaml | nindent 10  }}
 {{- end }}

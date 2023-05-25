@@ -361,3 +361,5 @@ grafana:
 minesweeper:
   enabled: true
   image: jupyterhub/mybinder.org-minesweeper:2020.12.4-0.dev.git.5080.hf35cc80d
+  nodeSelector:
+    binderhub: "true"
