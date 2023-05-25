@@ -25,6 +25,10 @@
       ansible.builtin.file:
         path: /ssd
         state: directory
+    - name: Create /orc2_data/repo2docker directory if it does not exist
+      ansible.builtin.file:
+        path: /orc2_data/repo2docker
+        state: directory
     - name: Create /orc2_data/prometheus directory if it does not exist
       ansible.builtin.file:
         path: /orc2_data/prometheus
