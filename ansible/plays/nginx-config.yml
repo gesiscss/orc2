@@ -25,7 +25,7 @@
         owner: www-data
         group: www-data
         mode: u=rw,g=r,o=r
-        recurse : true
+        recurse: true
     - name: Copy configuration files
       ansible.builtin.copy:
         src: ../../nginx/sites-available/
