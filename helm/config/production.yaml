@@ -10,9 +10,6 @@ binderhub:
     LaunchQuota:
       total_quota: 50
 
-  dind:
-    hostLibDir: /xfs/repo2docker
-
   extraConfig:
     02-badge-base-url: |
       c.BinderHub.badge_base_url = "https://mybinder.org/"

@@ -21,9 +21,9 @@
         name: net.ipv4.ip_forward
         value: '1'
         state: present
-    - name: Create /ssd directory if it does not exist
+    - name: Create /orc2_data/containerd directory if it does not exist
       ansible.builtin.file:
-        path: /ssd
+        path: /orc2_data/containerd
         state: directory
     - name: Create /orc2_data/repo2docker directory if it does not exist
       ansible.builtin.file:
