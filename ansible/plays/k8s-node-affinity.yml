@@ -11,3 +11,6 @@
     - name: Add database label
       ansible.builtin.shell: >
         kubectl label nodes svko-k8s-test03 database=postgresql
+    - name: Add web server label
+      ansible.builtin.shell: >
+        kubectl label nodes svko-k8s-test03 web-server=nginx

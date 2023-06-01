@@ -1,6 +1,7 @@
 - name: Create Kubernetes Worker Nodes
   hosts:
-    - jupyterhub
+    - notebooks_gesis_org
+    - binderhub
     - jupyterhub_single_user
   become: true
   tasks:
