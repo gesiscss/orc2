@@ -8,9 +8,9 @@ nginx ansible_host=194.95.75.20 ansible_ssh_user=ansible ansible_become_pass='{{
 [kubernetes_control_panel]
 k8s ansible_host=194.95.75.21 ansible_ssh_user=ansible ansible_become_pass='{{ become_pass_194_95_75_21 }}'
 
-[jupyterhub]
-jupyterhub ansible_host=10.6.13.81 ansible_ssh_user=ansible ansible_become_pass='{{ become_pass_10_6_13_81 }}'
+[binderhub]
+binderhub ansible_host=194.95.75.22 ansible_ssh_user=ansible ansible_become_pass='{{ become_pass_194_95_75_22 }}'
 
 [jupyterhub_single_user]
-jupyterhub_single_user01 ansible_host=10.6.13.82 ansible_ssh_user=ansible ansible_become_pass='{{ become_pass_10_6_13_82 }}'
-jupyterhub_single_user02 ansible_host=10.6.13.83 ansible_ssh_user=ansible ansible_become_pass='{{ become_pass_10_6_13_83 }}'
+jupyterhub_single_user01 ansible_host=194.95.75.14 ansible_ssh_user=ansible ansible_become_pass='{{ become_pass_194_95_75_14 }}'
+jupyterhub_single_user02 ansible_host=194.95.75.23 ansible_ssh_user=ansible ansible_become_pass='{{ become_pass_194_95_75_23 }}'
