@@ -9,7 +9,7 @@ nginx ansible_host=194.95.75.20 ansible_ssh_user=ansible ansible_become_pass='{{
 k8s ansible_host=194.95.75.21 ansible_ssh_user=ansible ansible_become_pass='{{ become_pass_194_95_75_21 }}'
 
 [binderhub]
-binderhub ansible_host=194.95.75.22 ansible_ssh_user=ansible ansible_become_pass='{{ become_pass_194_95_75_22 }}'
+binderhub01 ansible_host=194.95.75.22 ansible_ssh_user=ansible ansible_become_pass='{{ become_pass_194_95_75_22 }}'
 
 [jupyterhub_single_user]
 jupyterhub_single_user01 ansible_host=194.95.75.14 ansible_ssh_user=ansible ansible_become_pass='{{ become_pass_194_95_75_14 }}'
