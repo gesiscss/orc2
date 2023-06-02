@@ -155,6 +155,7 @@ gesis helm lint:
       --create-namespace \
       -f ./helm/config/${HELM_ENVIRONMENT}.yaml \
       -f ./helm/config/_secret-${HELM_ENVIRONMENT}.yaml \
+      -f ./helm/config/common/_secret-values.yaml \
       -f ./helm/config/common/_secret-mybinder.org-common.yaml \
       -f ./helm/config/common/_secret-banned-list.yaml
 
