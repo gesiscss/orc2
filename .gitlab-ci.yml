@@ -156,7 +156,6 @@ gesis helm lint:
       -f ./helm/config/${HELM_ENVIRONMENT}.yaml \
       -f ./helm/config/_secret-${HELM_ENVIRONMENT}.yaml \
       -f ./helm/config/common/_secret-mybinder.org-common.yaml \
-      -f ./helm/config/common/_secret-container-registry.yaml \
       -f ./helm/config/common/_secret-banned-list.yaml
 
 gesis helm stage deploy:
