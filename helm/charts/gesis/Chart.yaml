@@ -27,7 +27,7 @@ appVersion: "1.16.0"
 
 dependencies:
   - name: binderhub
-    version: "1.0.0-0.dev.git.3095.h47da66c"
+    version: "1.0.0-0.dev.git.3128.h52ffd88"
     repository: "https://jupyterhub.github.io/helm-chart"
 
   - name: prometheus
@@ -36,7 +36,7 @@ dependencies:
     condition: prometheus.enabled
 
   - name: grafana
-    version: "6.54.0"
+    version: "6.57.0"
     repository: https://grafana.github.io/helm-charts
     condition: grafana.enabled
 
