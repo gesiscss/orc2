@@ -209,7 +209,7 @@ binderhub:
     singleuser:
       memory:
         guarantee: 450M
-        limit: 2G
+        limit: 4G
       cpu:
         guarantee: 0.01
         limit: 1
