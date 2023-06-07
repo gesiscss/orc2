@@ -2,29 +2,23 @@
   hosts:
     - kubernetes_control_panel
   tasks:
-    - name: debug1
-      ansible.builtin.debug:
-        var: groups
-    - name: debug2
-      ansible.builtin.debug:
-        var: hostvars
     - name: Add binderhub label
       ansible.builtin.shell: |
         {% for host in groups['binderhub'] %}
-        kubectl label nodes {{ hostvars[host]['hostname'] }} binderhub=true
+        kubectl label nodes {{ hostvars[host]['ansible_hostname'] }} binderhub=true
         {% endfor %}
     - name: Add docker_available label
       ansible.builtin.shell: |
         {% for host in groups['binderhub'] %}
-        kubectl label nodes {{ hostvars[host]['hostname'] }} docker_available=true
+        kubectl label nodes {{ hostvars[host]['ansible_hostname'] }} docker_available=true
         {% endfor %}
     - name: Add database label
       ansible.builtin.shell: |
         {% for host in groups['notebooks_gesis_org'] %}
-        kubectl label nodes {{ hostvars[host]['hostname'] }} database=postgresql
+        kubectl label nodes {{ hostvars[host]['ansible_hostname'] }} database=postgresql
         {% endfor %}
     - name: Add web server label
       ansible.builtin.shell: |
         {% for host in groups['notebooks_gesis_org'] %}
-        kubectl label nodes {{ hostvars[host]['hostname'] }} web-server=nginx
+        kubectl label nodes {{ hostvars[host]['ansible_hostname'] }} web-server=nginx
         {% endfor %}
