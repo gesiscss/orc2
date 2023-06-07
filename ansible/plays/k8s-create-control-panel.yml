@@ -21,6 +21,16 @@
         --control-plane-endpoint={{ K8S_CONTROL_PLANE_ENDPOINT }}
         --cri-socket unix:///run/containerd/containerd.sock
       register: kubeadm_init_output
+    - name: Create root's .kube directory
+      ansible.builtin.file:
+        path: /root/.kube
+        state: directory
+        mode: 0755
+    - name: Copies admin.conf to root's kube config
+      ansible.builtin.copy:
+        src: /etc/kubernetes/admin.conf
+        dest: /root/.kube/config
+        remote_src: true
     - name: Create user's .kube directory
       ansible.builtin.file:
         path: /home/ansible/.kube
