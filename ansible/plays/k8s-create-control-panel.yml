@@ -22,10 +22,12 @@
         --cri-socket unix:///run/containerd/containerd.sock
       register: kubeadm_init_output
     - name: Create user's .kube directory
-      file:
+      ansible.builtin.file:
         path: /home/ansible/.kube
         state: directory
         mode: 0755
+        owner: ansible
+        group: ansible
     - name: Copies admin.conf to user's kube config
       ansible.builtin.copy:
         src: /etc/kubernetes/admin.conf
@@ -41,6 +43,8 @@
       ansible.builtin.file:
         path: /tmp/kubernetes_join_command
         state: touch
+        owner: ansible
+        group: ansible
     - name: Save content of join command
       ansible.builtin.copy:
         content: "{{ kubernetes_join_command.stdout }}"
