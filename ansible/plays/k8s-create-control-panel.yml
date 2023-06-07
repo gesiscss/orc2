@@ -8,18 +8,19 @@
         kubectl get nodes || /bin/true
       register: kubernetes_nodes
     - name: Pull kubernetes images
-      when: kubernetes_nodes.stdout.find('control-plane') != -1
+      when: kubernetes_nodes.stdout.find('control-plane') == -1
       ansible.builtin.shell: >
         kubeadm config images pull
         --cri-socket unix:///run/containerd/containerd.sock
     - name: Initialize the cluster
-      when: kubernetes_nodes.stdout.find('control-plane') != -1
+      when: kubernetes_nodes.stdout.find('control-plane') == -1
       ansible.builtin.shell: >
         kubeadm init
         --pod-network-cidr=10.244.0.0/16
         --upload-certs
         --control-plane-endpoint={{ K8S_CONTROL_PLANE_ENDPOINT }}
         --cri-socket unix:///run/containerd/containerd.sock
+      register: kubeadm_init_output
     - name: Create user's .kube directory
       file:
         path: /home/ansible/.kube
