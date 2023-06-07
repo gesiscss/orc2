@@ -2,6 +2,12 @@
   hosts:
     - kubernetes_control_panel
   tasks:
+    - name: debug1
+      ansible.builtin.debug:
+        var: groups
+    - name: debug2
+      ansible.builtin.debug:
+        var: hostvars
     - name: Add binderhub label
       ansible.builtin.shell: |
         {% for host in groups['binderhub'] %}
