@@ -1,3 +1,4 @@
+- ansible.builtin.import_playbook: plays/install-generic-dependencies.yml
 - ansible.builtin.import_playbook: plays/k8s-prepare-node.yml
 - ansible.builtin.import_playbook: plays/k8s-install.yml
 - ansible.builtin.import_playbook: plays/k8s-bridge-traffic.yml
