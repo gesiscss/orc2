@@ -1,28 +1,9 @@
-# Git Repositories
+# How-to clone the Git Repositories
 
 Here we will configure a local copy of the source code.
 
 ``` bash
 git clone git@git.gesis.org:ilcm/orc2.git
-```
-
-We host most of repositories both on GitHub and GESIS GitLab and it is very important that we keep them in sync.
-GitHub repos are the public ones which we use for pulling changes.
-On GESIS GitLab we have our CI/CD running which makes it important to be synced.
-This means any time when we push to public (GitHub), we also push to GitLab.
-
-## Two remote to push for `orc2`
-
-```bash
-cd orc2
-```
-
-```bash
-git remote set-url origin --push --add git@github.com:gesiscss/orc2.git
-```
-
-```bash
-git remote set-url origin --push --add git@git.gesis.org:ilcm/orc2.git
 ```
 
 ## Decrypt Secret Files

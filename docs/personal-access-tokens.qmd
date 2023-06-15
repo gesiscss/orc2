@@ -1,4 +1,4 @@
-# Personal Access Tokens {#sec-personal-access-tokens}
+# How-to create Personal Access Tokens {#sec-personal-access-tokens}
 
 To facilitate pull Git repositories to the remote servers, we recommend create personal access tokens.
 

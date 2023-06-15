@@ -1,4 +1,4 @@
-# Developing BinderHub Helm chart
+# How-to create BinderHub Helm chart
 
 ::: {.callout-note}
 
