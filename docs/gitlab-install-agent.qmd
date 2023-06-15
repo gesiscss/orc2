@@ -1,4 +1,4 @@
-# Install Agent
+# How-to create an GitLab Agent for Kubernetes
 
 ::: {.callout-note}
 

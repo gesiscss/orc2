@@ -1,5 +1,7 @@
 # Version Log book
 
+Here is a list of the version of the software that we are using.
+
 Software Version Number
 -------- --------------
 Git      2.34.1

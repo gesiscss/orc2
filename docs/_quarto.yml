@@ -8,19 +8,17 @@ book:
     - Raniere Silva
   chapters:
     - index.qmd
-    - part: "General"
-      chapters: 
-      - where-to-ask-questions.qmd
-      - secret-files.qmd
-      - git-repositories.qmd
-      - personal-access-tokens.qmd
-    - part: "Development Environment"
+    - where-to-ask-questions.qmd
+    - part: "Explanation"
+      chapters:
+      - what-is.qmd
+    - part: "Tutorial: Set your Development Environment"
       chapters: 
       - development-environment.qmd
       - hello-minikube.qmd
       - local-jupyterhub.qmd
       - local-binderhub.qmd
-    - part: "Test Environment"
+    - part: "Tutorial: Set the Test Environment"
       chapters:
       - test-hardware.qmd
       - test-software.qmd
@@ -30,7 +28,7 @@ book:
       - test-binderhub.qmd
       - test-nginx.qmd
       - test-clean-up.qmd
-    - part: "Production Environment"
+    - part: "Tutorial: Set the Production Environment"
       chapters: 
       - production-hardware.qmd
       - production-software.qmd
@@ -43,19 +41,25 @@ book:
       - production-binderhub.qmd
       - production-nginx.qmd
       - production-monitoring-status.qmd
-    - part: "Continuous Deployment"
+    - part: "How-to Guides"
       chapters: 
+      - secret-files.qmd
+      - git-repositories.qmd
+      - git-crypt-install.qmd
+      - git-crypt.qmd
+      - personal-access-tokens.qmd
       - gitlab-install-agent.qmd
+      - dev-binderhub.qmd
+    - part: "Reference"
+      chapters: 
+      - gitlab-ci-runner-101.qmd
+      - docker-101.qmd
+      - nginx-101.qmd
+      - postgresql-101.qmd
+      - openlens-101.qmd
+      - helm-101.qmd
   appendices:
     - version-log-book.qmd
-    - git-crypt.qmd
-    - gitlab-ci-runner-101.qmd
-    - docker-101.qmd
-    - nginx-101.qmd
-    - postgresql-101.qmd
-    - openlens-101.qmd
-    - helm-101.qmd
-    - dev-binderhub.qmd
 
 format:
   html:
