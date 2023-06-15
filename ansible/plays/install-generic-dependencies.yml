@@ -7,5 +7,6 @@
       ansible.builtin.apt:
         update_cache: true
         pkg:
+          - rsync
           - python3-pip
           - python3-dev
