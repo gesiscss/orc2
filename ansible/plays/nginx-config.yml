@@ -17,7 +17,7 @@
         path: /etc/sudoers
         state: present
         insertafter: '^%sudo'
-        line: "{{ user }} ALL=NOPASSWD: /usr/bin/rsync"
+        line: "{{ ansible_ssh_user }} ALL=NOPASSWD: /usr/bin/rsync"
     - name: Sync static files
       ansible.posix.synchronize:
         src: ../../nginx/static/
@@ -29,7 +29,7 @@
       lineinfile:
         path: /etc/sudoers
         state: absent
-        line: "{{ user }} ALL=NOPASSWD: /usr/bin/rsync"
+        line: "{{ ansible_user }} ALL=NOPASSWD: /usr/bin/rsync"
     - name: Change static files ownership, group and permissions
       ansible.builtin.file:
         path: /var/www/orc2
