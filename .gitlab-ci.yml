@@ -74,7 +74,7 @@ gesis ansible lint:
     entrypoint: [""]
   variables:
     ANSIBLE_INVENTORY: template
-  script::
+  script:
     - mkdir ~/.ssh/
     - echo StrictHostKeyChecking no > ~/.ssh/config
     - cp $ANSIBLE_SSH_PUBLIC_KEY ~/.ssh/id_ed25519.pub
