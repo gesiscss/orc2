@@ -12,6 +12,12 @@
       ansible.builtin.file:
         state: directory
         path: /etc/nginx/sites-enabled/
+    - name: Workaround limition to elevating permissions via passwordless sudo
+      ansible.builtin.lineinfile:
+        path: /etc/sudoers
+        state: present
+        insertafter: '^%sudo'
+        line: "{{ user }} ALL=NOPASSWD: /usr/bin/rsync"
     - name: Sync static files
       ansible.posix.synchronize:
         src: ../../nginx/static/
@@ -19,6 +25,11 @@
         delete: true
         dirs: true
         recursive: true
+    - name: Revert workaround
+      lineinfile:
+        path: /etc/sudoers
+        state: absent
+        line: "{{ user }} ALL=NOPASSWD: /usr/bin/rsync"
     - name: Change static files ownership, group and permissions
       ansible.builtin.file:
         path: /var/www/orc2
