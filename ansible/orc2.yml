@@ -1,3 +1,4 @@
+- ansible.builtin.import_playbook: plays/install-generic-dependencies.yml
 - ansible.builtin.import_playbook: plays/k8s-prepare-node.yml
 - ansible.builtin.import_playbook: plays/k8s-install.yml
 - ansible.builtin.import_playbook: plays/k8s-bridge-traffic.yml
@@ -7,5 +8,6 @@
 - ansible.builtin.import_playbook: plays/k8s-create-worker-nodes.yml
 - ansible.builtin.import_playbook: plays/k8s-node-affinity.yml
 - ansible.builtin.import_playbook: plays/k8s-install-gitlab-agent.yml
+- ansible.builtin.import_playbook: plays/cron4k8s.yml
 - ansible.builtin.import_playbook: plays/nginx-install.yml
 - ansible.builtin.import_playbook: plays/nginx-config.yml

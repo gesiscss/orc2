@@ -74,14 +74,12 @@ gesis ansible lint:
     entrypoint: [""]
   variables:
     ANSIBLE_INVENTORY: template
-  before_script:
+  script:
     - mkdir ~/.ssh/
     - echo StrictHostKeyChecking no > ~/.ssh/config
     - cp $ANSIBLE_SSH_PUBLIC_KEY ~/.ssh/id_ed25519.pub
     - cp $ANSIBLE_SSH_PRIVATE_KEY ~/.ssh/id_ed25519
     - chmod 600 ~/.ssh/id_ed25519
-    - mkdir tmp
-  script:
     - echo $ANSIBLE_VAULT > ansible/.ansible-vault-password-file
     - ansible --version
     - |
