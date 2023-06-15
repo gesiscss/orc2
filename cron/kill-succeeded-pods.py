@@ -3,7 +3,7 @@
 import argparse
 import logging
 
-from kubernetes import client, config, watch
+from kubernetes import client, config
 
 logging.basicConfig(
     format="%(asctime)s %(levelname)-8s | %(message)s", datefmt="%Y-%m-%d %H:%M:%S"
