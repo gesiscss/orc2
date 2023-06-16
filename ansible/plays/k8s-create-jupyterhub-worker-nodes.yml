@@ -8,6 +8,12 @@
         src: '{{ ANSIBLE_CONTROL_NODE_TMP }}/k8s/tmp/kubernetes_join_command'
         dest: /tmp/kubernetes_join_command
         mode: u=rwx,g=rx,o=rx
+    - name: Attempt to join cluster
+      ansible.builtin.shell: /tmp/kubernetes_join_command
+      register: kubernetes_join_attempt
+      failed_when:
+        - kubernetes_join_attempt.rc != 0
+        - '"already exists" not in kubernetes_join_attempt.stderr'
     - name: Stop kubelet service
       ansible.builtin.systemd:
         name: kubelet
@@ -20,9 +26,3 @@
       ansible.builtin.systemd:
         name: kubelet
         state: restarted
-    - name: Attempt to join cluster
-      ansible.builtin.shell: /tmp/kubernetes_join_command
-      register: kubernetes_join_attempt
-      failed_when:
-        - kubernetes_join_attempt.rc != 0
-        - '"already exists" not in kubernetes_join_attempt.stderr'
