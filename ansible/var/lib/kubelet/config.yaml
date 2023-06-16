@@ -14,7 +14,7 @@ authorization:
     cacheUnauthorizedTTL: 0s
 cgroupDriver: systemd
 clusterDNS:
-- 10.96.0.10
+  - 10.96.0.10
 clusterDomain: cluster.local
 cpuManagerReconcilePeriod: 0s
 evictionPressureTransitionPeriod: 0s
