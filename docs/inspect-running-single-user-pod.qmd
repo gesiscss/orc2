@@ -1,0 +1,33 @@
+# How-to Inspect Single User Running Kubernetes Pod
+
+After successfully build and launch a Git repository (for example, `https://github.com/binder-examples/requirements`), a single user running kubernetes pod should be li
+
+```bash
+kubectl get pods -n gesis -o wide
+```
+
+```
+NAME                                                  READY   STATUS    RESTARTS   AGE     IP             NODE                   NOMINATED NODE   READINESS GATES
+binder-79988fd6b4-8l8dj                               1/1     Running   0          2d17h   10.244.2.100   svko-ilcm04            <none>           <none>
+binder-79988fd6b4-vb79l                               1/1     Running   0          2d17h   10.244.4.17    svko-k8s-test03        <none>           <none>
+binderhub-cryptnono-5pwkd                             1/1     Running   0          3d19h   10.244.2.97    svko-ilcm04            <none>           <none>
+binderhub-cryptnono-8bkm7                             1/1     Running   0          3d19h   10.244.3.10    svko-k8s-test02        <none>           <none>
+binderhub-cryptnono-8nxjv                             1/1     Running   0          3d19h   10.244.4.10    svko-k8s-test03        <none>           <none>
+binderhub-cryptnono-9xmmd                             1/1     Running   0          3d19h   10.244.1.10    svko-css-backup-node   <none>           <none>
+binderhub-dind-dj9hb                                  1/1     Running   0          3d19h   10.244.3.11    svko-k8s-test02        <none>           <none>
+binderhub-grafana-7c5b497677-6ktcw                    1/1     Running   0          2d22h   10.244.4.13    svko-k8s-test03        <none>           <none>
+binderhub-image-cleaner-zhmmk                         1/1     Running   0          3d19h   10.244.3.12    svko-k8s-test02        <none>           <none>
+binderhub-kube-state-metrics-77c5477f8c-jwft9         1/1     Running   0          3d19h   10.244.1.8     svko-css-backup-node   <none>           <none>
+binderhub-prometheus-node-exporter-8bpdq              1/1     Running   0          3d19h   194.95.75.20   svko-css-backup-node   <none>           <none>
+binderhub-prometheus-node-exporter-8c7wz              1/1     Running   0          3d19h   194.95.75.14   svko-ilcm04            <none>           <none>
+binderhub-prometheus-node-exporter-brnck              1/1     Running   0          3d19h   194.95.75.22   svko-k8s-test02        <none>           <none>
+binderhub-prometheus-node-exporter-fkskg              1/1     Running   0          3d19h   194.95.75.23   svko-k8s-test03        <none>           <none>
+binderhub-prometheus-node-exporter-j2knm              1/1     Running   0          3d19h   194.95.75.21   svko-k8s-test01        <none>           <none>
+binderhub-prometheus-server-6f7b6b7bcb-q24cf          2/2     Running   0          46h     10.244.3.13    svko-k8s-test02        <none>           <none>
+hub-79d475cdb5-dlxql                                  1/1     Running   0          2d16h   10.244.1.14    svko-css-backup-node   <none>           <none>
+jupyter-binder-2dexamples-2drequirements-2di6bbji22   1/1     Running   0          80s     10.244.3.15    svko-k8s-test02        <none>           <none>
+minesweeper-fsv2n                                     1/1     Running   0          3d19h   10.244.3.8     svko-k8s-test02        <none>           <none>
+proxy-5f4f54d9c4-lfqsg                                1/1     Running   0          2d17h   10.244.4.15    svko-k8s-test03        <none>           <none>
+user-scheduler-758c5c58b7-6n9qh                       1/1     Running   0          2d17h   10.244.4.14    svko-k8s-test03        <none>           <none>
+user-scheduler-758c5c58b7-xw56s                       1/1     Running   0          2d17h   10.244.2.101   svko-ilcm04            <none>           <none>
+```

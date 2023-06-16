@@ -49,6 +49,7 @@ book:
       - git-crypt.qmd
       - personal-access-tokens.qmd
       - gitlab-install-agent.qmd
+      - inspect-running-single-user-pod.qmd
       - dev-binderhub.qmd
     - part: "Reference"
       chapters: 
