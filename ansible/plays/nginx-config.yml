@@ -35,7 +35,7 @@
         path: /var/www/orc2
         owner: www-data
         group: www-data
-        mode: u=rw,g=r,o=r
+        mode: u=rwx,g=rx,o=rx
         recurse: true
     - name: Copy configuration files
       ansible.builtin.copy:
