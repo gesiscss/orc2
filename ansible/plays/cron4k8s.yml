@@ -16,3 +16,4 @@
     - name: Add cron job to remove succeeded pods
       ansible.builtin.cron:
         job: "python3 /home/ansible/bin/kill-succeeded-pods.py --verbose >> /home/ansible/kill-succeeded-pods.log 2>&1"
+        minute: */5
