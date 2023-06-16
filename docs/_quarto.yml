@@ -51,13 +51,16 @@ book:
       - gitlab-install-agent.qmd
       - inspect-running-single-user-pod.qmd
       - dev-binderhub.qmd
+    - part: openlens/index.qmd
+      chapters: 
+        - openlens/install.qmd
+        - openlens/connect.qmd
     - part: "Reference"
       chapters: 
       - gitlab-ci-runner-101.qmd
       - docker-101.qmd
       - nginx-101.qmd
       - postgresql-101.qmd
-      - openlens-101.qmd
       - helm-101.qmd
   appendices:
     - version-log-book.qmd

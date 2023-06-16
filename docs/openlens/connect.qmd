@@ -1,10 +1,4 @@
-# OpenLens 101
-
-[OpenLens](https://github.com/lensapp/lens) is the open source version of [Lens IDE](https://k8slens.dev/), an integrated development environment for Kubernetes. Binaries for OpenLens are available at <https://github.com/MuhammedKalkan/OpenLens>.
-
-![Screenshot of OpenLens.](img/openlens.png)
-
-## Connecting to remote cluster
+# How-to Add New Cluster to OpenLens
 
 Access the remote cluster using SSH and run
 
@@ -25,9 +19,3 @@ Paste the output of `kubectl config view --minify --raw` in the text field and c
 After the cluster be successfully added, click on the cluster to open the dashboard.
 
 ![Screenshot of OpenLens showing cluster dashboard.](img/openlens-cluster-dashboard.png)
-
-## Extensions
-
-Some useful extensions:
-
-- [node and pod menu functionality](https://github.com/alebcay/openlens-node-pod-menu)
