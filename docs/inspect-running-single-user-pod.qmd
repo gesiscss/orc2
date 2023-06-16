@@ -1,6 +1,6 @@
 # How-to Inspect Single User Running Kubernetes Pod
 
-After successfully build and launch a Git repository (for example, `https://github.com/binder-examples/requirements`), a single user running kubernetes pod should be li
+After successfully build and launch a Git repository (for example, `https://github.com/binder-examples/requirements`), a new pod named `jupyter-` will be in the Kubernetes cluster.
 
 ```bash
 kubectl get pods -n gesis -o wide
@@ -31,3 +31,97 @@ proxy-5f4f54d9c4-lfqsg                                1/1     Running   0       
 user-scheduler-758c5c58b7-6n9qh                       1/1     Running   0          2d17h   10.244.4.14    svko-k8s-test03        <none>           <none>
 user-scheduler-758c5c58b7-xw56s                       1/1     Running   0          2d17h   10.244.2.101   svko-ilcm04            <none>           <none>
 ```
+
+In the Kubernetes node that is running the pod,
+
+```bash
+ps -axjf
+```
+
+should show a entry like
+
+```
+   PPID     PID    PGID     SID TTY        TPGID STAT   UID   TIME COMMAND
+      1 4124189 4124189 3836418 ?             -1 Sl       0   0:00 /usr/bin/containerd-shim-runc-v2 -namespace k8s.io -id 11d8f48e22f6f5b0d3a4f2253d0ce5348c3cd8e195d22c57698e07733b86d11d -address /run/containerd/containerd.sock
+4124189 4124208 4124208 4124208 ?             -1 Ss   65535   0:00  \_ /pause
+4124189 4124299 4124299 4124299 ?             -1 Ss    1000   0:00  \_ python3 -u /usr/local/bin/repo2docker-entrypoint python3 -c import os import sys  try:     import jupyterlab     import jupyterlab.labapp     major = int(jupyterlab.__version__.split(".", 1)[0]) except Exception as e:     print("Failed to import jupyterlab: {e}", file=sys.stderr)     have_lab = False else:     have_lab = major >= 3  if have_lab:     # technically, we could accept another jupyter-server-based frontend     print("Launching jupyter-lab", file=sys.stderr)     exe = "jupyter-lab" else:     print("jupyter-lab not found, launching jupyter-notebook", file=sys.stderr)     exe = "jupyter-notebook"# launch the notebook server os.execvp(exe, sys.argv)  --ip=0.0.0.0 --port=8888 --NotebookApp.base_url=/binder/jupyter/user/binder-examples-requirements-y02a2lnp/ --NotebookApp.token=vqPCJasMTwWs-3DJ_Hx97A --NotebookApp.trust_xheaders=True --NotebookApp.allow_origin=* --NotebookApp.allow_origin_pat=.* --ServerApp.base_url=/binder/jupyter/user/binder-examples-requirements-y02a2lnp/ --ServerApp.token=vqPCJasMTwWs-3DJ_Hx97A --ServerApp.trust_xheaders=True --ServerApp.allow_origin=* --ServerApp.allow_origin_pat=.*
+4124299 4124328 4124299 4124299 ?             -1 Sl    1000   0:02      \_ /srv/conda/envs/notebook/bin/python3.10 /srv/conda/envs/notebook/bin/jupyter-lab --ip=0.0.0.0 --port=8888 --NotebookApp.base_url=/binder/jupyter/user/binder-examples-requirements-y02a2lnp/ --NotebookApp.token=vqPCJasMTwWs-3DJ_Hx97A --NotebookApp.trust_xheaders=True --NotebookApp.allow_origin=* --NotebookApp.allow_origin_pat=.* --ServerApp.base_url=/binder/jupyter/user/binder-examples-requirements-y02a2lnp/ --ServerApp.token=vqPCJasMTwWs-3DJ_Hx97A --ServerApp.trust_xheaders=True --ServerApp.allow_origin=* --ServerApp.allow_origin_pat=.*
+```
+
+informing how the entrypoint for the user was configured.
+
+When the user is doing some computation,
+
+```bash
+ps -axjf
+```
+
+will show a entry like
+
+```
+   PPID     PID    PGID     SID TTY        TPGID STAT   UID   TIME COMMAND
+      1 4124189 4124189 3836418 ?             -1 Sl       0   0:00 /usr/bin/containerd-shim-runc-v2 -namespace k8s.io -id 11d8f48e22f6f5b0d3a4f2253d0ce5348c3cd8e195d22c57698e07733b86d11d -address /run/containerd/containerd.sock
+4124189 4124208 4124208 4124208 ?             -1 Ss   65535   0:00  \_ /pause
+4124189 4124299 4124299 4124299 ?             -1 Ss    1000   0:00  \_ python3 -u /usr/local/bin/repo2docker-entrypoint python3 -c import os import sys  try:     import jupyterlab     import jupyterlab.labapp     major = int(jupyterlab.__version__.split(".", 1)[0]) except Exception as e:     print("Failed to import jupyterlab: {e}", file=sys.stderr)     have_lab = False else:     have_lab = major >= 3  if have_lab:     # technically, we could accept another jupyter-server-based frontend     print("Launching jupyter-lab", file=sys.stderr)     exe = "jupyter-lab" else:     print("jupyter-lab not found, launching jupyter-notebook", file=sys.stderr)     exe = "jupyter-notebook"# launch the notebook server os.execvp(exe, sys.argv)  --ip=0.0.0.0 --port=8888 --NotebookApp.base_url=/binder/jupyter/user/binder-examples-requirements-y02a2lnp/ --NotebookApp.token=vqPCJasMTwWs-3DJ_Hx97A --NotebookApp.trust_xheaders=True --NotebookApp.allow_origin=* --NotebookApp.allow_origin_pat=.* --ServerApp.base_url=/binder/jupyter/user/binder-examples-requirements-y02a2lnp/ --ServerApp.token=vqPCJasMTwWs-3DJ_Hx97A --ServerApp.trust_xheaders=True --ServerApp.allow_origin=* --ServerApp.allow_origin_pat=.*
+4124299 4124328 4124299 4124299 ?             -1 Sl    1000   0:03      \_ /srv/conda/envs/notebook/bin/python3.10 /srv/conda/envs/notebook/bin/jupyter-lab --ip=0.0.0.0 --port=8888 --NotebookApp.base_url=/binder/jupyter/user/binder-examples-requirements-y02a2lnp/ --NotebookApp.token=vqPCJasMTwWs-3DJ_Hx97A --NotebookApp.trust_xheaders=True --NotebookApp.allow_origin=* --NotebookApp.allow_origin_pat=.* --ServerApp.base_url=/binder/jupyter/user/binder-examples-requirements-y02a2lnp/ --ServerApp.token=vqPCJasMTwWs-3DJ_Hx97A --ServerApp.trust_xheaders=True --ServerApp.allow_origin=* --ServerApp.allow_origin_pat=.*
+4124328 4127325 4127325 4127325 pts/0    4128223 Ss    1000   0:00          \_ /bin/bash -l
+4127325 4128223 4128223 4127325 pts/0    4128223 R+    1000   0:32          |   \_ /bin/bash ./awesome.sh
+4124328 4128351 4128351 4128351 ?             -1 Ssl   1000   0:00          \_ /srv/conda/envs/notebook/bin/python -m ipykernel_launcher -f /home/jovyan/.local/share/jupyter/runtime/kernel-6a2a5493-a93c-4c4e-98f7-16da26f84fe3.json
+```
+
+All user processes, `bash` and `ipykernel_launcher` in the above example, should be a child process of the entrypoint, JupyterLab in the above example.
+
+To find which Kubernetes pod is running a process, identify the process ID (`PID`) and execute
+
+```bash
+nsenter -t $PID -u hostname
+```
+
+```
+jupyter-binder-2dexamples-2drequirements-2dn0pm3694
+```
+
+where `$PID` is the process ID.
+
+
+## Acronyms
+
+`PPID`
+
+:   parent process ID
+
+`PID`
+
+:   a number representing the process ID
+
+`PGID`
+
+:   process group ID
+
+`SID`
+
+:   session ID
+
+`TTY`
+
+:   controlling terminal
+
+`TPGID`
+
+:   ID of the foreground process group on the terminal
+
+`STAT`
+
+:   multi-character process state
+
+`UID`
+
+:   effective user ID
+
+`TIME`
+
+:   accumulated cpu time
+
+`COMMAND`
+
+:   command with all its arguments as a string
