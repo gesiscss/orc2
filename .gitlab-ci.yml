@@ -105,9 +105,8 @@ gesis ansible stage deploy:
 
 gesis ansible production deploy:
   stage: deploy-prod-ansible
-  when: manual
   rules:
-    - if: $CI_PIPELINE_SOURCE != "merge_request_event" && $CI_COMMIT_BRANCH == 'main'
+    - if: $CI_COMMIT_BRANCH == 'main'
       changes:
         - ansible/**/*
         - nginx/**/*
