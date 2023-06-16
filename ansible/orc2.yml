@@ -5,7 +5,8 @@
 - ansible.builtin.import_playbook: plays/k8s-install-containerd.yml
 - ansible.builtin.import_playbook: plays/k8s-create-control-panel.yml
 - ansible.builtin.import_playbook: plays/k8s-install-cni.yml
-- ansible.builtin.import_playbook: plays/k8s-create-worker-nodes.yml
+- ansible.builtin.import_playbook: plays/k8s-create-generic-worker-nodes.yml
+- ansible.builtin.import_playbook: plays/k8s-create-jupyterhub-worker-nodes.yml
 - ansible.builtin.import_playbook: plays/k8s-node-affinity.yml
 - ansible.builtin.import_playbook: plays/k8s-install-gitlab-agent.yml
 - ansible.builtin.import_playbook: plays/cron4k8s.yml
