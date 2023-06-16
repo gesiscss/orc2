@@ -14,7 +14,7 @@
         state: stopped
     - name: Copy kubelet configuration
       ansible.builtin.copy:
-        src: var/lib/kubelet/config.yaml
+        src: ../var/lib/kubelet/config.yaml
         dest: /var/lib/kubelet/config.yaml
     - name: Restarted kubelet service
       ansible.builtin.systemd:
