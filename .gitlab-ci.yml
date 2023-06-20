@@ -12,6 +12,7 @@ stages:
     - if: $CI_PIPELINE_SOURCE == 'web'
       when: manual
       allow_failure: true
+      artifacts: true
 
 Assign Docker image tag:
   stage: prepare
@@ -73,6 +74,7 @@ Build container with Ansible and git-crypt:
 gesis ansible lint:
   stage: test
   needs:
+    - job: Assign Docker image tag
     - job: Build container with Ansible and git-crypt
       optional: true
   rules:
@@ -147,6 +149,7 @@ gesis ansible production deploy:
 gesis helm lint:
   stage: test
   needs:
+    - job: Assign Docker image tag
     - job: Build container with Kubernetes and git-crypt
       optional: true
   rules:
