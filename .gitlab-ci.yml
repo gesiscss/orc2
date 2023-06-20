@@ -12,7 +12,6 @@ stages:
     - if: $CI_PIPELINE_SOURCE == 'web'
       when: manual
       allow_failure: true
-      artifacts: true
 
 Assign Docker image tag:
   stage: prepare
