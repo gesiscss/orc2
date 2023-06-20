@@ -1,0 +1,9 @@
+# The `orc2-fix-jupyterhub` bot
+
+We observed that JupyterHub stop responding to API requests because BinderHub shows
+
+```
+[E 230607 14:30:50 launcher:122] Error accessing Hub API (using https://notebooks.gesis.org/binder/jupyter/hub/api/users/jerry-git-learn-python3-oz0cf3yk/servers/): HTTP 500: Internal Server Error
+```
+
+in the logs. This causes the number of launches to drop to zero. Restart JupyterHub resolves the problem. `orc2-fix-jupyterhub` bot inspect the BinderHub logs to check for the error above and restart JupyterHub when enconter the error.

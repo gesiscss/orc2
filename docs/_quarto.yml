@@ -59,6 +59,9 @@ book:
       chapters: 
         - bots/is-fix-jupyterhub-running.qmd
         - bots/get-log-fix-jupyterhub.qmd
+    - part: "Explanation"
+      chapters: 
+      - explanation/orc2-fix-jupyterhub.qmd
     - part: "Reference"
       chapters: 
       - gitlab-ci-runner-101.qmd
