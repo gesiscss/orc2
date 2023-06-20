@@ -55,6 +55,10 @@ book:
       chapters: 
         - openlens/install.qmd
         - openlens/connect.qmd
+    - part: "How-to Guides: Bots"
+      chapters: 
+        - bots/is-fix-jupyterhub-running.qmd
+        - bots/get-log-fix-jupyterhub.qmd
     - part: "Reference"
       chapters: 
       - gitlab-ci-runner-101.qmd
