@@ -214,6 +214,8 @@ gesis helm production deploy:
   needs:
     - job: gesis ansible production deploy
       optional: true
+    - job: gesis helm stage deploy
+      optional: true
     - job: gesis helm lint
       optional: true
   rules:
