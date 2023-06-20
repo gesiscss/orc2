@@ -35,7 +35,8 @@ Assign Docker image tag:
 Build container with Kubernetes and git-crypt:
   stage: build
   rules:
-    - !reference [.manual-web, rules]
+    - if: $CI_PIPELINE_SOURCE == 'web'
+      when: never
     - if: ($CI_PIPELINE_SOURCE != "schedule" && $CI_COMMIT_BRANCH == 'main') || $CI_PIPELINE_SOURCE == 'merge_request_event'
       changes:
         - Dockerfile
@@ -50,7 +51,8 @@ Build container with Kubernetes and git-crypt:
 Build container with Ansible and git-crypt:
   stage: build
   rules:
-    - !reference [.manual-web, rules]
+    - if: $CI_PIPELINE_SOURCE == 'web'
+      when: never
     - if: ($CI_PIPELINE_SOURCE != "schedule" && $CI_COMMIT_BRANCH == 'main') || $CI_PIPELINE_SOURCE == 'merge_request_event'
       changes:
         - Dockerfile
