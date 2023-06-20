@@ -196,7 +196,7 @@ gesis helm production deploy:
 pages:
   stage: build
   rules:
-    - if: ($CI_PIPELINE_SOURCE != "schedule") && $CI_COMMIT_BRANCH == 'main'
+    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == 'main'
       changes:
         - docs/**/*
   image: docker-private-snapshots.gesis.intra/gesis/methods-hub/quarto:latest
