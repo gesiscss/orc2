@@ -1,0 +1,9 @@
+# How-to Install OpenLens
+
+ Binaries for OpenLens are available at <https://github.com/MuhammedKalkan/OpenLens>.
+
+## Extensions
+
+Some useful extensions:
+
+- [node and pod menu functionality](https://github.com/alebcay/openlens-node-pod-menu)
