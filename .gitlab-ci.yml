@@ -15,7 +15,6 @@ stages:
 
 Assign Docker image tag:
   stage: prepare
-  needs: []
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
@@ -36,8 +35,6 @@ Assign Docker image tag:
 
 Build container with Kubernetes and git-crypt:
   stage: build
-  needs:
-    - job: Assign Docker image tag
   rules:
     - if: $CI_PIPELINE_SOURCE == 'web'
       when: never
@@ -54,8 +51,6 @@ Build container with Kubernetes and git-crypt:
 
 Build container with Ansible and git-crypt:
   stage: build
-  needs:
-    - job: Assign Docker image tag
   rules:
     - if: $CI_PIPELINE_SOURCE == 'web'
       when: never
@@ -72,10 +67,6 @@ Build container with Ansible and git-crypt:
 
 gesis ansible lint:
   stage: test
-  needs:
-    - job: Assign Docker image tag
-    - job: Build container with Ansible and git-crypt
-      optional: true
   rules:
     - !reference [.manual-web, rules]
     - if: (($CI_PIPELINE_SOURCE != "schedule") && $CI_COMMIT_BRANCH == 'main') || $CI_PIPELINE_SOURCE == 'merge_request_event'
@@ -89,9 +80,6 @@ gesis ansible lint:
     - ansible-lint --show-relpath ansible
 
 .gesis ansible deploy:
-  needs:
-    - job: gesis ansible lint
-      optional: true
   image: 
     name: docker-private-snapshots.gesis.intra/gesis/ilcm/orc2/ansible:${DOCKER_IMAGE_TAG}
     entrypoint: [""]
@@ -129,9 +117,6 @@ gesis ansible stage deploy:
     - .gesis ansible deploy
 
 gesis ansible production deploy:
-  needs:
-    - job: gesis ansible stage deploy
-      optional: true
   stage: deploy-prod-ansible
   rules:
     - !reference [.manual-web, rules]
@@ -147,10 +132,6 @@ gesis ansible production deploy:
 
 gesis helm lint:
   stage: test
-  needs:
-    - job: Assign Docker image tag
-    - job: Build container with Kubernetes and git-crypt
-      optional: true
   rules:
     - !reference [.manual-web, rules]
     - if: (($CI_PIPELINE_SOURCE != "schedule") && $CI_COMMIT_BRANCH == 'main') || $CI_PIPELINE_SOURCE == 'merge_request_event'
@@ -166,9 +147,6 @@ gesis helm lint:
     - helm template gesis ./helm/charts/gesis > gesis.helm.chart.yaml
 
 .gesis helm deploy:
-  needs:
-    - job: gesis helm lint
-      optional: true
   image: 
     name: docker-private-snapshots.gesis.intra/gesis/ilcm/orc2/k8s:${DOCKER_IMAGE_TAG}
     entrypoint: [""]
@@ -196,11 +174,6 @@ gesis helm lint:
 
 gesis helm stage deploy:
   stage: deploy-stage-helm
-  needs:
-    - job: gesis ansible stage deploy
-      optional: true
-    - job: gesis helm lint
-      optional: true
   rules:
     - !reference [.manual-web, rules]
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -213,13 +186,6 @@ gesis helm stage deploy:
 
 gesis helm production deploy:
   stage: deploy-prod-helm
-  needs:
-    - job: gesis ansible production deploy
-      optional: true
-    - job: gesis helm stage deploy
-      optional: true
-    - job: gesis helm lint
-      optional: true
   rules:
     - !reference [.manual-web, rules]
     - if: $CI_PIPELINE_SOURCE != "merge_request_event" && $CI_COMMIT_BRANCH == 'main'
