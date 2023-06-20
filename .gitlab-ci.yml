@@ -128,6 +128,9 @@ gesis ansible stage deploy:
     - .gesis ansible deploy
 
 gesis ansible production deploy:
+  needs:
+    - job: gesis ansible stage deploy
+      optional: true
   stage: deploy-prod-ansible
   rules:
     - !reference [.manual-web, rules]
@@ -191,6 +194,11 @@ gesis helm lint:
 
 gesis helm stage deploy:
   stage: deploy-stage-helm
+  needs:
+    - job: gesis ansible stage deploy
+      optional: true
+    - job: gesis helm lint
+      optional: true
   rules:
     - !reference [.manual-web, rules]
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -203,6 +211,11 @@ gesis helm stage deploy:
 
 gesis helm production deploy:
   stage: deploy-prod-helm
+  needs:
+    - job: gesis ansible production deploy
+      optional: true
+    - job: gesis helm lint
+      optional: true
   rules:
     - !reference [.manual-web, rules]
     - if: $CI_PIPELINE_SOURCE != "merge_request_event" && $CI_COMMIT_BRANCH == 'main'
