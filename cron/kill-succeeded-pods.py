@@ -33,7 +33,7 @@ def kill_pod(pod):
     try:
         api_response = v1.delete_namespaced_pod(pod.metadata.name, NAMESPACE)
         logger.info("Pod %s deleted.", api_response.metadata.name)
-    except kubernetes.client.exceptions.ApiException as exception:
+    except client.exceptions.ApiException as exception:
         logger.info(
             "Fail to delete pod %s due %s", api_response.metadata.name, exception
         )
