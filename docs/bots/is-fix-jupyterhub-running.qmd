@@ -1,0 +1,25 @@
+# How-to Check if bot `orc2-fix-jupyterhub` is running
+
+Login to the Kubernetes node running the control panel and execute
+
+```bash
+sudo systemctl status orc2-fix-jupyterhub-bot
+```
+
+```
+● orc2-fix-jupyterhub-bot.service - Bot service to restart ORC2 JupyterHub when API is not working
+     Loaded: loaded (/etc/systemd/system/orc2-fix-jupyterhub-bot.service; static)
+     Active: active (running) since Tue 2023-06-20 17:17:54 CEST; 4min 41s ago
+   Main PID: 947863 (python3)
+      Tasks: 1 (limit: 19065)
+     Memory: 70.5M
+        CPU: 1.215s
+     CGroup: /system.slice/orc2-fix-jupyterhub-bot.service
+             └─947863 /usr/bin/python3 /usr/bin/orc2-fix-jupyterhub-bot.py --debug
+
+Jun 20 17:17:54 svko-ilcm03 systemd[1]: Started Bot service to restart ORC2 JupyterHub when API is not working.
+Jun 20 17:17:56 svko-ilcm03 python3[947863]: 2023-06-20 17:17:56 DEBUG    | Pod binder-7bbc9ddf54-smjmt
+Jun 20 17:17:56 svko-ilcm03 python3[947863]: 2023-06-20 17:17:56 INFO     | Monitoring binder-7bbc9ddf54-smjmt
+```
+
+You should see `Active: active (running)` in the output.

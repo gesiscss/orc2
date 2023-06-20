@@ -1,0 +1,13 @@
+# How-to Get Log from bot `orc2-fix-jupyterhub`
+
+Login to the Kubernetes node running the control panel and execute
+
+```bash
+sudo journalctl -u orc2-fix-jupyterhub-bot
+```
+
+```
+Jun 20 17:17:54 svko-ilcm03 systemd[1]: Started Bot service to restart ORC2 JupyterHub when API is not working.
+Jun 20 17:17:56 svko-ilcm03 python3[947863]: 2023-06-20 17:17:56 DEBUG    | Pod binder-7bbc9ddf54-smjmt
+Jun 20 17:17:56 svko-ilcm03 python3[947863]: 2023-06-20 17:17:56 INFO     | Monitoring binder-7bbc9ddf54-smjmt
+```
