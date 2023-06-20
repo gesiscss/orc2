@@ -7,6 +7,11 @@ stages:
   - deploy-prod-ansible
   - deploy-prod-helm
 
+.manual-web:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'web'
+      when: manual
+
 Assign Docker image tag:
   stage: prepare
   rules:
@@ -30,6 +35,7 @@ Assign Docker image tag:
 Build container with Kubernetes and git-crypt:
   stage: build
   rules:
+    - !reference [.manual-web, rules]
     - if: ($CI_PIPELINE_SOURCE != "schedule" && $CI_COMMIT_BRANCH == 'main') || $CI_PIPELINE_SOURCE == 'merge_request_event'
       changes:
         - Dockerfile
@@ -44,6 +50,7 @@ Build container with Kubernetes and git-crypt:
 Build container with Ansible and git-crypt:
   stage: build
   rules:
+    - !reference [.manual-web, rules]
     - if: ($CI_PIPELINE_SOURCE != "schedule" && $CI_COMMIT_BRANCH == 'main') || $CI_PIPELINE_SOURCE == 'merge_request_event'
       changes:
         - Dockerfile
@@ -58,6 +65,7 @@ Build container with Ansible and git-crypt:
 gesis ansible lint:
   stage: test
   rules:
+    - !reference [.manual-web, rules]
     - if: (($CI_PIPELINE_SOURCE != "schedule") && $CI_COMMIT_BRANCH == 'main') || $CI_PIPELINE_SOURCE == 'merge_request_event'
       changes:
         - ansible/**/*
@@ -94,6 +102,7 @@ gesis ansible lint:
 gesis ansible stage deploy:
   stage: deploy-stage-ansible
   rules:
+    - !reference [.manual-web, rules]
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
         - ansible/**/*
@@ -107,6 +116,7 @@ gesis ansible stage deploy:
 gesis ansible production deploy:
   stage: deploy-prod-ansible
   rules:
+    - !reference [.manual-web, rules]
     - if: $CI_COMMIT_BRANCH == 'main'
       changes:
         - ansible/**/*
@@ -120,6 +130,7 @@ gesis ansible production deploy:
 gesis helm lint:
   stage: test
   rules:
+    - !reference [.manual-web, rules]
     - if: (($CI_PIPELINE_SOURCE != "schedule") && $CI_COMMIT_BRANCH == 'main') || $CI_PIPELINE_SOURCE == 'merge_request_event'
       changes:
         - helm/**/*
@@ -161,6 +172,7 @@ gesis helm lint:
 gesis helm stage deploy:
   stage: deploy-stage-helm
   rules:
+    - !reference [.manual-web, rules]
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
         - helm/**/*
@@ -172,6 +184,7 @@ gesis helm stage deploy:
 gesis helm production deploy:
   stage: deploy-prod-helm
   rules:
+    - !reference [.manual-web, rules]
     - if: $CI_PIPELINE_SOURCE != "merge_request_event" && $CI_COMMIT_BRANCH == 'main'
       changes:
         - helm/**/*
@@ -183,7 +196,7 @@ gesis helm production deploy:
 pages:
   stage: build
   rules:
-    - if: ($CI_PIPELINE_SOURCE != "schedule") && $CI_COMMIT_BRANCH == 'main'
+    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == 'main'
       changes:
         - docs/**/*
   image: docker-private-snapshots.gesis.intra/gesis/methods-hub/quarto:latest
