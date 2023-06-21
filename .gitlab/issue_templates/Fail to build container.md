@@ -14,9 +14,9 @@ repo2docker builds container successfuly.
 2. Fill `URL` with <failed-repository-url>
 3. Click `launch`
 
-## Reproducible at mybinder.org
+## Reproducible at ovh.mybinder.org
 
-1. Visit https://mybinder.org/
+1. Visit https://ovh.mybinder.org/
 2. Fill `URL` with <failed-repository-url>
 3. Click `launch`
 

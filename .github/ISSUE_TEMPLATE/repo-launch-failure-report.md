@@ -1,12 +1,12 @@
 ---
 name: Repository launch failure
 about: Report a Git repository that fail at notebooks.gesis.org
-title: ''
+title: 'Fail to launch <failed-repository-url>'
 labels: ''
 assignees: '@rgaiacs'
 ---
 
-[BinderHub]https://github.com/jupyterhub/binderhub) failed to build <failed-repository-url>.
+[BinderHub](https://github.com/jupyterhub/binderhub) failed to launch <failed-repository-url>.
 
 ## What is the current bug behavior?
 
@@ -22,9 +22,9 @@ BinderHub launches container successfuly.
 2. Fill `URL` with <failed-repository-url>
 3. Click `launch`
 
-## Reproducible at mybinder.org
+## Reproducible at ovh.mybinder.org
 
-1. Visit https://mybinder.org/
+1. Visit https://ovh.mybinder.org/
 2. Fill `URL` with <failed-repository-url>
 3. Click `launch`
 

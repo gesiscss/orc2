@@ -1,7 +1,7 @@
 ---
 name: Unhealth server
 about: Report a unhealth status from notebooks.gesis.org
-title: ''
+title: 'https://notebooks.gesis.org/binder/ is unhealth'
 labels: ''
 assignees: '@rgaiacs'
 ---
