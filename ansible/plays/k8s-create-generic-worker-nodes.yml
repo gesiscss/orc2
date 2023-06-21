@@ -1,8 +1,6 @@
 - name: Create Kubernetes Worker Nodes
   hosts:
-    - notebooks_gesis_org
-    - binderhub
-    - jupyterhub_single_user
+    - kubernetes_workers
   become: true
   tasks:
     - name: Copy join command
