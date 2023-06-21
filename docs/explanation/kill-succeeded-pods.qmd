@@ -1,0 +1,3 @@
+# The `kill-succeeded-pods` bot
+
+We observed that Kubernetes leaves `Succeeded` pods in the cluster for hours after it terminates. This limits the number of new launches because the `Succeeded` pods counts towards the quota. Delete the `Succeeded` pods resolves the problem. `kill-succeeded-pods` bot is managed by a job scheduler ([`cron`](https://en.wikipedia.org/wiki/Cron)) to run every 5 minutes and delete `Succeeded` pods.
