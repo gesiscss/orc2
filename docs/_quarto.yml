@@ -59,9 +59,12 @@ book:
       chapters: 
         - bots/is-fix-jupyterhub-running.qmd
         - bots/get-log-fix-jupyterhub.qmd
+        - bots/is-kill-succeeded-pods-running.qmd
+        - bots/get-log-kill-succeeded-pods.qmd
     - part: "Explanation"
       chapters: 
       - explanation/orc2-fix-jupyterhub.qmd
+      - explanation/kill-succeeded-pods.qmd
     - part: "Reference"
       chapters: 
       - gitlab-ci-runner-101.qmd

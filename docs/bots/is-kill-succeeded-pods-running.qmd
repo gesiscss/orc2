@@ -1,0 +1,14 @@
+# How-to Check if bot `kill-succeeded-pods` is running
+
+Login to the Kubernetes node running the control panel **with the `ansible` user` and execute
+
+```bash
+crontab -l
+```
+
+```
+#Ansible: remove succeeded
+*/5 * * * * python3 /home/ansible/bin/kill-succeeded-pods.py --verbose >> /home/ansible/kill-succeeded-pods.log 2>&1
+```
+
+You should see `python3 /home/ansible/bin/kill-succeeded-pods.py` in the output.
