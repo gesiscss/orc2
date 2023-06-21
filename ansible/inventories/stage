@@ -13,10 +13,10 @@ K8S_CONTROL_PLANE_ENDPOINT=194.95.75.21
 svko-css-backup
 
 [kubernetes_control_panel]
-svko-ilcm04
+svko-k8s-test01
 
 [kubernetes_workers]
-svko-k8s-test01
+svko-ilcm04
 svko-css-backup
 
 [binderhub]
