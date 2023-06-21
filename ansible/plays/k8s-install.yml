@@ -1,9 +1,5 @@
 - name: Install Kubernetes on Nodes
-  hosts:
-    - kubernetes_control_panel
-    - notebooks_gesis_org
-    - binderhub
-    - jupyterhub_single_user
+  hosts: all
   become: true
   tasks:
     - name: Add Kubernetes public GPG key

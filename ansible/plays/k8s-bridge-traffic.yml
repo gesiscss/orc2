@@ -1,9 +1,5 @@
 - name: Configure bridge traffic
-  hosts:
-    - notebooks_gesis_org
-    - kubernetes_control_panel
-    - binderhub
-    - jupyterhub_single_user
+  hosts: all
   become: true
   tasks:
     - name: modprobe overlay
