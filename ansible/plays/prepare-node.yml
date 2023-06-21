@@ -1,6 +1,9 @@
-- name: Install generic depenencies
+- name: Prepare node
   hosts:
     - kubernetes_control_panel
+    - notebooks_gesis_org
+    - binderhub
+    - jupyterhub_single_user
   become: true
   tasks:
     - name: Install dependencies
@@ -10,3 +13,6 @@
           - rsync
           - python3-pip
           - python3-dev
+          - apt-transport-https
+          - ca-certificates
+          - curl

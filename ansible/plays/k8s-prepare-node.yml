@@ -10,13 +10,6 @@
       ansible.builtin.shell: swapoff -a
     - name: Disable Firewall
       ansible.builtin.shell: ufw disable
-    - name: Install dependencies
-      ansible.builtin.apt:
-        update_cache: true
-        pkg:
-          - apt-transport-https
-          - ca-certificates
-          - curl
     - name: Allow IP forward
       ansible.posix.sysctl:
         name: net.ipv4.ip_forward
