@@ -154,8 +154,7 @@ binderhub:
       # with the proxy check-routes interval of five minutes
       every: 660
       timeout: 600
-      # maxAge is 1 hours: 1 * 3600 = 3600
-      maxAge: 3600
+      maxAge: 21600  # 6 hours: 6 * 3600 = 21600
     hub:
       # NOTE: hub and proxy must have 1 pod (https://github.com/jupyterhub/jupyterhub/issues/2841#issuecomment-561848594)
       # replicas: 1
