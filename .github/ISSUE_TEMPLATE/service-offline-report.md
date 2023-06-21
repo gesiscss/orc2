@@ -1,7 +1,7 @@
 ---
 name: Service Offline report
 about: Report when notebooks.gesis.org is offline
-title: ''
+title: 'https://notebooks.gesis.org/binder/ is offline'
 labels: ''
 assignees: '@rgaiacs'
 ---
