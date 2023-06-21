@@ -1,6 +1,5 @@
-- name: Install generic depenencies
-  hosts:
-    - kubernetes_control_panel
+- name: Prepare node
+  hosts: all
   become: true
   tasks:
     - name: Install dependencies
@@ -10,3 +9,6 @@
           - rsync
           - python3-pip
           - python3-dev
+          - apt-transport-https
+          - ca-certificates
+          - curl

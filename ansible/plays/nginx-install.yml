@@ -5,7 +5,6 @@
   tasks:
     - name: Install nginx
       ansible.builtin.apt:
-        update_cache: true
         pkg:
           - nginx=1.18.*
           - python3-passlib

@@ -1,15 +1,25 @@
+[all]
+svko-css-app01 ansible_host=194.95.75.9 ansible_ssh_user=ansible ansible_become_pass='{{ become_pass_194_95_75_9 }}'
+svko-ilcm03 ansible_host=194.95.75.10 ansible_ssh_user=ansible ansible_become_pass='{{ become_pass_194_95_75_10 }}'
+spko-css-app03 ansible_host=194.95.75.12 ansible_ssh_user=ansible ansible_become_pass='{{ become_pass_194_95_75_12 }}'
+
 [all:vars]
 INVENTORY_NAME=production
 K8S_CONTROL_PLANE_ENDPOINT=194.95.75.10
+K8S_CONTROL_PLANE_ALIAS=svko-ilcm03
 
 [notebooks_gesis_org]
-nginx ansible_host=194.95.75.9 ansible_ssh_user=ansible ansible_become_pass='{{ become_pass_194_95_75_9 }}'
+svko-css-app01
 
 [kubernetes_control_panel]
-k8s ansible_host=194.95.75.10 ansible_ssh_user=ansible ansible_become_pass='{{ become_pass_194_95_75_10 }}'
+svko-ilcm03
+
+[kubernetes_workers]
+svko-css-app01
+spko-css-app03
 
 [binderhub]
-binderhub01 ansible_host=194.95.75.12 ansible_ssh_user=ansible ansible_become_pass='{{ become_pass_194_95_75_12 }}'
+spko-css-app03
 
 [jupyterhub_single_user]
-jupyterhub_single_user01 ansible_host=194.95.75.12 ansible_ssh_user=ansible ansible_become_pass='{{ become_pass_194_95_75_12 }}'
+spko-css-app03
