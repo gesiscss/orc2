@@ -2,19 +2,28 @@
   hosts:
     - kubernetes_control_panel
   tasks:
+    - name: Install dependencies
+      become: true
+      ansible.builtin.shell: python3 -m pip install kubernetes
     - name: Create directory
       ansible.builtin.file:
         state: directory
         path: /home/ansible/bin
-    - name: Copy Python script
+    - name: Copy kill-succeeded-pods.py
       ansible.builtin.copy:
         src: ../../cron/kill-succeeded-pods.py
         dest: /home/ansible/bin/kill-succeeded-pods.py
-    - name: Install dependencies
-      become: true
-      ansible.builtin.shell: python3 -m pip install kubernetes
     - name: Add cron job to remove succeeded pods
       ansible.builtin.cron:
         name: "remove succeeded"
         job: "python3 /home/ansible/bin/kill-succeeded-pods.py --verbose >> /home/ansible/kill-succeeded-pods.log 2>&1"
+        minute: "*/5"
+    - name: Copy kill-after-timeout-pods.py
+      ansible.builtin.copy:
+        src: ../../cron/kill-after-timeout-pods.py
+        dest: /home/ansible/bin/kill-after-timeout-pods.py
+    - name: Add cron job to remove timed out pods
+      ansible.builtin.cron:
+        name: "remove succeeded"
+        job: "python3 /home/ansible/bin/kill-after-timeout-pods.py --verbose >> /home/ansible/kill-after-timeout-pods.log 2>&1"
         minute: "*/5"
