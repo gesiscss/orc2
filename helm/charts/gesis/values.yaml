@@ -301,8 +301,6 @@ prometheus:
   prometheus-pushgateway:
     enabled: false
   server:
-    nodeSelector:
-      database: postgresql
     podLabels:
       # needs access to the Hub API
       hub.jupyter.org/network-access-hub: "true"
