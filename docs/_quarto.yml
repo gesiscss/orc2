@@ -43,14 +43,14 @@ book:
       - production-monitoring-status.qmd
     - part: "How-to Guides"
       chapters: 
-      - secret-files.qmd
-      - git-repositories.qmd
-      - git-crypt-install.qmd
-      - git-crypt.qmd
-      - personal-access-tokens.qmd
-      - gitlab-install-agent.qmd
-      - inspect-running-single-user-pod.qmd
-      - dev-binderhub.qmd
+      - how-to/secret-files.qmd
+      - how-to/git-repositories.qmd
+      - how-to/git-crypt-install.qmd
+      - how-to/git-crypt.qmd
+      - how-to/personal-access-tokens.qmd
+      - how-to/gitlab-install-agent.qmd
+      - how-to/inspect-running-single-user-pod.qmd
+      - how-to/dev-binderhub.qmd
     - part: openlens/index.qmd
       chapters: 
         - openlens/install.qmd
