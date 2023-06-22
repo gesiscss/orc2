@@ -16,6 +16,7 @@ logger.setLevel(logging.WARNING)
 NAMESPACE = "gesis"
 BINDER_TIME_OUT = 6  # hours
 
+
 def get_timed_out_pods():
     """Get list of all timed out pods that are single user running pod"""
     time_now = datetime.datetime.now(datetime.timezone.utc)
@@ -25,8 +26,16 @@ def get_timed_out_pods():
     for pod in api_response.items:
         pod_run_time = time_now - pod.metadata.creation_timestamp
         pod_run_time_in_hours = pod_run_time.total_seconds() / 3600
-        logger.debug("Pod %s (%s) is running for %.1f hours.", pod.metadata.name, pod.status.phase, pod_run_time_in_hours)
-        if pod.metadata.name.startswith("jupyter-") and pod_run_time_in_hours > BINDER_TIME_OUT:
+        logger.debug(
+            "Pod %s (%s) is running for %.1f hours.",
+            pod.metadata.name,
+            pod.status.phase,
+            pod_run_time_in_hours,
+        )
+        if (
+            pod.metadata.name.startswith("jupyter-")
+            and pod_run_time_in_hours > BINDER_TIME_OUT
+        ):
             all_timed_out_pods.append(pod)
             logger.debug("Pod %s added to the list.", pod.metadata.name)
 
