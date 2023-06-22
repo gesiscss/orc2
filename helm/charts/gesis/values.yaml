@@ -3,6 +3,8 @@
 binderhub:
   nodeSelector:
     binderhub: "true"
+  build_node_selector:
+    binderhub: "true"
 
   pdb:
     maxUnavailable: 1
