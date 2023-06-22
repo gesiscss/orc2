@@ -3,7 +3,6 @@
 import argparse
 import logging
 import datetime
-import math
 
 from kubernetes import client, config
 
