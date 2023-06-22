@@ -6,7 +6,7 @@ To facilitate pull Git repositories to the remote servers, we recommend create p
 
 Access <https://git.gesis.org/-/profile/personal_access_tokens>.
 
-![Screenshot of GitLab's Personal Access Tokens form.](img/gitlab-personal-access-tokens.png)
+![Screenshot of GitLab's Personal Access Tokens form.](../img/gitlab-personal-access-tokens.png)
 
 Provide a `Token name` like `Remote machines at GESIS` and select only the `read_repository` scope.
 

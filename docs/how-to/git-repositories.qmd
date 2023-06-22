@@ -1,4 +1,4 @@
-# How-to clone the Git Repositories
+# How-to clone the Git Repository
 
 Here we will configure a local copy of the source code.
 

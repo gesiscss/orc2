@@ -157,13 +157,13 @@ http://127.0.0.1:41967
 
 Open BinderHub by pointing your web browser to <http://127.0.0.1:33505>.
 
-![Screenshot of BinderHub's homescreen.](img/minikube-binder-home.png)
+![Screenshot of BinderHub's homescreen.](../img/minikube-binder-home.png)
 
 ## Testing
 
 Use <https://github.com/binder-examples/requirements> to test your local instance of BinderHub.
 
-![Screenshot of BinderHub's homescreen with <https://github.com/binder-examples/requirements> as the repository to be launch.](img/minikube-binder-requirements.png)
+![Screenshot of BinderHub's homescreen with <https://github.com/binder-examples/requirements> as the repository to be launch.](../img/minikube-binder-requirements.png)
 
 ::: {.callout-important}
 
@@ -179,7 +179,7 @@ kubectl logs binder-6c78656b94-kf5hn
 
 Once the container is built, Binder will launch it and redirect the user to Jupyter Lab.
 
-![Screenshot of BinderHub after redirect to Jupyter Lab.](img/minikube-binder-jupyterlab.png)
+![Screenshot of BinderHub after redirect to Jupyter Lab.](../img/minikube-binder-jupyterlab.png)
 
 ::: {.callout-note}
 

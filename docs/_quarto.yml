@@ -41,16 +41,20 @@ book:
       - production-binderhub.qmd
       - production-nginx.qmd
       - production-monitoring-status.qmd
-    - part: "How-to Guides"
+    - part: "How-to Guides: Password"
       chapters: 
-      - secret-files.qmd
-      - git-repositories.qmd
-      - git-crypt-install.qmd
-      - git-crypt.qmd
-      - personal-access-tokens.qmd
-      - gitlab-install-agent.qmd
-      - inspect-running-single-user-pod.qmd
-      - dev-binderhub.qmd
+      - how-to/share-password-and-tokens.qmd
+      - how-to/share-password-database.qmd
+      - how-to/share-secret-files.qmd
+    - part: "How-to Guides: Git"
+      chapters: 
+      - how-to/git-repositories.qmd
+      - how-to/git-crypt-install.qmd
+      - how-to/git-crypt.qmd
+      - how-to/personal-access-tokens.qmd
+      - how-to/gitlab-install-agent.qmd
+      - how-to/inspect-running-single-user-pod.qmd
+      - how-to/dev-binderhub.qmd
     - part: openlens/index.qmd
       chapters: 
         - openlens/install.qmd
@@ -61,6 +65,9 @@ book:
         - bots/get-log-fix-jupyterhub.qmd
         - bots/is-kill-succeeded-pods-running.qmd
         - bots/get-log-kill-succeeded-pods.qmd
+    - part: "How-to Guides: Site Reliability"
+      chapters: 
+        - sre/docker-in-docker.qmd
     - part: "Explanation"
       chapters: 
       - explanation/orc2-fix-jupyterhub.qmd

@@ -1,6 +1,6 @@
 # How-to Install OpenLens
 
- Binaries for OpenLens are available at <https://github.com/MuhammedKalkan/OpenLens>.
+Binaries for OpenLens are available at <https://github.com/MuhammedKalkan/OpenLens>.
 
 ## Extensions
 
