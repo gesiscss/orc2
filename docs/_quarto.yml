@@ -41,9 +41,13 @@ book:
       - production-binderhub.qmd
       - production-nginx.qmd
       - production-monitoring-status.qmd
-    - part: "How-to Guides"
+    - part: "How-to Guides: Password"
       chapters: 
-      - how-to/secret-files.qmd
+      - how-to/share-password-and-tokens.qmd
+      - how-to/share-password-database.qmd
+      - how-to/share-secret-files.qmd
+    - part: "How-to Guides: Git"
+      chapters: 
       - how-to/git-repositories.qmd
       - how-to/git-crypt-install.qmd
       - how-to/git-crypt.qmd
