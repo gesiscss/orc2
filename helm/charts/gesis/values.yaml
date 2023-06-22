@@ -3,8 +3,6 @@
 binderhub:
   nodeSelector:
     binderhub: "true"
-  build_node_selector:
-    binderhub: "true"
 
   pdb:
     maxUnavailable: 1
@@ -33,6 +31,10 @@ binderhub:
       template_path: /etc/binderhub/templates
 
       cors_allow_origin: '*'
+
+      # TODO remove after https://github.com/jupyterhub/binderhub/issues/1723 is resolved
+      build_node_selector:
+        binderhub: "true"
 
     BuildExecutor:
       memory_limit: "8G"
