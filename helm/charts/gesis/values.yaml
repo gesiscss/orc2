@@ -1,6 +1,9 @@
 # Use https://github.com/jupyterhub/mybinder.org-deploy/blob/main/mybinder/values.yaml as reference
 
 binderhub:
+  nodeSelector:
+    binderhub: "true"
+
   pdb:
     maxUnavailable: 1
 
