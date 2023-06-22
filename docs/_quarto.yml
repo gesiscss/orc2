@@ -65,6 +65,9 @@ book:
         - bots/get-log-fix-jupyterhub.qmd
         - bots/is-kill-succeeded-pods-running.qmd
         - bots/get-log-kill-succeeded-pods.qmd
+    - part: "How-to Guides: Site Reliability"
+      chapters: 
+        - sre/docker-in-docker.qmd
     - part: "Explanation"
       chapters: 
       - explanation/orc2-fix-jupyterhub.qmd

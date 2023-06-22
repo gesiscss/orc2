@@ -1,0 +1,55 @@
+# How-to fix broken Docker-in-Docker socket
+
+:::{.callout-note}
+
+This is based on [Common problems and their solutions: The Docker-in-Docker socket](https://mybinder-sre.readthedocs.io/en/latest/operation_guide/common_problems.html#the-docker-in-docker-socket) from [Site Reliability Guide for mybinder.org](https://mybinder-sre.readthedocs.io/).
+
+:::
+
+When using Docker-in-Docker, there is a chance that `dind` hasn't started when a build is requested. If this happens, the volume mount to load `/var/run/dind/docker.sock` into the build container may occur before `dind` has created the socket. If this happens, the volume mount will create a directory at the mount point (which we don’t want to happen). If this happens, Docker-in-Docker will be inaccessible until `/var/run/dind` is manually deleted and the `dind` pod is restarted.
+
+## Spotting the problem
+
+Build pods will not be working, and the `dind` pods are stuck in `CrashLoopBackoff`.
+
+## Band aiding the problem
+
+### OpenLens
+
+:::{.callout-note}
+
+For an introduction to use OpenLens, read @sec-openlens-new-cluster.
+
+:::
+
+1.  Open OpenLens and connect to the cluster.
+
+    ![Screenshot of OpenLens showing cluster dashboard.](../img/openlens-cluster.png)
+
+2.  In the navigation bar on the left, click on `Workloads` and `Pods`.
+
+    ![Screenshot of OpenLens listing pods.](../img/openlens-workloads-pods.png)
+
+3.  Search for the `binderhub-dind-` pod that has many restarts. Click in the node name for the `binderhub-dind-` pod of interest to open the node details.
+
+    ![Screenshot of OpenLens listing pods and showing node details.](../img/openlens-workloads-pods-with-node-details.png)
+
+4.  On the node details navigation bar at the right top corner, click on the first icon (Node shell).
+
+    ![Screenshot of OpenLens listing pods and showing node terminal.](../img/openlens-workloads-pods-with-node-shell.png)
+
+5.  OpenLens opened a terminal as `root` user at the node. Execute
+
+    ```bash
+    rm -rf /var/run/dind/docker.sock/
+    ```
+
+6.  Select the `binderhub-dind-` and `binderhub-image-cleaner-` pods.
+
+    ![Screenshot of OpenLens listing pods with some selected.](../img/openlens-workloads-pods-with-selected-node-to-delete.png)
+
+7.  Remove the selected pods by clicking the minus button at the bottom right corner of the list of pods.
+
+## Fixing the problem
+
+**No fix is available**.
