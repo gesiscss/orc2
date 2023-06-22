@@ -49,7 +49,7 @@ def kill_pod(pod):
         logger.info("Pod %s deleted.", api_response.metadata.name)
     except client.exceptions.ApiException as exception:
         logger.info(
-            "Fail to delete pod %s due %s", api_response.metadata.name, exception
+            "Fail to delete pod %s due %s", pod.metadata.name, exception
         )
 
 
