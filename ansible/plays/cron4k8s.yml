@@ -24,6 +24,6 @@
         dest: /home/ansible/bin/kill-after-timeout-pods.py
     - name: Add cron job to remove timed out pods
       ansible.builtin.cron:
-        name: "remove succeeded"
+        name: "remove timeout"
         job: "python3 /home/ansible/bin/kill-after-timeout-pods.py --verbose >> /home/ansible/kill-after-timeout-pods.log 2>&1"
         minute: "*/5"
