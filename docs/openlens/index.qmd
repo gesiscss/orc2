@@ -2,6 +2,4 @@
 
 [OpenLens](https://github.com/lensapp/lens) is the open source version of [Lens IDE](https://k8slens.dev/), an integrated development environment for Kubernetes.
 
-![Screenshot of OpenLens.](img/openlens.png)
-
-OpenLens 
+![Screenshot of OpenLens.](../img/openlens.png)

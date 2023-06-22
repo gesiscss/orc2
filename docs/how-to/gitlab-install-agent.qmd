@@ -22,24 +22,24 @@ ci_access:
 
 Make sure that `Operations` is enabled in your project under `Settings > General > Visibility, project features, permissions`.
 
-![Screenshot of `Settings > General > Visibility, project features, permissions`.](img/gitlab-project-settings.png)
+![Screenshot of `Settings > General > Visibility, project features, permissions`.](../img/gitlab-project-settings.png)
 
 :::
 
 Point your web browser to the project's `Infrastructure > Kubernetes clusters`.
 
-![Screenshot of `Infrastructure > Kubernetes clusters`.](img/gitlab-infrastructure-k8s.png)
+![Screenshot of `Infrastructure > Kubernetes clusters`.](../img/gitlab-infrastructure-k8s.png)
 
 Click in `Connect a cluster`.
 
-![Screenshot of `Connect a Kubernetes cluster` dialog window.](img/gitlab-connect-a-k8s-cluster.png)
+![Screenshot of `Connect a Kubernetes cluster` dialog window.](../img/gitlab-connect-a-k8s-cluster.png)
 
 Select the agent from the dropdown menu and click `Register`.
 
 Follow the instructions provided by GitLab.
 
-![Screenshot of `Agent access token` dialog window.](img/gitlab-agent-access-token.png)
+![Screenshot of `Agent access token` dialog window.](../img/gitlab-agent-access-token.png)
 
 Refresh the page to verify that the agent is connected.
 
-![Screenshot of GitLab showing all the agents in a project.](img/gitlab-new-agent.png)
+![Screenshot of GitLab showing all the agents in a project.](../img/gitlab-new-agent.png)

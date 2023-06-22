@@ -10,12 +10,12 @@ Copy the output.
 
 On OpenLens, click on `File > Add Cluster`.
 
-![Screenshot of OpenLens showing text field to add new cluster.](img/openlens-add-cluster.png)
+![Screenshot of OpenLens showing text field to add new cluster.](../img/openlens-add-cluster.png)
 
 Paste the output of `kubectl config view --minify --raw` in the text field and click on `Add cluster`.
 
-![Screenshot of OpenLens listing all clusters.](img/openlens-new-cluster.png)
+![Screenshot of OpenLens listing all clusters.](../img/openlens-new-cluster.png)
 
 After the cluster be successfully added, click on the cluster to open the dashboard.
 
-![Screenshot of OpenLens showing cluster dashboard.](img/openlens-cluster-dashboard.png)
+![Screenshot of OpenLens showing cluster dashboard.](../img/openlens-cluster-dashboard.png)
