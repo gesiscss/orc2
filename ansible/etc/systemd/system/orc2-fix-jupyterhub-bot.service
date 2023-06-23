@@ -8,4 +8,4 @@ Type=simple
 Restart=always
 RestartSec=1
 User=ansible
-ExecStart=/usr/bin/python3 /usr/bin/orc2-fix-jupyterhub-bot.py --debug
+ExecStart=/usr/bin/python3 /usr/bin/orc2-fix-jupyterhub-bot.py --verbose
