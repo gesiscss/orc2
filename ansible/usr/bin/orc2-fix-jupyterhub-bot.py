@@ -18,24 +18,36 @@ RESTART_WAITING_TIME = 120  # seconds
 
 def get_binder_pod():
     """Get name of pod running Binder."""
+    logger.debug("Starting search for BinderHub pod ...")
     api_response = v1.list_namespaced_pod(NAMESPACE)
     for pod in api_response.items:
-        logger.debug("Pod %s", pod.metadata.name)
+        logger.debug("Pod %s is running on the cluster", pod.metadata.name)
         if pod.metadata.name.startswith("binder-"):
+            logger.info("Found BinderHub pod: %s", pod.metadata.name)
             binder_pod_name = pod.metadata.name
             break
 
+    logger.debug("Search for BinderHub pod stop.")
     return binder_pod_name
 
 
 def kill_jupyterhub_pod():
     """Kill all JupyterHub pods"""
+    logger.debug("Starting search for JupyterHub pod ...")
     api_response = v1.list_namespaced_pod(NAMESPACE)
     for pod in api_response.items:
-        logger.debug("Pod %s", pod.metadata.name)
+        logger.debug("Pod %s is running on the cluster", pod.metadata.name)
         if pod.metadata.name.startswith("hub-"):
-            v1.delete_namespaced_pod(pod.metadata.name, NAMESPACE)
-
+            logger.info("Found JupyterHub pod: %s", pod.metadata.name)
+            logger.info("Requesting delete of pod %s ...", pod.metadata.name)
+            try:
+                api_response = v1.delete_namespaced_pod(pod.metadata.name, NAMESPACE)
+                logger.info("Pod %s deleted.", api_response.metadata.name)
+            except client.exceptions.ApiException as exception:
+                logger.info(
+                    "Fail to delete pod %s due %s", pod.metadata.name, exception
+                )
+    logger.debug("Search for JupyterHub pod stop.")
 
 def monitor_pod():
     """Monitor pod"""
@@ -59,7 +71,7 @@ def monitor_pod():
                     kill_jupyterhub_pod()
                     last_jupyterhub_restart = now
                 else:
-                    logger.debug(
+                    logger.info(
                         "Waiting %s seconds for JupyterHub to restart.",
                         RESTART_WAITING_TIME,
                     )
