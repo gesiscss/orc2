@@ -49,6 +49,7 @@ def kill_jupyterhub_pod():
                 )
     logger.debug("Search for JupyterHub pod stop.")
 
+
 def monitor_pod():
     """Monitor pod"""
     while True:
@@ -77,6 +78,7 @@ def monitor_pod():
                     )
 
         logger.info("Stop monitoring %s", pod_name)
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
