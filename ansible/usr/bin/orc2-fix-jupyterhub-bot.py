@@ -55,7 +55,7 @@ def monitor_pod():
                 now = datetime.datetime.now()
                 time_difference = now - last_jupyterhub_restart
                 if time_difference.seconds > RESTART_WAITING_TIME:
-                    logger.debug("Restarting JupyterHub ...")
+                    logger.info("Restarting JupyterHub ...")
                     kill_jupyterhub_pod()
                     last_jupyterhub_restart = now
                 else:
