@@ -3,18 +3,34 @@
     - kubernetes_control_panel
   become: true
   tasks:
-    - name: Copy Python script
+    - name: Copy orc2-fix-jupyterhub-bot Python script
       ansible.builtin.copy:
         src: ../usr/bin/orc2-fix-jupyterhub-bot.py
         dest: /usr/bin/orc2-fix-jupyterhub-bot.py
         mode: u=rwx,g=rwx,o=rx
-    - name: Copy Systemd Unit script
+    - name: Copy orc2-fix-jupyterhub-bot Systemd Unit script
       ansible.builtin.copy:
         src: ../etc/systemd/system/orc2-fix-jupyterhub-bot.service
         dest: /etc/systemd/system/orc2-fix-jupyterhub-bot.service
     - name: Enable service orc2-fix-jupyterhub-bot
       ansible.builtin.systemd:
         name: orc2-fix-jupyterhub-bot
+        daemon_reload: true
+        enabled: true
+        masked: false
+        state: restarted
+    - name: Copy orc2-fix-dind-bot Python script
+      ansible.builtin.copy:
+        src: ../usr/bin/orc2-fix-dind-bot.py
+        dest: /usr/bin/orc2-fix-dind-bot.py
+        mode: u=rwx,g=rwx,o=rx
+    - name: Copy orc2-fix-dind-bot Systemd Unit script
+      ansible.builtin.template:
+        src: ../etc/systemd/system/orc2-fix-dind-bot.service
+        dest: /etc/systemd/system/orc2-fix-dind-bot.service
+    - name: Enable service orc2-fix-dind-bot
+      ansible.builtin.systemd:
+        name: orc2-fix-dind-bot
         daemon_reload: true
         enabled: true
         masked: false
