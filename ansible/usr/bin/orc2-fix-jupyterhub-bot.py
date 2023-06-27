@@ -56,7 +56,7 @@ def monitor_pod():
         pod_name = get_binder_pod()
         logger.info("Monitoring %s", pod_name)
 
-        last_jupyterhub_restart = datetime.datetime.now()
+        last_jupyterhub_restart = datetime.datetime.now(datetime.timezone.utc)
 
         w = watch.Watch()
         for line in w.stream(
@@ -65,7 +65,7 @@ def monitor_pod():
             if line.find("Error accessing Hub API") > -1:
                 logger.debug(line)
 
-                now = datetime.datetime.now()
+                now = datetime.datetime.now(datetime.timezone.utc)
                 time_difference = now - last_jupyterhub_restart
                 if time_difference.seconds > RESTART_WAITING_TIME:
                     logger.info("Restarting JupyterHub ...")
