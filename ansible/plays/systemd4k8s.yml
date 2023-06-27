@@ -25,7 +25,7 @@
         dest: /usr/bin/orc2-fix-dind-bot.py
         mode: u=rwx,g=rwx,o=rx
     - name: Copy orc2-fix-dind-bot Systemd Unit script
-      ansible.builtin.copy:
+      ansible.builtin.template:
         src: ../etc/systemd/system/orc2-fix-dind-bot.service
         dest: /etc/systemd/system/orc2-fix-dind-bot.service
     - name: Enable service orc2-fix-dind-bot
