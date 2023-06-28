@@ -137,6 +137,4 @@ if __name__ == "__main__":
 
     v1 = client.CoreV1Api()
 
-    # monitor_cluster()
-    get_node_running_pod("binderhub-dind-b59wz")
-    # remove_docker_socket()
+    monitor_cluster()
