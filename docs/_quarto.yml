@@ -73,8 +73,12 @@ book:
         - openlens/connect.qmd
     - part: "How-to Guides: Bots"
       chapters: 
+        - bots/is-fix-dind-running.qmd
+        - bots/get-log-fix-dind.qmd
         - bots/is-fix-jupyterhub-running.qmd
         - bots/get-log-fix-jupyterhub.qmd
+        - bots/is-kill-succeeded-pods-running.qmd
+        - bots/get-log-kill-succeeded-pods.qmd
         - bots/is-kill-succeeded-pods-running.qmd
         - bots/get-log-kill-succeeded-pods.qmd
     - part: "How-to Guides: Site Reliability"
