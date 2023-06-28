@@ -14,6 +14,10 @@ Build pods will not be working, and the `dind` pods are stuck in `CrashLoopBacko
 
 ## Band aiding the problem
 
+### Bots
+
+We implemented a bot to monitor the issue and the source code is available at <https://github.com/gesiscss/orc2/blob/main/ansible/usr/bin/orc2-fix-dind-bot.py>.
+
 ### OpenLens
 
 :::{.callout-note}
