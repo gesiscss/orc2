@@ -3,7 +3,7 @@
 Login to the Kubernetes node running the control panel and execute
 
 ```bash
-sudo journalctl -u orc2-fix-jupyterhub-bot
+sudo journalctl -u orc2-fix-jupyterhub-bot -n 10
 ```
 
 ```
