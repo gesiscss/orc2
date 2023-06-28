@@ -1,0 +1,26 @@
+# How-to Check if bot `orc2-fix-dind` is running
+
+Login to the Kubernetes node running the control panel and execute
+
+```bash
+sudo systemctl status orc2-fix-dind-bot
+```
+
+```
+● orc2-fix-dind-bot.service - Bot service to restart ORC2 Docker-in-Docker when is not working
+     Loaded: loaded (/etc/systemd/system/orc2-fix-dind-bot.service; static)
+     Active: active (running) since Wed 2023-06-28 08:36:50 CEST; 1min 58s ago
+   Main PID: 4095990 (python3)
+      Tasks: 1 (limit: 19065)
+     Memory: 46.7M
+        CPU: 1.681s
+     CGroup: /system.slice/orc2-fix-dind-bot.service
+             └─4095990 /usr/bin/python3 /usr/bin/orc2-fix-dind-bot.py --verbose
+
+Jun 28 08:36:50 svko-ilcm03 systemd[1]: Started Bot service to restart ORC2 Docker-in-Docker when is not working.
+Jun 28 08:36:50 svko-ilcm03 python3[4095990]: 2023-06-28 08:36:50 INFO     | Start monitoring ...
+Jun 28 08:36:50 svko-ilcm03 python3[4095990]: 2023-06-28 08:36:50 INFO     | Found Warning event in binderhub-dind-b59wz.176cbead1e0451cb
+Jun 28 08:36:50 svko-ilcm03 python3[4095990]: 2023-06-28 08:36:50 INFO     | Skipping because event old (7 > 5 seconds).
+```
+
+You should see `Active: active (running)` in the output.

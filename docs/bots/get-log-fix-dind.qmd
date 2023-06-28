@@ -1,0 +1,14 @@
+# How-to Get Log from bot `orc2-fix-dind`
+
+Login to the Kubernetes node running the control panel and execute
+
+```bash
+sudo journalctl -u orc2-fix-dind-bot -n 10
+```
+
+```
+Jun 28 08:36:22 svko-ilcm03 systemd[1]: Started Bot service to restart ORC2 Docker-in-Docker when is not working.
+Jun 28 08:36:23 svko-ilcm03 python3[4095860]: 2023-06-28 08:36:23 INFO     | Start monitoring ...
+Jun 28 08:36:23 svko-ilcm03 python3[4095860]: 2023-06-28 08:36:23 INFO     | Found Warning event in binderhub-dind-b59wz.176cbead1e0451cb
+Jun 28 08:36:23 svko-ilcm03 python3[4095860]: 2023-06-28 08:36:23 INFO     | Removing Docker-in-Docker socket and pods ...
+```
