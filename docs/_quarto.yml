@@ -5,7 +5,19 @@ project:
 book:
   title: "Open Research Computing (ORC)"
   author:
-    - Raniere Silva
+    - name: Raniere Silva
+      email: Raniere.CostadaSilva@gesis.org
+      orcid: 0000-0002-8381-3749
+      attributes:
+        corresponding: true
+      affiliations:
+        - name: GESIS Leibniz Institute for the Social Sciences
+          department: Computational Social Science
+          address: Unter Sachsenhausen 6-8
+          city: Cologne
+          country: Germany
+          postal-code: 50667
+          url: https://www.gesis.org
   chapters:
     - index.qmd
     - where-to-ask-questions.qmd
