@@ -1,0 +1,12 @@
+# How-to Get Log from bot `kill-after-timeout-pods`
+
+Login to the Kubernetes node running the control panel **with the `ansible` user` and execute
+
+```bash
+tail ~/kill-after-timeout-pods.log
+```
+
+```
+2023-06-28 08:50:01 INFO     | Starting inspection of Kubernetes pod ...
+2023-06-28 08:50:02 INFO     | 0 pods deleted.
+```

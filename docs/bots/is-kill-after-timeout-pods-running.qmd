@@ -1,0 +1,14 @@
+# How-to Check if bot `kill-after-timeout-pods` is running
+
+Login to the Kubernetes node running the control panel **with the `ansible` user` and execute
+
+```bash
+crontab -l
+```
+
+```
+#Ansible: remove timeout
+*/5 * * * * python3 /home/ansible/bin/kill-after-timeout-pods.py --verbose >> /home/ansible/kill-after-timeout-pods.log 2>&1
+```
+
+You should see `python3 /home/ansible/bin/kill-after-timeout-pods.py` in the output.
