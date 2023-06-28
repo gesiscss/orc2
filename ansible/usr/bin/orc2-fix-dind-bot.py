@@ -91,10 +91,15 @@ def monitor_cluster():
                             )
                         else:
                             logger.info("Removing Docker-in-Docker socket and pods ...")
-                            node_IP_address = get_node_running_pod(pod_name)
-                            remove_docker_socket(node_IP_address)
-                            remove_pods()
-
+                            try:
+                                node_IP_address = get_node_running_pod(pod_name)
+                                remove_docker_socket(node_IP_address)
+                                remove_pods()
+                            except Exception as exception:
+                                logger.info(
+                                    "Fail to delete pod %s due %s", pod_name, exception
+                                )
+                 
                 elif event["object"].type == "Normal":
                     logger.debug(
                         "Found Normal event in %s ... skipping!",
