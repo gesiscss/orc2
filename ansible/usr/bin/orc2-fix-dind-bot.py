@@ -69,44 +69,45 @@ def get_node_running_pod(pod_name):
 
 def monitor_cluster():
     """Monitor pod"""
-    logger.info("Start monitoring ...")
+    while True:
+        logger.info("Start monitoring ...")
 
-    w = watch.Watch()
-    for event in w.stream(v1.list_namespaced_event, namespace=NAMESPACE):
-        pod_name = event["object"].metadata.name
-        if pod_name.startswith("binderhub-dind-"):
-            if event["object"].type == "Warning":
-                logger.info("Found Warning event in %s", pod_name)
-                if event["object"].reason == "BackOff":
-                    time_since_last_timestamp = (
-                        datetime.datetime.now(datetime.timezone.utc)
-                        - event["object"].last_timestamp
+        w = watch.Watch()
+        for event in w.stream(v1.list_namespaced_event, namespace=NAMESPACE):
+            pod_name = event["object"].metadata.name
+            if pod_name.startswith("binderhub-dind-"):
+                if event["object"].type == "Warning":
+                    logger.info("Found Warning event in %s", pod_name)
+                    if event["object"].reason == "BackOff":
+                        time_since_last_timestamp = (
+                            datetime.datetime.now(datetime.timezone.utc)
+                            - event["object"].last_timestamp
+                        )
+
+                        if time_since_last_timestamp.seconds > 5:
+                            logger.info(
+                                "Skipping because event old (%d > 5 seconds).",
+                                time_since_last_timestamp.seconds,
+                            )
+                        else:
+                            logger.info("Removing Docker-in-Docker socket and pods ...")
+                            node_IP_address = get_node_running_pod(pod_name)
+                            remove_docker_socket(node_IP_address)
+                            remove_pods()
+
+                elif event["object"].type == "Normal":
+                    logger.debug(
+                        "Found Normal event in %s ... skipping!",
+                        event["object"].metadata.name,
+                    )
+                else:
+                    logger.debug(
+                        "Found %s event in %s ... ignoring!",
+                        event["object"].type,
+                        ["object"].metadata.name,
                     )
 
-                    if time_since_last_timestamp.seconds > 5:
-                        logger.info(
-                            "Skipping because event old (%d > 5 seconds).",
-                            time_since_last_timestamp.seconds,
-                        )
-                    else:
-                        logger.info("Removing Docker-in-Docker socket and pods ...")
-                        node_IP_address = get_node_running_pod(pod_name)
-                        remove_docker_socket(node_IP_address)
-                        remove_pods()
-
-            elif event["object"].type == "Normal":
-                logger.debug(
-                    "Found Normal event in %s ... skipping!",
-                    event["object"].metadata.name,
-                )
-            else:
-                logger.debug(
-                    "Found %s event in %s ... ignoring!",
-                    event["object"].type,
-                    ["object"].metadata.name,
-                )
-
-    logger.info("Stop monitoring!")
+        logger.info("Stop monitoring!")
 
 
 if __name__ == "__main__":
