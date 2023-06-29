@@ -74,7 +74,7 @@ def monitor_cluster():
 
         w = watch.Watch()
         for event in w.stream(v1.list_namespaced_event, namespace=NAMESPACE):
-            pod_name = event["object"].metadata.name
+            pod_name = event["object"].involved_object.name
             if pod_name.startswith("binderhub-dind-"):
                 if event["object"].type == "Warning":
                     logger.info("Found Warning event in %s", pod_name)
@@ -99,7 +99,7 @@ def monitor_cluster():
                                 logger.info(
                                     "Fail to delete pod %s due %s", pod_name, exception
                                 )
-                 
+                    
                 elif event["object"].type == "Normal":
                     logger.debug(
                         "Found Normal event in %s ... skipping!",
