@@ -1,354 +1,204 @@
-# Use https://github.com/jupyterhub/mybinder.org-deploy/blob/main/mybinder/values.yaml as reference
-
 binderhub:
-  nodeSelector:
-    binderhub: "true"
-
-  pdb:
-    maxUnavailable: 1
-
-  replicas: 2
-
-  resources:
-    requests:
-      cpu: "0.25"
-      memory: 1Gi
-    limits:
-      cpu: "2"
-      memory: 1Gi
-
   config:
     BinderHub:
       base_url: /binder/
+      build_node_selector:
+        binderhub: 'true'
+      cors_allow_origin: '*'
       hub_url: https://notebooks.gesis.org/binder/jupyter/
-      
-      use_registry: true
       image_prefix: gesiscss/binder-r2d-g5b5b759-
-
       per_repo_quota: 100
       per_repo_quota_higher: 200
-
       template_path: /etc/binderhub/templates
-
-      cors_allow_origin: '*'
-
-      # TODO remove after https://github.com/jupyterhub/binderhub/issues/1723 is resolved
-      build_node_selector:
-        binderhub: "true"
-
+      use_registry: true
     BuildExecutor:
-      memory_limit: "8G"
-
-    KubernetesBuildExecutor:
-      build_image: quay.io/jupyterhub/repo2docker:2023.06.0-8.gd414e99
-      memory_request: "1G"
-      memory_limit: "3G"
-      node_selector:
-        docker_available: "true"
-        binderhub: "true"
-
+      memory_limit: 8G
     GitHubRepoProvider:
       high_quota_specs:
-        - ^gesiscss/.*
-
-  podAnnotations:
-    rollme: "rollme"
-
-  extraVolumes:
-    - name: binder-templates
-      configMap:
-        name: binder-templates
-    - name: binder-templates-gesis
-      configMap:
-        name: binder-templates-gesis
-    - name: secrets
-      secret:
-        secretName: events-archiver-secrets
-  
-  extraVolumeMounts:
-    - name: binder-templates
-      mountPath: /etc/binderhub/templates
-    - name: binder-templates-gesis
-      mountPath: /etc/binderhub/templates/gesis
-    - name: secrets
-      mountPath: /secrets
-      readOnly: true
-
-  extraEnv:
-    GOOGLE_APPLICATION_CREDENTIALS: /secrets/service-account.json
-
-  extraConfig:
-    # Send Events to StackDriver on Google Cloud
-    # This doesn't need any extra permissions, since the GKE nodes have
-    # permission to write to StackDriver by default. We don't block access
-    # to cloud metadata in binderhub pod, so this should 'just work'.
-    01-eventlog: |
-      import os
-      import google.cloud.logging
-      import google.cloud.logging.handlers
-      # importing google cloud configures a root log handler,
-      # which prevents tornado's pretty-logging
-      import logging
-      logging.getLogger().handlers = []
-
-      class JSONCloudLoggingHandler(google.cloud.logging.handlers.CloudLoggingHandler):
-          def emit(self, record):
-              record.name = None
-              super().emit(record)
-
-      def _make_eventsink_handler(el):
-          client = google.cloud.logging.Client()
-          # These events are not parsed as JSON in stackdriver, so give it a different name
-          # for now. Should be fixed in https://github.com/googleapis/google-cloud-python/pull/6293
-          return [JSONCloudLoggingHandler(client, name=os.environ.get("EVENT_LOG_NAME") or "binderhub-events-text")]
-      c.EventLog.handlers_maker = _make_eventsink_handler
-
-    01-template-variables:  |
-      import uuid
-      template_vars = {
-          "version": "beta",
-          "home_url": "/",
-          "gesisbinder_url": "/binder/",
-          "about_url": "/about.html",
-          "tou_url": "/terms.html",
-          "imprint_url": "https://www.gesis.org/en/institute/imprint/",
-          "data_protection_url": "https://www.gesis.org/en/institute/data-protection/",
-          "gesis_url": "https://www.gesis.org/en/home/",
-          "status_url": "https://gesisnotebooks.betteruptime.com",
-          "gallery_url": "/gallery/",
-          "faq_url": "/faq.html",
-          "active": "binder",
-          "static_nginx": "/static/",
-          "static_version": uuid.uuid4().hex,
-          "user": None,
-          "production": True,
-      }
-      c.BinderHub.template_variables.update(template_vars)
-
-  service:
-    type: NodePort
-    nodePort: 30081
-    annotations:
-      "prometheus.io/scrape": "true"
-      "prometheus.io/port": "8585"
-      "prometheus.io/path": "/binder/metrics"
-
-  imageBuilderType: dind
+      - ^gesiscss/.*
+    KubernetesBuildExecutor:
+      build_image: quay.io/jupyterhub/repo2docker:2023.06.0
+      memory_limit: 3G
+      memory_request: 1G
+      node_selector:
+        binderhub: 'true'
+        docker_available: 'true'
   dind:
-    hostLibDir: /orc2_data/repo2docker
-    resources:
-      requests:
-        cpu: "0.5"
-        memory: 1Gi
-      limits:
-        cpu: "4"
-        memory: 4Gi
     daemonset:
       extraArgs:
-        - "--mtu=1000"
-
+      - --mtu=1000
+    hostLibDir: /orc2_data/repo2docker
+    resources:
+      limits:
+        cpu: '4'
+        memory: 4Gi
+      requests:
+        cpu: '0.5'
+        memory: 1Gi
+  extraConfig:
+    01-eventlog: "import os\nimport google.cloud.logging\nimport google.cloud.logging.handlers\n#
+      importing google cloud configures a root log handler,\n# which prevents tornado's
+      pretty-logging\nimport logging\nlogging.getLogger().handlers = []\n\nclass JSONCloudLoggingHandler(google.cloud.logging.handlers.CloudLoggingHandler):\n
+      \   def emit(self, record):\n        record.name = None\n        super().emit(record)\n\ndef
+      _make_eventsink_handler(el):\n    client = google.cloud.logging.Client()\n    #
+      These events are not parsed as JSON in stackdriver, so give it a different name\n
+      \   # for now. Should be fixed in https://github.com/googleapis/google-cloud-python/pull/6293\n
+      \   return [JSONCloudLoggingHandler(client, name=os.environ.get(\"EVENT_LOG_NAME\")
+      or \"binderhub-events-text\")]\nc.EventLog.handlers_maker = _make_eventsink_handler\n"
+    01-template-variables: "import uuid\ntemplate_vars = {\n    \"version\": \"beta\",\n
+      \   \"home_url\": \"/\",\n    \"gesisbinder_url\": \"/binder/\",\n    \"about_url\":
+      \"/about.html\",\n    \"tou_url\": \"/terms.html\",\n    \"imprint_url\": \"https://www.gesis.org/en/institute/imprint/\",\n
+      \   \"data_protection_url\": \"https://www.gesis.org/en/institute/data-protection/\",\n
+      \   \"gesis_url\": \"https://www.gesis.org/en/home/\",\n    \"status_url\":
+      \"https://gesisnotebooks.betteruptime.com\",\n    \"gallery_url\": \"/gallery/\",\n
+      \   \"faq_url\": \"/faq.html\",\n    \"active\": \"binder\",\n    \"static_nginx\":
+      \"/static/\",\n    \"static_version\": uuid.uuid4().hex,\n    \"user\": None,\n
+      \   \"production\": True,\n}\nc.BinderHub.template_variables.update(template_vars)\n"
+  extraEnv:
+    GOOGLE_APPLICATION_CREDENTIALS: /secrets/service-account.json
+  extraVolumeMounts:
+  - mountPath: /etc/binderhub/templates
+    name: binder-templates
+  - mountPath: /etc/binderhub/templates/gesis
+    name: binder-templates-gesis
+  - mountPath: /secrets
+    name: secrets
+    readOnly: true
+  extraVolumes:
+  - configMap:
+      name: binder-templates
+    name: binder-templates
+  - configMap:
+      name: binder-templates-gesis
+    name: binder-templates-gesis
+  - name: secrets
+    secret:
+      secretName: events-archiver-secrets
+  imageBuilderType: dind
   imageCleaner:
     enabled: true
-    # size is given in bytes, 1e9 = 1GB
-    # cull images until only 40% are used.
     imageGCThresholdHigh: 1600e9
     imageGCThresholdLow: 1000e9
-    imageGCThresholdType: "absolute"
-
+    imageGCThresholdType: absolute
   jupyterhub:
     cull:
-      # cull every 11 minutes so it is out of phase
-      # with the proxy check-routes interval of five minutes
       every: 660
+      maxAge: 21600
       timeout: 600
-      maxAge: 21600  # 6 hours: 6 * 3600 = 21600
     hub:
-      # NOTE: hub and proxy must have 1 pod (https://github.com/jupyterhub/jupyterhub/issues/2841#issuecomment-561848594)
-      # replicas: 1
-      pdb:
-        minAvailable: 0
-      networkPolicy:
-        # z2jh chart has a default ingress rule which allows inbound traffic
-        # only to port 8081 (API port)
-        # from pods with label "hub.jupyter.org/network-access-hub",
-        # user and proxy pods have this label
-        # z2jh chart has a default egress rule: allow all outbound traffic for hub
-        enabled: true
-      nodeSelector:
-        database: postgresql
-      baseUrl: /binder/jupyter/
-      db:
-        type: postgres
-        upgrade: true
       authenticatePrometheus: false
+      baseUrl: /binder/jupyter/
       config:
         BinderSpawner:
           cors_allow_origin: '*'
+      db:
+        type: postgres
+        upgrade: true
       extraConfig:
-        02-orc: |
-          c.KubeSpawner.extra_pod_config.update({'restart_policy': 'Never'})
+        02-orc: 'c.KubeSpawner.extra_pod_config.update({''restart_policy'': ''Never''})
+
+          '
+      networkPolicy:
+        enabled: true
+      nodeSelector:
+        database: postgresql
+      pdb:
+        minAvailable: 0
     proxy:
+      chp:
+        networkPolicy:
+          enabled: true
+        pdb:
+          minAvailable: 0
+      https:
+        enabled: true
+        type: offload
       service:
-        type: NodePort
         nodePorts:
           http: 30085
           https: 30082
-      https:
-        # https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/master/CHANGELOG.md#breaking-changes
-        # for z2jh 0.10.0+ https needs to be enabled.
-        enabled: true
-        type: offload
-      chp:
-        networkPolicy:
-          # z2jh chart has a default ingress rule which allows inbound traffic
-          # to port 8000 (HTTP port) from pods with label "hub.jupyter.org/network-access-proxy-HTTP" and
-          # to port 8001 (API port) from pods with label "hub.jupyter.org/network-access-proxy-API",
-          # and only hub pod has these labels
-          # so only the hub pod can talk to the proxy's API and HTTP ports
-          # z2jh chart has a default egress rule: allow all outbound traffic for proxy
-          enabled: true
-        # NOTE: hub and proxy must have 1 pod (https://github.com/jupyterhub/jupyterhub/issues/2841#issuecomment-561848594)
-        # replicas: 1
-        # PDB relocated to proxy.chp.pdb https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1938
-        pdb:
-          minAvailable: 0
-    singleuser:
-      memory:
-        guarantee: 450M
-        limit: 4G
-      cpu:
-        guarantee: 0.01
-        limit: 1
-      networkPolicy:
-        enabled: true
-        # z2jh chart has a default ingress rule which allows inbound traffic
-        # only to port 8888
-        # from pods with label "hub.jupyter.org/network-access-singleuser",
-        # hub and proxy pods have this label
-        #ingress: []
-        # z2jh chart has a default egress rule which restricts outbound traffic to only JupyterHub API port
-        egress: []  # no additional egress rule, this empty list also overrides the egress rule defined in values.yaml of z2jh
-      nodeSelector:
-        binderhub: "true"
-      storage:
-        extraVolumes:
-          - name: etc-jupyter
-            configMap:
-              name: user-etc-jupyter
-          - name: etc-jupyter-templates
-            configMap:
-              name: user-etc-jupyter-templates
-        extraVolumeMounts:
-          - name: etc-jupyter
-            mountPath: /etc/jupyter
-          - name: etc-jupyter-templates
-            mountPath: /etc/jupyter/templates
-
-    # Because we have only 1 node for user pods
+        type: NodePort
     scheduling:
-      userScheduler:
-        enabled: true
       podPriority:
         enabled: true
       userPlaceholder:
         enabled: true
-
-etcJupyter:
-  jupyter_notebook_config.json:
-    NotebookApp:
-      allow_origin: "*"
-      tornado_settings:
-        trust_xheaders: true
-      # shutdown the server after no activity
-      shutdown_no_activity_timeout: 600
-
-    # if a user leaves a notebook with a running kernel,
-    # the effective idle timeout will typically be CULL_TIMEOUT + CULL_KERNEL_TIMEOUT
-    # as culling the kernel will register activity,
-    # resetting the no_activity timer for the server as a whole
-    MappingKernelManager:
-      # shutdown kernels after no activity
-      cull_idle_timeout: 600
-      # check for idle kernels this often
-      cull_interval: 60
-      # a kernel with open connections but no activity still counts as idle
-      # this is what allows us to shutdown servers
-      # when people leave a notebook open and wander off
-      cull_connected: true
-
-# Send GESIS Binder events to mybinder.org's StackDriver
-# must be override in _secret.yaml
-eventsArchiver:
-  serviceAccountKey: ""
-
+      userScheduler:
+        enabled: true
+    singleuser:
+      cpu:
+        guarantee: 0.01
+        limit: 1
+      memory:
+        guarantee: 450M
+        limit: 4G
+      networkPolicy:
+        egress: []
+        enabled: true
+      nodeSelector:
+        binderhub: 'true'
+      storage:
+        extraVolumeMounts:
+        - mountPath: /etc/jupyter
+          name: etc-jupyter
+        - mountPath: /etc/jupyter/templates
+          name: etc-jupyter-templates
+        extraVolumes:
+        - configMap:
+            name: user-etc-jupyter
+          name: etc-jupyter
+        - configMap:
+            name: user-etc-jupyter-templates
+          name: etc-jupyter-templates
+  nodeSelector:
+    binderhub: 'true'
+  pdb:
+    maxUnavailable: 1
+  podAnnotations:
+    rollme: rollme
+  replicas: 2
+  resources:
+    limits:
+      cpu: '2'
+      memory: 1Gi
+    requests:
+      cpu: '0.25'
+      memory: 1Gi
+  service:
+    annotations:
+      prometheus.io/path: /binder/metrics
+      prometheus.io/port: '8585'
+      prometheus.io/scrape: 'true'
+    nodePort: 30081
+    type: NodePort
 cryptnono:
   enabled: true
   tolerations:
-    # deploy anti-cryptomining cryptnono on all nodes
-    - effect: NoSchedule
-      key: hub.jupyter.org/dedicated
-      operator: Equal
-      value: user
-    - effect: NoSchedule
-      key: hub.jupyter.org_dedicated
-      operator: Equal
-      value: user
-
-prometheus:
-  enabled: true
-  alertmanager:
-    enabled: false
-  prometheus-pushgateway:
-    enabled: false
-  server:
-    podLabels:
-      # needs access to the Hub API
-      hub.jupyter.org/network-access-hub: "true"
-    strategy:
-      # The default of RollingUpdate fail because attached storage can only be
-      # mounted on one pod, so we need to use Recreate that first shut down the
-      # pod and then starts it up during updates.
-      type: Recreate
-    ingress:
-      enabled: true
-      annotations:
-        kubernetes.io/ingress.class: nginx
-        kubernetes.io/tls-acme: "true"
-
-  # make sure we collect metrics on pods by app/component at least
-  kube-state-metrics:
-    metricLabelsAllowlist:
-      - pods=[app,component]
-      - nodes=[*]
-
-proxyPatches:
-  enabled: true
-  nodeSelector: {}
-
+  - effect: NoSchedule
+    key: hub.jupyter.org/dedicated
+    operator: Equal
+    value: user
+  - effect: NoSchedule
+    key: hub.jupyter.org_dedicated
+    operator: Equal
+    value: user
+etcJupyter:
+  jupyter_notebook_config.json:
+    MappingKernelManager:
+      cull_connected: true
+      cull_idle_timeout: 600
+      cull_interval: 60
+    NotebookApp:
+      allow_origin: '*'
+      shutdown_no_activity_timeout: 600
+      tornado_settings:
+        trust_xheaders: true
+eventsArchiver:
+  serviceAccountKey: ''
 grafana:
-  enabled: true
-  
-  service:
-    type: NodePort
-    port: 80
-    nodePort: 30075
-
-  ingress:
-    enabled: true
-    annotations:
-      kubernetes.io/ingress.class: nginx
-      kubernetes.io/tls-acme: "true"
-
-  # deploymentStrategy.type is set to Recreate as we have storage that can only
-  # be attached once, we can't have two replicas as RollingUpdate leads to.
   deploymentStrategy:
     type: Recreate
-  persistence:
-    enabled: true
-    size: 1Gi
-    accessModes:
-      - ReadWriteOnce
-
+  enabled: true
   grafana.ini:
     auth.anonymous:
       enabled: true
@@ -356,16 +206,52 @@ grafana:
       org_role: Viewer
     auth.basic:
       enabled: true
-    smtp:
-      enabled: true
     security:
       allow_embedding: true
     server:
-      root_url: "https://notebooks.gesis.org/grafana/"
       http_port: 3000
-   
+      root_url: https://notebooks.gesis.org/grafana/
+    smtp:
+      enabled: true
+  ingress:
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      kubernetes.io/tls-acme: 'true'
+    enabled: true
+  persistence:
+    accessModes:
+    - ReadWriteOnce
+    enabled: true
+    size: 1Gi
+  service:
+    nodePort: 30075
+    port: 80
+    type: NodePort
 minesweeper:
   enabled: true
   image: jupyterhub/mybinder.org-minesweeper:2020.12.4-0.dev.git.5080.hf35cc80d
   nodeSelector:
-    binderhub: "true"
+    binderhub: 'true'
+prometheus:
+  alertmanager:
+    enabled: false
+  enabled: true
+  kube-state-metrics:
+    metricLabelsAllowlist:
+    - pods=[app,component]
+    - nodes=[*]
+  prometheus-pushgateway:
+    enabled: false
+  server:
+    ingress:
+      annotations:
+        kubernetes.io/ingress.class: nginx
+        kubernetes.io/tls-acme: 'true'
+      enabled: true
+    podLabels:
+      hub.jupyter.org/network-access-hub: 'true'
+    strategy:
+      type: Recreate
+proxyPatches:
+  enabled: true
+  nodeSelector: {}
