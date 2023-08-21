@@ -16,7 +16,6 @@
     - name: Install dependencies
       ansible.builtin.apt:
         update_cache: true
-        allow_change_held_packages: true
         pkg:
           - containerd.io=1.6.*
     - name: Copy configuration file

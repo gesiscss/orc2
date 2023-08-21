@@ -27,9 +27,8 @@
     - name: Install dependencies
       ansible.builtin.apt:
         update_cache: true
-        allow_change_held_packages: true
         pkg:
-          - kubelet=1.27.*
-          - kubeadm=1.27.*
-          - kubectl=1.27.*
-          - helm=3.11.*
+          - kubelet=1.28.*
+          - kubeadm=1.28.*
+          - kubectl=1.28.*
+          - helm=3.12.*
