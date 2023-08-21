@@ -4,6 +4,7 @@
   become: true
   tasks:
     - name: Install nginx
+      allow_change_held_packages: true
       ansible.builtin.apt:
         pkg:
           - nginx=1.18.*
