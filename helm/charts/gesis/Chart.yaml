@@ -16,6 +16,9 @@ dependencies:
   name: cryptnono
   repository: https://yuvipanda.github.io/cryptnono/
   version: 0.0.1-n025.h28f473f
+- name: harbor
+  repository: https://helm.goharbor.io
+  version: 1.12.4
 description: GESIS BinderHub
 name: gesis
 type: application

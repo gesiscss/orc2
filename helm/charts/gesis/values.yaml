@@ -255,3 +255,13 @@ prometheus:
 proxyPatches:
   enabled: true
   nodeSelector: {}
+harbor:
+  expose:
+    type: nodePort
+    tls:
+      enabled: false
+    nodePort:
+      name: harbor
+    persistence:
+      enabled: false
+    
