@@ -160,17 +160,18 @@ gesis helm lint:
     - helm dependency update ./helm/charts/gesis
     - |
       helm upgrade \
-      --debug \
+      binderhub ./helm/charts/gesis \
       --cleanup-on-fail \
-      --history-max 3 \
-      --install binderhub ./helm/charts/gesis \
-      --namespace=gesis \
       --create-namespace \
-      -f ./helm/config/${HELM_ENVIRONMENT}.yaml \
-      -f ./helm/config/_secret-${HELM_ENVIRONMENT}.yaml \
-      -f ./helm/config/common/_secret-values.yaml \
-      -f ./helm/config/common/_secret-mybinder.org-common.yaml \
-      -f ./helm/config/common/_secret-banned-list.yaml
+      --history-max 3 \
+      --install \
+      --namespace=gesis \
+      --render-subchart-notes \
+      --values ./helm/config/_secret-${HELM_ENVIRONMENT}.yaml \
+      --values ./helm/config/${HELM_ENVIRONMENT}.yaml \
+      --values ./helm/config/common/_secret-banned-list.yaml \
+      --values ./helm/config/common/_secret-mybinder.org-common.yaml \
+      --values ./helm/config/common/_secret-values.yaml
 
 gesis helm stage deploy:
   stage: deploy-stage-helm
