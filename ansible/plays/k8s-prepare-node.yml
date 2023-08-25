@@ -2,6 +2,11 @@
   hosts: all
   become: true
   tasks:
+    - name: Ensure DOCKER_CLIENT_TIMEOUT is set
+      ansible.builtin.lineinfile:
+        path: /etc/environment
+        regexp: '^DOCKER_CLIENT_TIMEOUT='
+        line: DOCKER_CLIENT_TIMEOUT=180
     - name: Disable swap
       ansible.builtin.shell: swapoff -a
     - name: Disable Firewall
