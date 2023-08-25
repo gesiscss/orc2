@@ -3,8 +3,10 @@ stages:
   - build
   - test
   - deploy-stage-ansible
+  - deploy-stage-nginx
   - deploy-stage-helm
   - deploy-prod-ansible
+  - deploy-prod-nginx
   - deploy-prod-helm
 
 .manual-web:
@@ -164,7 +166,7 @@ gesis ansible production deploy:
       ansible/orc2.yml
 
 gesis nginx update with ansible at stage environment:
-  stage: deploy-stage-ansible
+  stage: deploy-stage-nginx
   rules:
     - !reference [.manual-web, rules]
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -177,7 +179,7 @@ gesis nginx update with ansible at stage environment:
     - .gesis ansible deploy
 
 gesis nginx update with ansible at stage production:
-  stage: deploy-prod-ansible
+  stage: deploy-prod-nginx
   rules:
     - !reference [.manual-web, rules]
     - if: $CI_COMMIT_BRANCH == 'main'
