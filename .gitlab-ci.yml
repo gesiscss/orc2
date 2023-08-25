@@ -94,6 +94,7 @@ gesis ansible lint:
     - echo $ANSIBLE_VAULT > ansible/.ansible-vault-password-file
     - |
       staticjinja \
+      build \
       --srcpath pages/templates \
       --outpath nginx/static
     - ansible --version
