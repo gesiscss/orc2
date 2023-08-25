@@ -1,7 +1,13 @@
-{% set gesis_notebooks_https = gesis_notebooks_https|default("https://notebooks.gesis.org/") %}
-{% set gesis_notebooks_static = gesis_notebooks_static|default("https://notebooks.gesis.org/static/") %}
-{% set gesis_web_frontend_framework = gesis_web_frontend_framework|default("https://notebooks.gesis.org/static/gesis-web-frontend-framework/") %}
-
+{% set gesis_notebooks_https = gesis_notebooks_https|default("https://notebooks.gesis.org/") -%}
+{% set gesis_notebooks_static = gesis_notebooks_static|default("https://notebooks.gesis.org/static/") -%}
+{% set gesis_web_frontend_framework = gesis_web_frontend_framework|default("https://notebooks.gesis.org/static/gesis-web-frontend-framework/") -%}
+{% set navigation_bar = [
+  ('/', 'home', 'Home'),
+  ('/binder/', 'binder', 'Binder'),
+  ('/about.html', 'about', 'About'),
+  ('/faq.html', 'faq', 'FAQ')
+] -%}
+{% set active_page = active_page|default('home') -%}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -79,6 +85,11 @@
     <button id="gs_mm_toggle_button-104618" class="gs_mm_toggle_button" aria-haspopup="true" aria-controls="gs_megamenu-104618" aria-label="Navigationsmenü"></button>
     <nav class="gs_megamenu_nav" aria-labelledby="gs_mm_toggle_button-104618">
       <ul role="menu" id="gs_megamenu-104618" class="gs_megamenu">
+        {% for href, id, caption in navigation_bar %}
+          <li{% if id == active_page %} class="gs_active"{% endif %}>
+            <a role="menuitem" href="{{ href|escape }}">{{ caption|escape }}</a>
+          </li>
+        {% endfor %}
         <li> <a role="menuitem" href="/styleguide/home">Home</a> </li>
         <li> <a role="menuitem" href="/styleguide/home">Binder</a> </li>
         <li> <a role="menuitem" href="/styleguide/home">About</a> </li>
