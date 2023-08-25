@@ -151,7 +151,8 @@ gesis ansible production deploy:
     - chmod 600 ~/.ssh/id_ed25519
     - echo $ANSIBLE_VAULT > ansible/.ansible-vault-password-file
     - |
-      staticjina \
+      python pages/staticjinja-gesis-notebooks.py \
+      --${ANSIBLE_INVENTORY} \
       --srcpath pages/templates \
       --outpath nginx/static
     - ansible --version
