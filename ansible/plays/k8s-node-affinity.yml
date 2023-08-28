@@ -29,7 +29,6 @@
         kubectl label nodes {{ host }} repo2docker-
         {% endif %}
         {% endfor %}
-        - name: Add repo2docker label
     - name: Add component label
       ansible.builtin.shell: |
         {% for host in hostvars %}
