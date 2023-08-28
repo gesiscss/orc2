@@ -20,6 +20,15 @@
         kubectl label nodes {{ host }} docker_available-
         {% endif %}
         {% endfor %}
+    - name: Add repo2docker label
+      ansible.builtin.shell: |
+        {% for host in hostvars %}
+        {% if host in groups['repo2docker'] %}
+        kubectl label nodes {{ host }} repo2docker=true
+        {% else %}
+        kubectl label nodes {{ host }} repo2docker-
+        {% endif %}
+        {% endfor %}
     - name: Add database label
       ansible.builtin.shell: |
         {% for host in hostvars %}

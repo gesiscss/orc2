@@ -21,5 +21,8 @@ spko-css-app03
 [binderhub]
 spko-css-app03
 
+[repo2docker]
+spko-css-app03
+
 [jupyterhub_single_user]
 spko-css-app03

@@ -21,7 +21,7 @@ binderhub:
       memory_limit: 3G
       memory_request: 1G
       node_selector:
-        binderhub: 'true'
+        repo2docker: 'true'
         docker_available: 'true'
   dind:
     daemonset:
