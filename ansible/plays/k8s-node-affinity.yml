@@ -29,15 +29,6 @@
         kubectl label nodes {{ host }} repo2docker-
         {% endif %}
         {% endfor %}
-    - name: Add component label
-      ansible.builtin.shell: |
-        {% for host in hostvars %}
-        {% if host in groups['repo2docker'] %}
-        kubectl label nodes {{ host }} component=binderhub-build
-        {% else %}
-        kubectl label nodes {{ host }} component-
-        {% endif %}
-        {% endfor %}
     - name: Add database label
       ansible.builtin.shell: |
         {% for host in hostvars %}
