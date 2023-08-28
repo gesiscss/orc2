@@ -24,8 +24,6 @@ svko-k8s-test03
 
 [binderhub]
 svko-ilcm04
-svko-k8s-test02
-svko-k8s-test03
 
 [repo2docker]
 svko-k8s-test02

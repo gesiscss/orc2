@@ -3,7 +3,8 @@ binderhub:
     BinderHub:
       base_url: /binder/
       build_node_selector:
-        binderhub: 'true'
+        repo2docker: 'true'
+        docker_available: 'true'
       cors_allow_origin: '*'
       hub_url: https://notebooks.gesis.org/binder/jupyter/
       image_prefix: gesiscss/binder-r2d-g5b5b759-
