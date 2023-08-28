@@ -19,6 +19,8 @@ svko-k8s-test01
 [kubernetes_workers]
 svko-ilcm04
 svko-css-backup
+svko-k8s-test02
+svko-k8s-test03
 
 [binderhub]
 svko-ilcm04
