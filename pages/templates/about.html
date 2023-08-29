@@ -8,6 +8,14 @@ GESIS Notebooks: About
 
 {% endblock %}
 
+{% block etracker %}
+{% if production %}
+{% with et_pagename="/GESISHub:about/", et_areas="/GESISHub" %}
+  {% include "gesis/etracker.html" %}
+{% endwith %}
+{% endif %}
+{% endblock etracker %}
+
 {% block main %}
 
 <h2>About</h2>

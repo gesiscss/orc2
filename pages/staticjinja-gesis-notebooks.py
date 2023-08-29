@@ -18,10 +18,13 @@ if __name__ == "__main__":
 
     if args.local:
         context['gesis_notebooks_https'] = '/'
+        context['production'] = False
     if args.stage:
         context['gesis_notebooks_https'] = 'https://notebooks-test.gesis.org/'
+        context['production'] = False
     if args.production:
         context['gesis_notebooks_https'] = 'https://notebooks.gesis.org/'
+        context['production'] = True
     
     context['gesis_notebooks_static'] = context['gesis_notebooks_https'] + "static/"
     context['gesis_web_frontend_framework'] = context['gesis_notebooks_static'] + "gesis-web-frontend-framework/"

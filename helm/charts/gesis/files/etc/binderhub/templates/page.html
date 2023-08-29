@@ -46,6 +46,14 @@
   {% block head_extra %}
   {% endblock head_extra %}
 
+
+  {% block etracker %}
+  {% if production %}
+  {% with et_pagename="/GESISBinder:binder/", et_areas="/GESISBinder" %}
+    {% include "gesis/etracker.html" %}
+  {% endwith %}
+  {% endif %}
+  {% endblock etracker %}
 </head>
 <body class="container-xl gs-layout-1">
 

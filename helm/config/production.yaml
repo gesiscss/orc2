@@ -16,6 +16,7 @@ binderhub:
     01-template-variables: |
       template_vars = {
         "gesis_notebooks_https": 'https://notebooks.gesis.org/',
+        'production': True,
       }
       template_vars['gesis_notebooks_static'] = template_vars['gesis_notebooks_https'] + "static/"
       template_vars['gesis_web_frontend_framework'] = template_vars['gesis_notebooks_static'] + "gesis-web-frontend-framework/"
