@@ -15,12 +15,12 @@
 
   <title>{% block title %}Binder{% endblock %}</title>
   <meta name="description" content="Reproducible, sharable, open, interactive computing environments.">
-  <link id="favicon" rel="shortcut icon" type="image/png" href="{{ gesis_notebooks_static }}images/logo/logo.png?v={{ static_version }}" />
+  <link id="favicon" rel="shortcut icon" type="image/png" href="{{ gesis_notebooks_static }}images/logo/logo.png" />
 
   {# Social media previews #}
   <meta property="og:title" content="GESIS Binder">
   <meta property="og:description" content="Reproducible, sharable, open, interactive computing environments.">
-  <meta property="og:image" content="{{ gesis_notebooks_static }}images/logo/logo_big_square.png?v={{ static_version }}">
+  <meta property="og:image" content="{{ gesis_notebooks_static }}images/logo/logo_big_square.png">
   <meta property="og:image:width" content="800">
   <meta property="og:image:height" content="800">
   <meta property="og:image:alt" content="GESIS Notebooks Logo" />
@@ -103,8 +103,9 @@
       </div>
       <div class="d-flex col-12 col-xl-4 align-items-center justify-content-center justify-content-xl-start">
         <div class="gs_footerlinks">
-          <a href="https://www.gesis.org/institut/impressum">Impressum</a>
-          <a href="https://www.gesis.org/institut/datenschutz">Datenschutz</a>
+          <a href="https://www.gesis.org/en/institute/imprint/">Imprint</a>
+          <a href="https://www.gesis.org/en/institute/data-protection/">Data protection</a>
+          <a href="{{ gesis_notebooks_https }}terms.html">Terms of Use</a>
           <span>©&nbsp;GESIS</span>
         </div>
       </div>
