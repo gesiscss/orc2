@@ -23,6 +23,9 @@ if __name__ == "__main__":
     if args.production:
         context['gesis_notebooks_https'] = 'https://notebooks.gesis.org/'
     
+    context['gesis_notebooks_static'] = context['gesis_notebooks_https'] + "static/"
+    context['gesis_web_frontend_framework'] = context['gesis_notebooks_static'] + "gesis-web-frontend-framework/"
+
     site = Site.make_site(
         searchpath=args.srcpath,
         outpath=args.outpath,
