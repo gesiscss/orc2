@@ -25,6 +25,7 @@ if __name__ == "__main__":
     
     context['gesis_notebooks_static'] = context['gesis_notebooks_https'] + "static/"
     context['gesis_web_frontend_framework'] = context['gesis_notebooks_static'] + "gesis-web-frontend-framework/"
+    context['binder_static'] = context['gesis_notebooks_https'] + "binder/static/"
 
     site = Site.make_site(
         searchpath=args.srcpath,

@@ -14,15 +14,15 @@
 {% endblock head_social_media %}
 
 {% block head_extra %}
-<link href="{{ gesis_notebooks_static }}dist/styles.css" rel="stylesheet">
-<script src="{{ gesis_notebooks_static }}dist/bundle.js"></script>
+<link href="{{ binder_static }}dist/styles.css" rel="stylesheet">
+<script src="{{ binder_static }}dist/bundle.js"></script>
 {% endblock head_extra %}
 
 {% block logo %}
 <div class="container">
   <div class="row">
     <div id="logo-container">
-      <img id="logo" src="static/logo.svg" width="390px"  />
+      <img id="logo" src="{{ binder_static }}static/logo.svg" width="390px"  />
     </div>
   </div>
 </div>
