@@ -17,6 +17,8 @@
   <meta name="description" content="Reproducible, sharable, open, interactive computing environments.">
   <link id="favicon" rel="shortcut icon" type="image/png" href="{{ gesis_notebooks_static }}images/logo/logo.png" />
 
+  {% block head_social_media %}
+  
   {# Social media previews #}
   <meta property="og:title" content="GESIS Binder">
   <meta property="og:description" content="Reproducible, sharable, open, interactive computing environments.">
@@ -25,6 +27,8 @@
   <meta property="og:image:height" content="800">
   <meta property="og:image:alt" content="GESIS Notebooks Logo" />
   <meta name="twitter:card" content="summary">
+
+  {% endblock head_social_media %}
 
   {# GESIS-Web-Frontend-Framework: https://www.gesis.org/styleguide/gesis-web-frontend-framework #}
   <link rel="stylesheet" type="text/css" href="{{ gesis_web_frontend_framework }}gesis-web.css" media="all">
@@ -38,6 +42,9 @@
 
   {# GESIS Notebooks #}
   <link rel="stylesheet" type="text/css" href="{{ gesis_notebooks_static }}styles/gesis.css" media="all">
+
+  {% block head_extra %}
+  {% endblock head_extra %}
 
 </head>
 <body class="container-xl gs-layout-1">
@@ -92,6 +99,8 @@
   </header>
 
   <main id="gs_main">
+    {% block logo %}
+    {% endblock logo %}
     {% block main %}
     {% endblock main %}
   </main>

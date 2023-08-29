@@ -1,7 +1,6 @@
 {% extends "templates/loading.html" %}
 
-{% block head %}
-{#<meta name="robots" content="noindex, nofollow">#}
+{% block head_social_media %}
 <meta id="base-url" data-url="{{ gesis_notebooks_https }}">
 <meta id="badge-base-url" data-url="{{badge_base_url}}">
 
@@ -13,17 +12,14 @@
 <meta property="og:image:height" content="800">
 <meta property="og:image:alt" content="GESIS Notebooks Logo" />
 <meta name="twitter:card" content="summary">
+{% endblock head_social_media %}
 
+{% block head_extra %}
 <link href="{{ gesis_notebooks_static }}dist/styles.css" rel="stylesheet">
 <link href="{{ gesis_notebooks_static }}loading.css" rel="stylesheet">
 <script src="{{ gesis_notebooks_static }}dist/bundle.js"></script>
-{% endblock head %}
-
-{% block logo %}
-{% endblock logo %}
+{% endblock head_extra %}
 
 {% block main %}
-<div id="main" class="container">
-  {{ super() }}
-</div>
+{{ super() }}
 {% endblock main %}
