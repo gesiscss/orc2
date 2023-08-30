@@ -3,8 +3,10 @@ stages:
   - build
   - test
   - deploy-stage-ansible
+  - deploy-stage-nginx
   - deploy-stage-helm
   - deploy-prod-ansible
+  - deploy-prod-nginx
   - deploy-prod-helm
 
 .manual-web:
@@ -92,6 +94,11 @@ gesis ansible lint:
     - cp $ANSIBLE_SSH_PRIVATE_KEY ~/.ssh/id_ed25519
     - chmod 600 ~/.ssh/id_ed25519
     - echo $ANSIBLE_VAULT > ansible/.ansible-vault-password-file
+    - |
+      staticjinja \
+      build \
+      --srcpath pages/templates \
+      --outpath nginx/static
     - ansible --version
     - |
       ansible-playbook \
@@ -129,6 +136,61 @@ gesis ansible production deploy:
     ANSIBLE_INVENTORY: production
   extends:
     - .gesis ansible deploy
+
+.gesis nginx update with ansible:
+  image: 
+    name: docker-private-snapshots.gesis.intra/gesis/ilcm/orc2/ansible:${DOCKER_IMAGE_TAG}
+    entrypoint: [""]
+  variables:
+    ANSIBLE_INVENTORY: template
+  script:
+    - mkdir ~/.ssh/
+    - echo StrictHostKeyChecking no > ~/.ssh/config
+    - cp $ANSIBLE_SSH_PUBLIC_KEY ~/.ssh/id_ed25519.pub
+    - cp $ANSIBLE_SSH_PRIVATE_KEY ~/.ssh/id_ed25519
+    - chmod 600 ~/.ssh/id_ed25519
+    - echo $ANSIBLE_VAULT > ansible/.ansible-vault-password-file
+    - |
+      python3 pages/staticjinja-gesis-notebooks.py \
+      --${ANSIBLE_INVENTORY} \
+      --srcpath pages/templates \
+      --outpath nginx/static
+    - ansible --version
+    - |
+      ansible-playbook \
+      --vault-password-file ansible/.ansible-vault-password-file \
+      --extra-vars @ansible/vault/${ANSIBLE_INVENTORY}.yml \
+      --extra-vars "ANSIBLE_CONTROL_NODE_TMP=$(pwd)/tmp" \
+      --inventory ansible/inventories/${ANSIBLE_INVENTORY} \
+      --user ansible \
+      --tags nginx-config \
+      ansible/orc2.yml
+
+gesis nginx update with ansible at stage environment:
+  stage: deploy-stage-nginx
+  rules:
+    - !reference [.manual-web, rules]
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
+        - pages/**/*
+        - nginx/**/*
+  variables:
+    ANSIBLE_INVENTORY: stage
+  extends:
+    - .gesis nginx update with ansible
+
+gesis nginx update with ansible at stage production:
+  stage: deploy-prod-nginx
+  rules:
+    - !reference [.manual-web, rules]
+    - if: $CI_COMMIT_BRANCH == 'main'
+      changes:
+        - pages/**/*
+        - nginx/**/*
+  variables:
+    ANSIBLE_INVENTORY: production
+  extends:
+    - .gesis nginx update with ansible
 
 gesis helm lint:
   stage: test

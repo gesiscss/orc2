@@ -1,0 +1,20 @@
+.team-member a {
+    color: var(--bs-body-color);
+    text-decoration: none;
+}
+
+.team-member figcaption p {
+    margin: 0 0;
+}
+
+.team-member figcaption p:first-child {
+    font-weight: bold;
+}
+
+.team-member figure {
+    margin: 0 0 20px;
+}
+
+h4 {
+    font-weight: bold;
+}
