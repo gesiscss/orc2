@@ -1,5 +1,7 @@
 {% extends "templates/index.html" %}
 
+{# Fork of https://github.com/jupyterhub/binderhub/blob/HEAD/binderhub/templates/index.html #}
+
 {% block head_social_media %}
 <meta id="base-url" data-url="{{base_url}}">
 <meta id="badge-base-url" data-url="{{badge_base_url}}">
@@ -37,3 +39,14 @@
   </div>
 </div>
 {% endblock logo %}
+
+{% block footer %}
+<div class="container">
+  <div class="row text-center">
+    <h3>questions?<br />join the <a href="https://discourse.jupyter.org/c/binder">discussion</a>, read the <a href="https://mybinder.readthedocs.io/en/latest/">docs</a>, see the <a href="https://github.com/jupyterhub/binderhub">code</a></h3>
+  </div>
+</div>
+<script type="text/javascript">
+indexMain();
+</script>
+{% endblock footer %}
