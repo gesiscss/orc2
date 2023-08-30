@@ -1,111 +1,139 @@
+{% set navigation_bar = [
+  ('/', 'home', 'Home'),
+  ('/binder/', 'binder', 'Binder'),
+  ('/about.html', 'about', 'About'),
+  ('/faq.html', 'faq', 'FAQ')
+] -%}
+{% set active_page = active_page|default('home') -%}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>{% block title %}Binder{% endblock %}</title>
 
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  {# The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags #}
-  <meta name="description" content="Reproducible, sharable, open, interactive computing environments.">
 
-  {% block head %}
+  <title>{% block title %}Binder{% endblock %}</title>
+  <meta name="description" content="Reproducible, sharable, open, interactive computing environments.">
+  <link id="favicon" rel="shortcut icon" type="image/png" href="{{ gesis_notebooks_static }}images/logo/logo.png" />
+
+  {% block head_social_media %}
+  
   {# Social media previews #}
   <meta property="og:title" content="GESIS Binder">
   <meta property="og:description" content="Reproducible, sharable, open, interactive computing environments.">
-  <meta property="og:image" content="https://notebooks.gesis.org/static/images/logo/logo_big_square.png?v={{ static_version }}">
+  <meta property="og:image" content="{{ gesis_notebooks_static }}images/logo/logo_big_square.png">
   <meta property="og:image:width" content="800">
   <meta property="og:image:height" content="800">
   <meta property="og:image:alt" content="GESIS Notebooks Logo" />
   <meta name="twitter:card" content="summary">
 
-  <link href="{{static_url("dist/styles.css")}}" rel="stylesheet">
-  {% endblock head %}
-  <link id="favicon" rel="shortcut icon" type="image/png" href="{{ static_nginx }}images/logo/logo.png?v={{ static_version }}" />
+  {% endblock head_social_media %}
 
-  <link href="{{ static_nginx }}vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
-  <script src="{{ static_nginx }}vendor/jquery-3.2.1.min.js"></script>
-  <link href="{{ static_nginx }}styles/notebooks.css?v={{ static_version }}" rel="stylesheet" />
-  <link href="{{ static_nginx }}styles/binder.css?v={{ static_version }}" rel="stylesheet" />
+  {# GESIS-Web-Frontend-Framework: https://www.gesis.org/styleguide/gesis-web-frontend-framework #}
+  <link rel="stylesheet" type="text/css" href="{{ gesis_web_frontend_framework }}gesis-web.css" media="all">
+  <script src="{{ gesis_web_frontend_framework }}gesis-web.js"></script>
 
-  <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-  <!--[if lt IE 9]>
-    <script src="{{ static_nginx }}vendor/html5shiv.min.js"></script>
-    <script src="{{ static_nginx }}vendor/respond.min.js"></script>
-  <![endif]-->
+  {% block head_extra %}
+  {% endblock head_extra %}
+
+  {# BinderHub #}
+  <link href="{{ gesis_notebooks_static }}styles/notebooks.css" rel="stylesheet" />
+  <link href="{{ gesis_notebooks_static }}styles/binder.css" rel="stylesheet" />
+
+  {# GESIS Notebooks #}
+  <link rel="stylesheet" type="text/css" href="{{ gesis_notebooks_static }}styles/gesis.css" media="all">
 
   {% block etracker %}
   {% if production %}
   {% with et_pagename="/GESISBinder:binder/", et_areas="/GESISBinder" %}
-      {% include "gesis/etracker.html" %}
+    {% include "gesis/etracker.html" %}
   {% endwith %}
   {% endif %}
   {% endblock etracker %}
 </head>
-<body>
-  {% block body %}
+<body class="container-xl gs-layout-1">
 
-  {% include "gesis/header.html" %}
-  {% include "gesis/nav.html" %}
-
-  {% if banner %}
-  <div id="banner-container">
-    {{ banner | safe }}
-  </div>
-  {% endif %}
-
-  {% block logo %}
-  <div class="container">
-    <div class="row">
-      <div id="logo-container">
-        <img id="logo" src={% block logo_image %}"{{static_url("logo.svg")}}"{% endblock logo_image %} width="390px"  />
+  <header class="gs_header_main">
+    <div class="d-flex justify-content-between align-items-center px-3 px-md-gesis-2 py-3">
+      <div>
+        <a title="GESIS-Homepage besuchen" href="/home">
+          <picture>
+            <source srcset="{{ gesis_web_frontend_framework }}img/gs_home_logo_pure.svg" media="(max-width: 767.98px)" />
+            <img src="{{ gesis_web_frontend_framework }}img/gs_home_logo_de.svg" height="37" alt="GESIS-Homepage besuchen" />
+          </picture>
+        </a>
+      </div>
+      <nav class="gs_topnav">
+        <ul class="list-group list-group-horizontal">
+          <li>
+            <a href="mailto:gitlab+ilcm-orc2-2705-issue-@gesis.org">
+              <span class="icon-gs-contact pe-1"></span>
+              <span class="d-none d-md-inline">Contact</span>
+            </a>
+          </li>
+          <li>
+            <a href="https://mybinder.readthedocs.io/en/latest/introduction.html">
+              <span class="icon-gs-help pe-1"></span>
+              <span class="d-none d-md-inline">Help</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+    <div class="container-xl gs_ms_header px-3 px-md-gesis-2 py-3">
+      <div class="row align-items-center align-self-center">
+        <div class="col col-4 col-sm-3 col-md-2">
+          <img src="{{ gesis_notebooks_static }}images/logo/logo_text_2.png" height="100" alt="GESIS Notebooks Logo" />
+        </div>
+        <div class="col justify-content-center">
+          <h1>GESIS Notebooks</h1>
+        </div>
       </div>
     </div>
-  </div>
-  {% endblock logo %}
+    <button id="gs_mm_toggle_button-104618" class="gs_mm_toggle_button" aria-haspopup="true" aria-controls="gs_megamenu-104618" aria-label="Navigationsmenü"></button>
+    <nav class="gs_megamenu_nav" aria-labelledby="gs_mm_toggle_button-104618">
+      <ul role="menu" id="gs_megamenu-104618" class="gs_megamenu">
+        {% for href, id, caption in navigation_bar -%}
+        <li{% if id == active_page %} class="gs_active"{% endif %}>
+          <a role="menuitem" href="{{ href|escape }}">{{ caption|escape }}</a>
+        </li>
+        {% endfor -%}
+      </ul>
+    </nav>
+  </header>
 
-  {% block main %}
-  {% endblock main %}
+  <main>
+    {% block logo %}
+    {% endblock logo %}
+    {% block main %}
+    {% endblock main %}
+  </main>
 
-  {% block footer %}
-  <div id="questions-footer" class="container">
-    <div class="row text-center">
-      <h3>questions?<br />join the <a href="https://discourse.jupyter.org/c/binder">Binder discussion</a>, read the <a href="https://mybinder.readthedocs.io/en/latest/">Binder docs</a>{#, see the <a href="https://github.com/jupyterhub/binderhub">code</a>#}</h3>
+  <footer id="gs_footer" class="container-xl">
+    <div class="row gy-3">
+      <div class="d-flex col-12 col-xl-1 justify-content-center justify-content-xl-start p-0">
+        <img src="{{ gesis_web_frontend_framework }}img/leibniz_logo_de_white.svg" alt="Leibniz-Logo">
+      </div>
+      <div class="d-flex col-12 col-xl-4 align-items-center justify-content-center justify-content-xl-start">
+        <div class="gs_footerlinks">
+          <a href="https://www.gesis.org/en/institute/imprint/">Imprint</a>
+          <a href="https://www.gesis.org/en/institute/data-protection/">Data protection</a>
+          <a href="{{ gesis_notebooks_https }}terms.html">Terms of Use</a>
+          <span>©&nbsp;GESIS</span>
+        </div>
+      </div>
+      <div class="d-flex col-12 col-xl-7 align-items-center flex-column flex-md-row justify-content-sm-center justify-content-xl-end p-0">
+        <div class="btn-group btn-group-vertical-md-down gap-2">
+          <a href="https://facebook.com/sharer/sharer.php?u=https%3A%2F%2Fwww.gesis.org%2Fstyleguide%2Flayout%2Fhtml-seitenaufbau" target="_blank" rel="noopener noreferrer" class="btn btn-facebook text-start">
+            <i class="bi bi-facebook pe-2"></i> Share on Facebook </a>
+          <a href="https://twitter.com/intent/tweet/?text=HTML-Seitenaufbau&amp;url=https%3A%2F%2Fwww.gesis.org%2Fstyleguide%2Flayout%2Fhtml-seitenaufbau" target="_blank" rel="noopener noreferrer" class="btn btn-twitter text-start">
+            <i class="bi bi-twitter pe-2"></i> Share on Twitter </a>
+          <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A%2F%2Fwww.gesis.org%2Fstyleguide%2Flayout%2Fhtml-seitenaufbau&amp;title=HTML-Seitenaufbau&amp;summary=HTML-Seitenaufbau&amp;source=https%3A%2F%2Fwww.gesis.org%2Fstyleguide%2Flayout%2Fhtml-seitenaufbau" target="_blank" rel="noopener noreferrer" class="btn btn-linkedin text-start">
+            <i class="bi bi-linkedin pe-2"></i> Share on LinkedIn </a>
+        </div>
+      </div>
     </div>
-  </div>
-  {% endblock footer %}
-
-  {% include "gesis/footer.html" %}
-  <script src="{{ static_nginx }}scripts/gesis_nav.js?v={{ static_version }}"></script>
-
-  {% if google_analytics_code %}
-  <script>
-    // Only load GA if DNT is not set
-    if (navigator.doNotTrack != "1" && // Most Firefox & Chrome
-      window.doNotTrack != "1" && // IE & Safari
-      navigator.msDoNotTrack != "1" // Old IE
-  ) {
-    console.log("Loading Google Analytics, since Do Not Track is off");
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-    ga('create', '{{ google_analytics_code }}', '{{ google_analytics_domain }}',
-      {'storage': 'none'});
-    ga('set', 'anonymizeIp', true);
-    ga('send', 'pageview');
-  }
-  </script>
-  {% endif %}
-  {% if extra_footer_scripts %}
-  {% for script in extra_footer_scripts|dictsort %}
-  <script>
-    {{ script[1]|safe }}
-  </script>
-  {% endfor %}
-  {% endif %}
-  {% endblock body %}
+  </footer>
 </body>
 </html>

@@ -45,15 +45,7 @@ binderhub:
       \   # for now. Should be fixed in https://github.com/googleapis/google-cloud-python/pull/6293\n
       \   return [JSONCloudLoggingHandler(client, name=os.environ.get(\"EVENT_LOG_NAME\")
       or \"binderhub-events-text\")]\nc.EventLog.handlers_maker = _make_eventsink_handler\n"
-    01-template-variables: "import uuid\ntemplate_vars = {\n    \"version\": \"beta\",\n
-      \   \"home_url\": \"/\",\n    \"gesisbinder_url\": \"/binder/\",\n    \"about_url\":
-      \"/about.html\",\n    \"tou_url\": \"/terms.html\",\n    \"imprint_url\": \"https://www.gesis.org/en/institute/imprint/\",\n
-      \   \"data_protection_url\": \"https://www.gesis.org/en/institute/data-protection/\",\n
-      \   \"gesis_url\": \"https://www.gesis.org/en/home/\",\n    \"status_url\":
-      \"https://gesisnotebooks.betteruptime.com\",\n    \"gallery_url\": \"/gallery/\",\n
-      \   \"faq_url\": \"/faq.html\",\n    \"active\": \"binder\",\n    \"static_nginx\":
-      \"/static/\",\n    \"static_version\": uuid.uuid4().hex,\n    \"user\": None,\n
-      \   \"production\": True,\n}\nc.BinderHub.template_variables.update(template_vars)\n"
+
   extraEnv:
     GOOGLE_APPLICATION_CREDENTIALS: /secrets/service-account.json
   extraVolumeMounts:
