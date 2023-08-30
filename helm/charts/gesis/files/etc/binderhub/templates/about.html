@@ -1,8 +1,6 @@
-{% extends "templates/index.html" %}
+{% extends "templates/about.html" %}
 
 {% block head %}
-<meta id="base-url" data-url="{{base_url}}">
-<meta id="badge-base-url" data-url="{{badge_base_url}}">
 {# Social media previews #}
 <meta property="og:title" content="GESIS Binder">
 <meta property="og:description" content="Reproducible, sharable, open, interactive computing environments.">
@@ -13,5 +11,4 @@
 <meta name="twitter:card" content="summary">
 
 <link href="{{static_url("dist/styles.css")}}" rel="stylesheet">
-<script src="{{static_url("dist/bundle.js")}}"></script>
 {% endblock head %}

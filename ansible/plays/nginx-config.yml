@@ -1,6 +1,4 @@
 - name: Update NGINX configuration
-  tags:
-    - nginx-config
   hosts:
     - notebooks_gesis_org
   become: true
@@ -14,7 +12,7 @@
       ansible.builtin.file:
         state: directory
         path: /etc/nginx/sites-enabled/
-    - name: Workaround limitation to elevating permissions via passwordless sudo
+    - name: Workaround limition to elevating permissions via passwordless sudo
       ansible.builtin.lineinfile:
         path: /etc/sudoers
         state: present
