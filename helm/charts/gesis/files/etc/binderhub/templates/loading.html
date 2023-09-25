@@ -3,7 +3,7 @@
 {# Fork of https://github.com/jupyterhub/binderhub/blob/HEAD/binderhub/templates/loading.html #}
 
 {% block head_social_media %}
-<meta id="base-url" data-url="{{ gesis_notebooks_https }}">
+<meta id="base-url" data-url="{{ base_url }}">
 <meta id="badge-base-url" data-url="{{badge_base_url}}">
 
 {# Social media previews #}
@@ -20,6 +20,8 @@
 <link href="{{ binder_static }}dist/styles.css" rel="stylesheet">
 <link href="{{ binder_static }}loading.css" rel="stylesheet">
 <script src="{{ binder_static }}dist/bundle.js"></script>
+
+<script src="{{ gesis_notebooks_static }}vendor/jquery-3.2.1.min.js"></script>
 {% endblock head_extra %}
 
 {% block main %}
