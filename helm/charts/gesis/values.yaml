@@ -17,7 +17,7 @@ binderhub:
       high_quota_specs:
       - ^gesiscss/.*
     KubernetesBuildExecutor:
-      build_image: quay.io/jupyterhub/repo2docker:2023.06.0-8.gd414e99
+      build_image: quay.io/jupyterhub/repo2docker:2023.06.0-39.g8bdf681
       memory_limit: 3G
       memory_request: 1G
       node_selector:
@@ -45,7 +45,6 @@ binderhub:
       \   # for now. Should be fixed in https://github.com/googleapis/google-cloud-python/pull/6293\n
       \   return [JSONCloudLoggingHandler(client, name=os.environ.get(\"EVENT_LOG_NAME\")
       or \"binderhub-events-text\")]\nc.EventLog.handlers_maker = _make_eventsink_handler\n"
-
   extraEnv:
     GOOGLE_APPLICATION_CREDENTIALS: /secrets/service-account.json
   extraVolumeMounts:
