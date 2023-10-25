@@ -6,7 +6,7 @@
       kubernetes.core.k8s:
         state: absent
         src: https://github.com/coreos/flannel/raw/master/Documentation/kube-flannel.yml
-    - name: Install Tigera Calico operator 
+    - name: Install Tigera Calico operator
       kubernetes.core.k8s:
         state: present
         src: https://raw.githubusercontent.com/projectcalico/calico/v3.26.3/manifests/tigera-operator.yaml
