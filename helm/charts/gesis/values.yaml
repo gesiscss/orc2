@@ -164,6 +164,19 @@ binderhub:
     type: NodePort
   networkPolicy:
     enabled: true
+    egress:
+      tcpPorts:
+        - 80 # http
+        - 443 # https
+        - 9418 # git
+        - 873 # rsync
+        - 1094 # xroot
+        - 1095 # xroot
+        - 16286 # Wolfram Engine on-demand licensing
+        - 4001 # IPFS
+      cidr: 0.0.0.0/0
+    ingress:
+      bannedIps: []
 cryptnono:
   enabled: true
   tolerations:
