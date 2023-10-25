@@ -10,3 +10,7 @@
       kubernetes.core.k8s:
         state: present
         src: https://raw.githubusercontent.com/projectcalico/calico/v3.26.3/manifests/tigera-operator.yaml
+    - name: Install Calico and resource
+      kubernetes.core.k8s:
+        state: present
+        definition: "{{ lookup('file', '../calico/custom-resources.yaml') | from_yaml_all }}"
