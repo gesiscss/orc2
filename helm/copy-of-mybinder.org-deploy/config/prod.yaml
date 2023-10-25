@@ -1,0 +1,241 @@
+projectName: binderhub-288415
+
+userNodeSelector: &userNodeSelector
+  mybinder.org/pool-type: users
+coreNodeSelector: &coreNodeSelector
+  mybinder.org/pool-type: core
+
+binderhubEnabled: false
+
+binderhub:
+  config:
+    BinderHub:
+      pod_quota: 0
+      concurrent_build_limit: 1
+      build_node_selector: *userNodeSelector
+      hub_url: https://hub.gke2.mybinder.org
+      badge_base_url: https://mybinder.org
+      image_prefix: gcr.io/binderhub-288415/r2d-staging-g5b5b759-
+      sticky_builds: true
+
+  nodeSelector: *coreNodeSelector
+
+  resources:
+    requests:
+      cpu: 0.5
+
+  hpa:
+    enabled: true
+    maxReplicas: 4
+    minReplicas: 2
+    targetCPU: 100 # 100% of cpu request, so 0.5 CPU
+
+  dind:
+    hostLibDir: /mnt/disks/ssd0/dind
+    resources:
+      requests:
+        cpu: "2"
+        memory: 1Gi
+      limits:
+        cpu: "5"
+        memory: 12Gi
+
+  ingress:
+    hosts:
+      - gke.mybinder.org
+      - gke2.mybinder.org
+
+  jupyterhub:
+    singleuser:
+      nodeSelector: *userNodeSelector
+    hub:
+      nodeSelector: *coreNodeSelector
+
+    proxy:
+      chp:
+        nodeSelector: *coreNodeSelector
+        resources:
+          requests:
+            cpu: "1"
+          limits:
+            cpu: "1"
+    ingress:
+      hosts:
+        - hub.mybinder.org
+        - hub.gke.mybinder.org
+        - hub.gke2.mybinder.org
+      tls:
+        - secretName: kubelego-tls-jupyterhub-prod
+          hosts:
+            - hub.mybinder.org
+            - hub.gke.mybinder.org
+            - hub.gke2.mybinder.org
+    scheduling:
+      userPlaceholder:
+        replicas: 75
+      userScheduler:
+        nodeSelector: *coreNodeSelector
+
+grafana:
+  nodeSelector: *coreNodeSelector
+  resources:
+    requests:
+      cpu: 10m
+      memory: 128Mi
+    limits:
+      cpu: 250m
+      memory: 128Mi
+  ingress:
+    hosts:
+      - grafana.mybinder.org
+      - grafana.gke.mybinder.org
+      - grafana.gke2.mybinder.org
+    tls:
+      - hosts:
+          - grafana.mybinder.org
+          - grafana.gke.mybinder.org
+          - grafana.gke2.mybinder.org
+        secretName: kubelego-tls-grafana
+  datasources:
+    datasources.yaml:
+      apiVersion: 1
+      datasources:
+        - name: prometheus
+          orgId: 1
+          type: prometheus
+          url: https://prometheus.mybinder.org
+          isDefault: true
+          editable: false
+  persistence:
+    storageClassName: standard
+
+prometheus:
+  server:
+    #nodeSelector: *coreNodeSelector
+    livenessProbeInitialDelay: 800
+    resources:
+      requests:
+        cpu: 100m
+        memory: 4Gi
+      limits:
+        cpu: "1"
+        # before stopping prod binderhub
+        # 20Gi wasn't enough to rebuild WAL on startup
+        # keep an eye on this
+        memory: 16Gi
+    persistentVolume:
+      size: 50G
+      storageClass: standard
+    retention: 30d
+    ingress:
+      hosts:
+        - prometheus.mybinder.org
+        - prometheus.gke.mybinder.org
+        - prometheus.gke2.mybinder.org
+      tls:
+        - hosts:
+            - prometheus.mybinder.org
+            - prometheus.gke.mybinder.org
+            - prometheus.gke2.mybinder.org
+          secretName: kubelego-tls-prometheus
+
+ingress-nginx:
+  controller:
+    service:
+      loadBalancerIP: 35.239.125.45
+
+static:
+  ingress:
+    hosts:
+      - static.mybinder.org
+      - static.gke.mybinder.org
+      - static.gke2.mybinder.org
+
+proxyPatches:
+  nodeSelector: *coreNodeSelector
+
+redirector:
+  enabled: true
+  nodeSelector: *coreNodeSelector
+  redirects:
+    - type: host
+      host:
+        from: beta.mybinder.org
+        to: mybinder.org
+    - type: host
+      host:
+        from: docs.mybinder.org
+        to: mybinder.readthedocs.io
+    - type: host
+      host:
+        from: playground.mybinder.org
+        to: play.nteract.io
+    - type: url
+      host:
+        from: status.mybinder.org
+        to: mybinder.readthedocs.io/en/latest/status.html
+    - type: url
+      host:
+        from: matomo.mybinder.org
+        to: mybinder.org/matomo/index.php
+
+matomo:
+  enabled: true
+  replicas: 2
+  nodeSelector: *coreNodeSelector
+  db:
+    instanceName: binderhub-288415:us-central1:matomo-prod
+  trustedHosts:
+    - mybinder.org
+    - gke.mybinder.org
+    - gke2.mybinder.org
+  ingress:
+    hosts:
+      - mybinder.org
+      - gke.mybinder.org
+      - gke2.mybinder.org
+  resources:
+    requests:
+      cpu: 10m
+      memory: 256Mi
+    limits:
+      cpu: 200m
+      memory: 1Gi
+
+analyticsPublisher:
+  enabled: true
+  project: binderhub-288415
+  destinationBucket: binder-events-archive
+  events:
+    sourceBucket: binder-events-raw-export
+  cloudCosts:
+    sourceBucket: binder-billing-archive
+
+gcsProxy:
+  enabled: true
+  buckets:
+    - name: binder-events-archive
+      host: archive.analytics.mybinder.org
+    - name: binder-events-archive
+      host: archive.analytics.gke2.mybinder.org
+
+federationRedirect:
+  enabled: true
+  hosts:
+    gke:
+      prime: false
+      url: https://gke.mybinder.org
+      weight: 0
+      health: https://gke.mybinder.org/health
+      versions: https://gke.mybinder.org/versions
+    gesis:
+      url: https://notebooks.gesis.org/binder
+      weight: 100
+      health: https://notebooks.gesis.org/binder/health
+      versions: https://notebooks.gesis.org/binder/versions
+    ovh2:
+      prime: true
+      url: https://ovh2.mybinder.org
+      weight: 100
+      health: https://ovh2.mybinder.org/health
+      versions: https://ovh2.mybinder.org/versions
