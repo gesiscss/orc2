@@ -35,7 +35,7 @@ kubectl
 
 ::: {.callout-note}
 
-You can visualise the changes in the minikube cluster using the dashboard. From a new terminal:
+You can visualise the changes in the minikube cluster using OpenLens, see @sec-openlens-new-cluster, or the native dashboard. Launch the native dashboard from a new terminal:
 
 ```bash
 minikube dashboard --url
@@ -67,8 +67,7 @@ Create a new Deployment (Pod and ReplicaSet):
 ```bash
 kubectl create deployment hello-node \
     --image=registry.k8s.io/e2e-test-images/agnhost:2.39 \
-    -- /agnhost netexec \
-    --http-port=8080
+    -- /agnhost netexec --http-port=8080
 ```
 
 ```
@@ -177,11 +176,34 @@ Open the Service by pointing your web browser to <http://localhost:8080>.
 
 ![Diagram of `ExternalName` service from <https://medium.com/devops-mojo/kubernetes-service-types-overview-introduction-to-k8s-service-types-what-are-types-of-kubernetes-services-ea6db72c3f8c>.](img/k8s-externalname.png)
 
-The service is accessed based on it's DNS name and requires the configuration of the cluster DNS. More details at https://kubernetes.io/docs/concepts/services-networking/service/#externalname.
+The service is accessed based on it's DNS name and requires the configuration of the cluster DNS. More details at <https://kubernetes.io/docs/concepts/services-networking/service/#externalname>.
 
 ### Ingress
 
 Ingress only provide external access to HTTP and HTTPS services. Read more at <https://kubernetes.io/docs/concepts/services-networking/ingress/>.
+
+## Network (Security) Policy
+
+[Kubernetes has native support to Network Policy](https://kubernetes.io/docs/concepts/services-networking/network-policies/), in other words, control traffic flow at the IP address or port level. Network Policy is implemented by the [Container Network Interface (CNI) network plugin](https://kubernetes.io/docs/concepts/extend-kubernetes/compute-storage-net/network-plugins/) like [Calico](https://www.tigera.io/project-calico/), [Cilium](https://cilium.io/), [Flannel](https://github.com/flannel-io/flannel), [kindnet](https://www.tkng.io/cni/kindnet/).
+
+::: {.callout-important}
+
+Not all Container Network Interface (CNI) network plugin implement Kubernetes Network Policy. [Calico](https://www.tigera.io/project-calico/) is the most popular Container Network Interface (CNI) network plugin with Network Policy support.
+
+:::
+
+To create a minikube cluster with a specific Container Network Interface (CNI) network plugin, use the `--cni` option. For example,
+
+```bash
+minikube start \
+--kubernetes-version v1.26.1 \
+--cpus 4 \
+--memory 8192 \
+--cni calico
+```
+
+will create a minikube cluster with [Calico](https://www.tigera.io/project-calico/) pre-configured.
+
 
 ## Debugging
 
@@ -338,6 +360,27 @@ kubectl exec hello-node-7b87cd5f68-7jcmv -- uname -a
 ```
 Linux hello-node-7b87cd5f68-7jcmv 5.15.90.1-microsoft-standard-WSL2 #1 SMP Fri Jan 27 02:56:13 UTC 2023 x86_64 Linux
 ```
+
+::: {.callout-note}
+
+It's possible to access an interactive shell running in the pod:
+
+```bash
+kubectl exec hello-node-7b87cd5f68-7jcmv \
+--tty \
+--stdin \
+-- /bin/bash
+```
+
+or
+
+```bash
+kubectl exec hello-node-7b87cd5f68-7jcmv -ti -- /bin/bash
+-- /bin/bash
+```
+
+:::
+
 
 ## Clean up
 

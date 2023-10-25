@@ -28,6 +28,7 @@ book:
       chapters: 
       - development-environment.qmd
       - hello-minikube.qmd
+      - network-policy-with-minikube.qmd
       - local-jupyterhub.qmd
       - local-binderhub.qmd
     - part: "Tutorial: Set the Test Environment"

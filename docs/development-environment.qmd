@@ -11,7 +11,10 @@ The reader can use other implementations of local Kubernetes cluster, including 
 Start the local minikube cluster:
 
 ```bash
-minikube start --kubernetes-version v1.26.1 --cpus 4 --memory 8192
+minikube start \
+--kubernetes-version v1.26.1 \
+--cpus 4 \
+--memory 8192
 ```
 
 ::: {.callout-note}
@@ -31,10 +34,29 @@ to remove old Docker images and free space in your machine.
 If you are running the latest version of Docker, old versions of Kubernetes does **not** support your Docker installation. Try minikube with the [latest version of Kubernetes](https://kubernetes.io/releases/) by changing the value of the argument `--kubernetes-version`. For example,
 
 ```bash
-minikube start --kubernetes-version=vX.Y.Z --cpus 4 --memory 8192
+minikube start \
+--kubernetes-version=vX.Y.Z \
+--cpus 4 \
+--memory 8192
 ```
 
 try to start the local minikube cluster with Kubernetes vX.Y.Z.
+
+:::
+
+::: {.callout-note}
+
+By default, your minikube cluster will have a single node. To create a minikube cluster with more than one node, use the `--nodes` option. For example,
+
+```bash
+minikube start \
+--kubernetes-version v1.26.1 \
+--cpus 4 \
+--memory 8192 \
+--nodes 3
+```
+
+will create a minikube cluster with 3 nodes.
 
 :::
 

@@ -1,0 +1,77 @@
+# Network Policy with minikube
+
+::: {.callout-note}
+
+An interactive "Calico tutorial" is available at <https://play.instruqt.com/tigera/invite/cgzdhiwnjrsy>.
+
+:::
+
+This is a very short introduction to [Kubernetes Network Policy](https://kubernetes.io/docs/concepts/services-networking/network-policies/) and [Calico](https://www.tigera.io/project-calico/).
+
+Start the local minikube cluster:
+
+```bash
+minikube start \
+--kubernetes-version v1.26.1 \
+--cpus 4 \
+--memory 8192 \
+--cni calico
+```
+
+From another terminal, launch the native dashboard:
+
+```bash
+minikube dashboard --url
+```
+
+Create a new Deployment:
+
+```bash
+kubectl create deployment hello-node \
+    --image=registry.k8s.io/e2e-test-images/agnhost:2.39 \
+    -- /agnhost netexec --http-port=8080
+```
+
+Our deployment can access the [Bitcoin website](https://bitcoin.org/):
+
+```bash
+kubectl exec hello-node-7b87cd5f68-c672s \
+-- curl --silent --connect-timeout 5 https://bitcoin.org/en/ | grep title | head -n 1
+```
+
+```
+<title>Bitcoin - Open source P2P money</title>
+```
+
+To limit the access to the [Bitcoin website](https://bitcoin.org/), we can apply
+
+```bash
+kubectl apply -f - <<EOF
+apiVersion: crd.projectcalico.org/v1
+kind: GlobalNetworkPolicy
+metadata:
+  name: deny-bitcoin
+spec:
+  types:
+  - Ingress
+  - Egress
+  ingress:
+  - action: Deny
+    destination:
+      nets:
+      - 104.22.68.176
+      - 172.67.40.154
+      - 104.22.69.176
+      ports:
+      - '0:65535'
+  egress:
+  - action: Deny
+    destination:
+      nets:
+      - 104.22.68.176
+      - 172.67.40.154
+      - 104.22.69.176
+      ports:
+      - '0:65535'
+EOF
+```
