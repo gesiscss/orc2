@@ -10,10 +10,18 @@ metadata:
     release: {{ .Release.Name }}
 spec:
   podSelector:
+    # apply this to both places user code runs: dind and singleuser-server
+    matchExpressions:
+      - key: component
+        operator: In
+        values:
+          - singleuser-server
+          # TODO: Remove dind after upgrade is complete
+          # https://github.com/jupyterhub/binderhub/pull/1543
+          - dind
+          - image-builder
     matchLabels:
-      app.kubernetes.io/name: ingress-nginx
-      app.kubernetes.io/component: controller
-      app.kubernetes.io/instance: {{ .Release.Name }}
+      release: {{ .Release.Name }}
   policyTypes:
     - Ingress
   # block ingress from banned client ips
