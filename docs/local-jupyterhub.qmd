@@ -68,14 +68,14 @@ helm upgrade --cleanup-on-fail \
   --install my-local-jupyterhub jupyterhub/jupyterhub \
   --namespace jupyterhub \
   --create-namespace \
-  --version=2.0.0 \
+  --version=3.1.0 \
   --values config.yaml
 ```
 
 ```
 Release "my-local-jupyterhub" does not exist. Installing it now.
 NAME: my-local-jupyterhub
-LAST DEPLOYED: Tue Mar  7 08:36:58 2023
+LAST DEPLOYED: Fri Oct 27 11:16:33 2023
 NAMESPACE: jupyterhub
 STATUS: deployed
 REVISION: 1
@@ -94,9 +94,9 @@ NOTES:
 
   - Kubernetes namespace: jupyterhub
   - Helm release name:    my-local-jupyterhub
-  - Helm chart version:   2.0.0
-  - JupyterHub version:   3.0.0
-  - Hub pod packages:     See https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/2.0.0/images/hub/requirements.txt
+  - Helm chart version:   3.1.0
+  - JupyterHub version:   4.0.2
+  - Hub pod packages:     See https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/3.1.0/images/hub/requirements.txt
 
 ### Followup links
 
