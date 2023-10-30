@@ -23,10 +23,7 @@ spec:
     matchLabels:
       release: {{ .Release.Name }}
   policyTypes:
-    - Ingress
     - Egress
-  # block ingress unless explicitly allowed by other policies
-  ingress: []
   egress:
     # allow DNS resolution in the cluster
     # it would be nicer to be able to pin this to only the kube-dns service,
@@ -65,12 +62,21 @@ spec:
     # (needed to fetch public urls hosted on this cluster,
     # e.g. analytics.mybinder.org)
     - ports:
-        - port: 443
+        - port: 8000
+          protocol: TCP
+        - port: 8001
           protocol: TCP
       to:
         - podSelector:
             matchLabels:
-              app: nginx-ingress
-              component: controller
-
+              app: jupyterhub
+              component: proxy
+    - ports:
+        - port: 8081
+          protocol: TCP
+      to:
+        - podSelector:
+            matchLabels:
+              app: jupyterhub
+              component: hub
 {{- end }}

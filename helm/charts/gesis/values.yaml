@@ -90,7 +90,7 @@ binderhub:
 
           '
       networkPolicy:
-        enabled: true
+        enabled: false
       nodeSelector:
         database: postgresql
       pdb:
@@ -98,7 +98,7 @@ binderhub:
     proxy:
       chp:
         networkPolicy:
-          enabled: true
+          enabled: false
         pdb:
           minAvailable: 0
       https:
@@ -124,8 +124,7 @@ binderhub:
         guarantee: 450M
         limit: 4G
       networkPolicy:
-        egress: []
-        enabled: true
+        enabled: false
       nodeSelector:
         binderhub: 'true'
       storage:
