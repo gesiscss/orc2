@@ -231,6 +231,7 @@ gesis helm lint:
       --render-subchart-notes \
       --values ./helm/gesis-config/${HELM_ENVIRONMENT}.yaml \
       --values ./helm/gesis-config/secrets/values.yaml \
+      --values ./helm/gesis-config/secrets/ban.yaml \
       --values ./helm/gesis-config/secrets/${HELM_ENVIRONMENT}.yaml \
       --values ./helm/copy-of-mybinder.org-deploy/secrets/config/common/common.yaml \
       --values ./helm/copy-of-mybinder.org-deploy/secrets/config/common/bans.yaml \
