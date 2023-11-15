@@ -1,0 +1,27 @@
+{% extends '_base.html' %}
+
+{% set active_page = 'faq' %}
+
+{% block title %}
+
+GESIS Notebooks: FAQ
+
+{% endblock %}
+
+{% block etracker %}
+{% if production %}
+{% with et_pagename="/GESISHub:faq/", et_areas="/GESISHub" %}
+  {% include "gesis/etracker.html" %}
+{% endwith %}
+{% endif %}
+{% endblock etracker %}
+
+{% block main %}
+
+<p>Dear GESIS Notebooks users,</p>
+<p>We regret to inform you that we will have to shut down the authenticated side (persistent binderhub) of GESIS notebooks on 20th December 2021 due to institute wide restructurings of our service portfolio. You will still be able to use <a href="https://notebooks.gesis.org/binder">notebooks.gesis.org/binder</a> or <a href="https://mybinder.org">mybinder.org</a> to create reproducible launch links for all of your projects but you won’t be able to create new projects on GESIS notebooks and your account data will be removed from GESIS servers. The changes you make inside the notebooks will not be saved anymore after the persistent binderhub will be shut down. For this reason, we advise you to download all projects and data from the platform until Dec. 20th 2021 using <a href="https://notebooks.gesis.org/takeout">notebooks.gesis.org/takeout</a>.</p>
+<p><a href="https://notebooks.gesis.org/takeout" target="_blank">Export Data</a></p>
+<p>We will be back soon with an improved notebooks infrastructure to support (computational) social science researchers with interactive and reproducible access to digital behavioral data and analysis methods as part of our institute-wide efforts focusing on digital behavioral data. For more information, see: https://www.gesis.org/en/institute/digital-behavioral-data</p>
+<p>For any further questions, you can contact us at <a href="mailto:notebooks@gesis.org">notebooks@gesis.org</a></p>
+<p>Thank you for using our service and we hope to see you back soon!</p>
+{% endblock main %}
