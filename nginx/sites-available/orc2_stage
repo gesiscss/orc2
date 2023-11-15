@@ -148,11 +148,16 @@ server {
     }
     location = /sitemap.xml {
     }
-    location = /terms.html {
+
+    location = /about.html {
     }
     location = /faq.html {
     }
-    location = /about.html {
+    location = /maintenance.html {
+    }
+    location = /shut-down-persistent-gesis-notebooks.html {
+    }
+    location = /terms.html {
     }
 
     include snippets/_secret.conf;
