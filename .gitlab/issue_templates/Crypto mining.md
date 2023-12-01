@@ -10,7 +10,7 @@ GESIS Notebooks has **zero** crypto mining pods.
 
 Repository: <crypto-mining-git-repository>
 
-`ps -u` returns
+`ps aux --sort=-pcpu | head -n 10` returns
 
 ```
 output
