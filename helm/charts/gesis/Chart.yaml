@@ -11,11 +11,11 @@ dependencies:
 - condition: grafana.enabled
   name: grafana
   repository: https://grafana.github.io/helm-charts
-  version: 7.0.17
+  version: 7.0.19
 - condition: cryptnono.enabled
   name: cryptnono
   repository: https://yuvipanda.github.io/cryptnono/
-  version: 0.3.1-0.dev.git.103.h8646c67
+  version: 0.3.1-0.dev.git.107.heb504bc
 description: GESIS BinderHub
 name: gesis
 type: application
