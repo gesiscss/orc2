@@ -172,6 +172,7 @@ gesis nginx update with ansible at stage environment:
     - !reference [.manual-web, rules]
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
+        - helm/charts/gesis/files/etc/binderhub/templates/page.html
         - pages/**/*
         - nginx/**/*
   variables:
@@ -185,6 +186,7 @@ gesis nginx update with ansible at stage production:
     - !reference [.manual-web, rules]
     - if: $CI_COMMIT_BRANCH == 'main'
       changes:
+        - helm/charts/gesis/files/etc/binderhub/templates/page.html
         - pages/**/*
         - nginx/**/*
   variables:
