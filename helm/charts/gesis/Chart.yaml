@@ -14,7 +14,7 @@ dependencies:
   version: 7.1.0
 - condition: cryptnono.enabled
   name: cryptnono
-  repository: https://yuvipanda.github.io/cryptnono/
+  repository: https://cryptnono.github.io/cryptnono/
   version: 0.3.1-0.dev.git.124.ha9d46de
 description: GESIS BinderHub
 name: gesis
