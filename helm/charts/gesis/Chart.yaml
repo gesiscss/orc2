@@ -7,11 +7,11 @@ dependencies:
 - condition: prometheus.enabled
   name: prometheus
   repository: https://prometheus-community.github.io/helm-charts
-  version: 25.8.2
+  version: 25.9.0
 - condition: grafana.enabled
   name: grafana
   repository: https://grafana.github.io/helm-charts
-  version: 7.2.1
+  version: 7.2.2
 - condition: cryptnono.enabled
   name: cryptnono
   repository: https://cryptnono.github.io/cryptnono/
