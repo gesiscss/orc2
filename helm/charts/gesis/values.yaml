@@ -17,7 +17,7 @@ binderhub:
       high_quota_specs:
       - ^gesiscss/.*
     KubernetesBuildExecutor:
-      build_image: quay.io/jupyterhub/repo2docker:2023.06.0-41.g57d229e
+      build_image: quay.io/jupyterhub/repo2docker:2023.06.0-64.g6aad2bc
       memory_limit: 3G
       memory_request: 1G
       node_selector:
@@ -140,6 +140,21 @@ binderhub:
         - configMap:
             name: user-etc-jupyter-templates
           name: etc-jupyter-templates
+  networkPolicy:
+    egress:
+      cidr: 0.0.0.0/0
+      tcpPorts:
+      - 80
+      - 443
+      - 9418
+      - 873
+      - 1094
+      - 1095
+      - 16286
+      - 4001
+    enabled: true
+    ingress:
+      bannedIps: []
   nodeSelector:
     binderhub: 'true'
   pdb:
@@ -161,21 +176,6 @@ binderhub:
       prometheus.io/scrape: 'true'
     nodePort: 30081
     type: NodePort
-  networkPolicy:
-    enabled: true
-    egress:
-      tcpPorts:
-        - 80 # http
-        - 443 # https
-        - 9418 # git
-        - 873 # rsync
-        - 1094 # xroot
-        - 1095 # xroot
-        - 16286 # Wolfram Engine on-demand licensing
-        - 4001 # IPFS
-      cidr: 0.0.0.0/0
-    ingress:
-      bannedIps: []
 cryptnono:
   enabled: true
   tolerations:
