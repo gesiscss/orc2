@@ -3,15 +3,15 @@ appVersion: 1.16.0
 dependencies:
 - name: binderhub
   repository: https://jupyterhub.github.io/helm-chart
-  version: 1.0.0-0.dev.git.3398.h6b9d3a8
+  version: 1.0.0-0.dev.git.3410.h92609de
 - condition: prometheus.enabled
   name: prometheus
   repository: https://prometheus-community.github.io/helm-charts
-  version: 25.13.0
+  version: 25.16.0
 - condition: grafana.enabled
   name: grafana
   repository: https://grafana.github.io/helm-charts
-  version: 7.3.2
+  version: 7.3.3
 - condition: cryptnono.enabled
   name: cryptnono
   repository: https://cryptnono.github.io/cryptnono/
