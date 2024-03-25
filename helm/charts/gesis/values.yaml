@@ -17,7 +17,7 @@ binderhub:
       high_quota_specs:
       - ^gesiscss/.*
     KubernetesBuildExecutor:
-      build_image: quay.io/jupyterhub/repo2docker:2023.06.0-78.ga20dd1c
+      build_image: quay.io/jupyterhub/repo2docker:2023.06.0-88.gf667caf
       memory_limit: 3G
       memory_request: 1G
       node_selector:
