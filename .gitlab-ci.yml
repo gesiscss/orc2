@@ -110,6 +110,7 @@ gesis ansible lint:
       ansible/orc2.yml
 
 gesis ansible stage deploy:
+  resource_group: stage
   stage: deploy-stage-ansible
   rules:
     - !reference [.manual-web, rules]
@@ -124,6 +125,7 @@ gesis ansible stage deploy:
     - .gesis ansible deploy
 
 gesis ansible production deploy:
+  resource_group: production
   stage: deploy-prod-ansible
   rules:
     - !reference [.manual-web, rules]
@@ -167,6 +169,7 @@ gesis ansible production deploy:
       ansible/orc2.yml
 
 gesis nginx update with ansible at stage environment:
+  resource_group: stage
   stage: deploy-stage-nginx
   rules:
     - !reference [.manual-web, rules]
@@ -181,6 +184,7 @@ gesis nginx update with ansible at stage environment:
     - .gesis nginx update with ansible
 
 gesis nginx update with ansible at stage production:
+  resource_group: production
   stage: deploy-prod-nginx
   rules:
     - !reference [.manual-web, rules]
@@ -240,6 +244,7 @@ gesis helm lint:
       --values ./helm/copy-of-mybinder.org-deploy/secrets/config/common/cryptnono.yaml
 
 gesis helm stage deploy:
+  resource_group: stage
   stage: deploy-stage-helm
   rules:
     - !reference [.manual-web, rules]
@@ -252,6 +257,7 @@ gesis helm stage deploy:
     - .gesis helm deploy
 
 gesis helm production deploy:
+  resource_group: production
   stage: deploy-prod-helm
   rules:
     - !reference [.manual-web, rules]
