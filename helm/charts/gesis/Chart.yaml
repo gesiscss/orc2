@@ -15,7 +15,7 @@ dependencies:
 - condition: cryptnono.enabled
   name: cryptnono
   repository: https://cryptnono.github.io/cryptnono/
-  version: 0.3.1-0.dev.git.133.hd195428
+  version: 0.3.1-0.dev.git.138.ha4b11b8
 description: GESIS BinderHub
 name: gesis
 type: application
