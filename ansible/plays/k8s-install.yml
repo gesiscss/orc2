@@ -2,15 +2,19 @@
   hosts: all
   become: true
   tasks:
+    - name: Remove old Kubernetes public GPG key
+      ansible.builtin.file:
+        path: /etc/apt/trusted.gpg.d/kubernetes-archive-keyring.gpg
+        state: absent
     - name: Add Kubernetes public GPG key
       ansible.builtin.get_url:
-        url: https://dl.k8s.io/apt/doc/apt-key.gpg
-        dest: /etc/apt/trusted.gpg.d/kubernetes-archive-keyring.gpg
+        url: https://pkgs.k8s.io/core:/stable:/v1.27/deb/Release.key
+        dest: /etc/apt/trusted.gpg.d/kubernetes-archive-keyring.asc
         mode: '0644'
         force: true
     - name: Add Kubernetes repository
       ansible.builtin.apt_repository:
-        repo: "deb [signed-by=/etc/apt/trusted.gpg.d/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main"
+        repo: "deb [signed-by=/etc/apt/trusted.gpg.d/kubernetes.asc] https://pkgs.k8s.io/core:/stable:/v1.27/deb/ /"
         filename: kubernetes
         state: present
     - name: Add Helm public GPG key
