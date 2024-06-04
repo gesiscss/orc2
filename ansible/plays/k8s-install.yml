@@ -12,6 +12,11 @@
         dest: /etc/apt/trusted.gpg.d/kubernetes-archive-keyring.asc
         mode: '0644'
         force: true
+    - name: Remove old Kubernetes repository
+      ansible.builtin.apt_repository:
+        repo: "deb [signed-by=/etc/apt/trusted.gpg.d/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main"
+        filename: kubernetes
+        state: absent
     - name: Add Kubernetes repository
       ansible.builtin.apt_repository:
         repo: "deb [signed-by=/etc/apt/trusted.gpg.d/kubernetes.asc] https://pkgs.k8s.io/core:/stable:/v1.27/deb/ /"
