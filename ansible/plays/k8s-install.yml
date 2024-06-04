@@ -2,15 +2,23 @@
   hosts: all
   become: true
   tasks:
-    - name: Add Kubernetes public GPG key
+    - name: Download Kubernetes public GPG key
       ansible.builtin.get_url:
-        url: https://dl.k8s.io/apt/doc/apt-key.gpg
-        dest: /etc/apt/trusted.gpg.d/kubernetes-archive-keyring.gpg
+        url: https://pkgs.k8s.io/core:/stable:/v1.27/deb/Release.key
+        dest: /tmp/kubernetes-archive-keyring.asc
         mode: '0644'
         force: true
+    - name: Convert the public GPG key to binary
+      ansible.builtin.shell: gpg --dearmor -o /tmp/kubernetes.gpg /tmp/kubernetes-archive-keyring.asc
+    - name: Copy GPG key
+      ansible.builtin.copy:
+        src: /tmp/kubernetes.gpg
+        dest: /etc/apt/keyrings/kubernetes.gpg
+        remote_src: true
+        mode: '0644'
     - name: Add Kubernetes repository
       ansible.builtin.apt_repository:
-        repo: "deb [signed-by=/etc/apt/trusted.gpg.d/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main"
+        repo: "deb [signed-by=/etc/apt/keyrings/kubernetes.gpg] https://pkgs.k8s.io/core:/stable:/v1.27/deb/ /"
         filename: kubernetes
         state: present
     - name: Add Helm public GPG key

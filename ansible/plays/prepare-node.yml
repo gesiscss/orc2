@@ -2,6 +2,10 @@
   hosts: all
   become: true
   tasks:
+    - name: Create directory
+      ansible.builtin.file:
+        state: directory
+        path: /etc/apt/keyrings
     - name: Install dependencies
       ansible.builtin.apt:
         update_cache: true
