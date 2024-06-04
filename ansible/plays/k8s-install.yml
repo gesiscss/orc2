@@ -14,7 +14,7 @@
       ansible.builtin.copy:
         src: /tmp/kubernetes.gpg
         dest: /etc/apt/keyrings/kubernetes.gpg
-        remote_src: yes
+        remote_src: true
         mode: '0644'
     - name: Add Kubernetes repository
       ansible.builtin.apt_repository:
