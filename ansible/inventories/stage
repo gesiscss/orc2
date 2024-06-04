@@ -1,5 +1,5 @@
 [all]
-#svko-ilcm04 ansible_host=194.95.75.14 ansible_ssh_user=ansible ansible_become_pass='{{ become_pass_194_95_75_14 }}'
+svko-ilcm04 ansible_host=194.95.75.14 ansible_ssh_user=ansible ansible_become_pass='{{ become_pass_194_95_75_14 }}'
 svko-css-backup ansible_host=194.95.75.20 ansible_ssh_user=ansible ansible_become_pass='{{ become_pass_194_95_75_20 }}'
 svko-k8s-test01 ansible_host=194.95.75.21 ansible_ssh_user=ansible ansible_become_pass='{{ become_pass_194_95_75_21 }}'
 #svko-k8s-test02 ansible_host=194.95.75.22 ansible_ssh_user=ansible ansible_become_pass='{{ become_pass_194_95_75_22 }}'
