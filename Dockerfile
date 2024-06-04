@@ -20,4 +20,4 @@ apt install -y ansible ansible-lint python3 python3-pip python3-passlib rsync gi
 apt-get clean && \
 rm -rf /var/lib/apt/lists/* && \
 ansible-galaxy collection install kubernetes.core && \
-python3 -m pip install --no-cache-dir staticjinja
+python3 -m pip install --break-system-packages --no-cache-dir staticjinja
