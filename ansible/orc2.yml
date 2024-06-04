@@ -1,3 +1,5 @@
+# plays/deprecate.yml must be the first
+- ansible.builtin.import_playbook: plays/deprecate.yml
 - ansible.builtin.import_playbook: plays/prepare-node.yml
 - ansible.builtin.import_playbook: plays/k8s-prepare-node.yml
 - ansible.builtin.import_playbook: plays/k8s-install.yml

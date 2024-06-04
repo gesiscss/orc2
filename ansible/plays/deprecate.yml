@@ -1,0 +1,14 @@
+# This must be the first playbook
+- name: Remove old configuration
+  hosts: all
+  become: true
+  tasks:
+    - name: Remove old Kubernetes public GPG key
+      ansible.builtin.file:
+        path: /etc/apt/trusted.gpg.d/kubernetes-archive-keyring.gpg
+        state: absent
+    - name: Remove old Kubernetes repository
+      ansible.builtin.apt_repository:
+        repo: "deb [signed-by=/etc/apt/trusted.gpg.d/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main"
+        filename: kubernetes
+        state: absent
