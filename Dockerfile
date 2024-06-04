@@ -1,4 +1,4 @@
-FROM ubuntu:24.04 as k8s
+FROM ubuntu:22.04 as k8s
 RUN apt update && \
 apt install -y curl && \
 curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.27/deb/Release.key --output /etc/apt/trusted.gpg.d/kubernetes.asc && \
@@ -10,7 +10,7 @@ apt install -y kubelet=1.27.* kubeadm=1.27.* kubectl=1.27.* helm=3.11.* git-cryp
 apt-get clean && \
 rm -rf /var/lib/apt/lists/*
 
-FROM ubuntu:24.04 as ansible
+FROM ubuntu:22.04 as ansible
 
 ENV TZ=Europe/Berlin
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
