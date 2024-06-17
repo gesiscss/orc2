@@ -12,6 +12,7 @@
       ansible.builtin.command:
         argv:
           - gpg
+          - --yes
           - --dearmor
           - --output
           - /tmp/kubernetes.gpg
