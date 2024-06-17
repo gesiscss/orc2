@@ -10,6 +10,7 @@
         force: true
     - name: Convert the public GPG key to binary
       ansible.builtin.command:
+        debugger: always
         argv:
           - gpg
           - --dearmor
