@@ -9,8 +9,8 @@
         mode: '0644'
         force: true
     - name: Convert the public GPG key to binary
+      debugger: always
       ansible.builtin.command:
-        debugger: always
         argv:
           - gpg
           - --dearmor
