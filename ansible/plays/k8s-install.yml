@@ -42,7 +42,6 @@
     - name: Install dependencies
       ansible.builtin.apt:
         update_cache: true
-        allow_downgrade: true
         pkg:
           - kubelet=1.28.*
           - kubeadm=1.28.*
