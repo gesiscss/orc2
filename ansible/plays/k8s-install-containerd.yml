@@ -17,7 +17,7 @@
       ansible.builtin.apt:
         update_cache: true
         pkg:
-          - containerd.io=1.6.*
+          - containerd.io=1.7.*
     - name: Copy configuration file
       ansible.builtin.copy:
         src: ../etc/containerd/config.toml
