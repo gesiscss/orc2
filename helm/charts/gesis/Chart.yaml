@@ -3,19 +3,19 @@ appVersion: 1.16.0
 dependencies:
 - name: binderhub
   repository: https://jupyterhub.github.io/helm-chart
-  version: 1.0.0-0.dev.git.3497.hf25ee22
+  version: 1.0.0-0.dev.git.3503.ha8a2e19
 - condition: prometheus.enabled
   name: prometheus
   repository: https://prometheus-community.github.io/helm-charts
-  version: 25.24.1
+  version: 25.25.0
 - condition: grafana.enabled
   name: grafana
   repository: https://grafana.github.io/helm-charts
-  version: 8.4.0
+  version: 8.4.1
 - condition: cryptnono.enabled
   name: cryptnono
   repository: https://cryptnono.github.io/cryptnono/
-  version: 0.3.1-0.dev.git.146.h6bdf5b7
+  version: 0.3.1-0.dev.git.143.hfc89744
 description: GESIS BinderHub
 name: gesis
 type: application
