@@ -23,6 +23,12 @@ binderhub:
       template_vars['binder_static'] = template_vars['gesis_notebooks_https'] + "binder/static/"
       c.BinderHub.template_variables.update(template_vars)
 
+  imageCleaner:
+    enabled: true
+    imageGCThresholdHigh: 80e9
+    imageGCThresholdLow: 50e9
+    imageGCThresholdType: absolute
+
 prometheus:
   enabled: true
   server:
