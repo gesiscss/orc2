@@ -14,15 +14,21 @@ map $request_uri $loggable {
 }
 
 upstream JupyterHub {
-  server 194.95.75.14:30080 max_fails=0;
+#   server 194.95.75.14:30080 max_fails=0;
+  server 194.95.75.22:30080 max_fails=0;
+  server 194.95.75.23:30080 max_fails=0;
 }
 
 upstream BinderHub {
-  server 194.95.75.14:30081 max_fails=0;
+#   server 194.95.75.14:30081 max_fails=0;
+  server 194.95.75.22:30081 max_fails=0;
+  server 194.95.75.23:30081 max_fails=0;
 }
 
 upstream BinderJupyterHub {
-  server 194.95.75.14:30082 max_fails=0;
+#   server 194.95.75.14:30082 max_fails=0;
+  server 194.95.75.22:30082 max_fails=0;
+  server 194.95.75.23:30082 max_fails=0;
 }
 
 upstream prometheus {
