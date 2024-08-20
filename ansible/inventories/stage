@@ -1,9 +1,9 @@
 [all]
-svko-ilcm04 ansible_host=194.95.75.14 ansible_ssh_user=ansible ansible_become_pass='{{ become_pass_194_95_75_14 }}'
+#svko-ilcm04 ansible_host=194.95.75.14 ansible_ssh_user=ansible ansible_become_pass='{{ become_pass_194_95_75_14 }}'
 svko-css-backup-node ansible_host=194.95.75.20 ansible_ssh_user=ansible ansible_become_pass='{{ become_pass_194_95_75_20 }}'
 svko-k8s-test01 ansible_host=194.95.75.21 ansible_ssh_user=ansible ansible_become_pass='{{ become_pass_194_95_75_21 }}'
-#svko-k8s-test02 ansible_host=194.95.75.22 ansible_ssh_user=ansible ansible_become_pass='{{ become_pass_194_95_75_22 }}'
-#svko-k8s-test03 ansible_host=194.95.75.23 ansible_ssh_user=ansible ansible_become_pass='{{ become_pass_194_95_75_23 }}'
+svko-k8s-test02 ansible_host=194.95.75.22 ansible_ssh_user=ansible ansible_become_pass='{{ become_pass_194_95_75_22 }}'
+svko-k8s-test03 ansible_host=194.95.75.23 ansible_ssh_user=ansible ansible_become_pass='{{ become_pass_194_95_75_23 }}'
 
 [all:vars]
 INVENTORY_NAME=stage
@@ -17,11 +17,13 @@ svko-css-backup-node
 svko-k8s-test01
 
 [kubernetes_workers]
-svko-ilcm04
+#svko-ilcm04
 svko-css-backup-node
+svko-k8s-test02
+svko-k8s-test03
 
 [binderhub]
-svko-ilcm04
+svko-k8s-test02
 
 [jupyterhub_single_user]
-svko-ilcm04
+svko-k8s-test03
