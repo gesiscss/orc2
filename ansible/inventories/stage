@@ -27,3 +27,9 @@ svko-k8s-test02
 
 [jupyterhub_single_user]
 svko-k8s-test03
+
+[prometheus]
+svko-css-backup-node
+
+[grafana]
+svko-css-backup-node
