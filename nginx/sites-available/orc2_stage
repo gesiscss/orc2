@@ -32,11 +32,11 @@ upstream BinderJupyterHub {
 }
 
 upstream prometheus {
-  server 194.95.75.14:30073;
+  server 194.95.75.20:30073;
 }
 
 upstream grafana {
-  server 194.95.75.14:30075;
+  server 194.95.75.20:30075;
 }
 
 # HTTP server to redirect notebooks.gesis.org 80 traffic to SSL/HTTPS
