@@ -49,3 +49,21 @@
         kubectl label nodes {{ host }} web-server-
         {% endif %}
         {% endfor %}
+    - name: Add prometheus label
+      ansible.builtin.shell: |
+        {% for host in hostvars %}
+        {% if host in groups['prometheus'] %}
+        kubectl label nodes {{ host }} prometheus=true
+        {% else %}
+        kubectl label nodes {{ host }} prometheus-
+        {% endif %}
+        {% endfor %}
+    - name: Add grafana label
+      ansible.builtin.shell: |
+        {% for host in hostvars %}
+        {% if host in groups['grafana'] %}
+        kubectl label nodes {{ host }} grafana=true
+        {% else %}
+        kubectl label nodes {{ host }} grafana-
+        {% endif %}
+        {% endfor %}

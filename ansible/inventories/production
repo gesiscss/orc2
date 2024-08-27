@@ -23,3 +23,9 @@ spko-css-app03
 
 [jupyterhub_single_user]
 spko-css-app03
+
+[prometheus]
+spko-css-app03
+
+[grafana]
+svko-css-app01
