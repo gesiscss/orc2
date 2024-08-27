@@ -94,6 +94,8 @@ server {
         # https://github.com/prometheus/prometheus/issues/2193
         proxy_set_header Accept-Encoding "";
         proxy_pass http://prometheus/;
+
+        proxy_set_header Authorization $http_authorization;
         include snippets/headers.conf;
 
         #sub_filter_types text/html;
