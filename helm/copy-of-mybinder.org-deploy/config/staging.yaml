@@ -95,17 +95,6 @@ grafana:
           - grafana.staging.mybinder.org
           - grafana.gke2.staging.mybinder.org
         secretName: kubelego-tls-grafana
-  datasources:
-    datasources.yaml:
-      apiVersion: 1
-      datasources:
-        - name: prometheus
-          orgId: 1
-          type: prometheus
-          url: https://prometheus.staging.mybinder.org
-          access: direct
-          isDefault: true
-          editable: false
   persistence:
     storageClassName: standard
 
