@@ -90,6 +90,7 @@ grafana:
           editable: false
 
   persistence:
+    enabled: false
     storageClassName: standard
 
 cryptnono:
