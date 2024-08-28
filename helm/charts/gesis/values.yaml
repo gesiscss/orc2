@@ -234,12 +234,26 @@ grafana:
     type: NodePort
   extraVolumeMounts:
     - name: dashboard-volume
-      mountPath: /var/lib/grafana/dashboards
+      mountPath: /var/lib/grafana/dashboards/default
       readOnly: true
   extraVolumes:
     - name: dashboard-volume
       configMap:
         name: grafana-dashboard-config-map
+  # Configure grafana dashboard providers
+  # ref: http://docs.grafana.org/administration/provisioning/#dashboards
+  dashboardProviders:
+    dashboardproviders.yaml:
+      apiVersion: 1
+      providers:
+      - name: 'default'
+        orgId: 1
+        folder: ''
+        type: file
+        disableDeletion: true
+        editable: false
+        options:
+          path: /var/lib/grafana/dashboards/default
 
 minesweeper:
   enabled: true
