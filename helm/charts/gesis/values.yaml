@@ -232,6 +232,14 @@ grafana:
     nodePort: 30075
     port: 80
     type: NodePort
+  extraVolumeMounts:
+    - name: dashboard-volume
+      mountPath: /var/lib/grafana/dashboards
+      readOnly: true
+  extraVolumes:
+    - name: dashboard-volume
+      configMap: grafana-dashboard-config-map
+
 minesweeper:
   enabled: true
   image: jupyterhub/mybinder.org-minesweeper:2020.12.4-0.dev.git.5080.hf35cc80d

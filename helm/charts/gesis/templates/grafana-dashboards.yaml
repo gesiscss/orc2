@@ -1,0 +1,15 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: grafana-dashboard-config-map
+  labels:
+    app: grafana
+    component: grafana-dashboard
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+data:
+{{- range $path, $_ :=  .Files.Glob  "files/var/lib/grafana/dashboards/**" }}
+{{- $filename := base $path }}
+  {{ $filename }}: |
+{{ $.Files.Get $path | indent 4}}
+{{ end }}
