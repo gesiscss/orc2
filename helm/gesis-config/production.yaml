@@ -59,16 +59,30 @@ grafana:
     path: /grafana
     hosts:
       - notebooks.gesis.org
+
+  # Configure Grafana datasources
+  # ref: http://docs.grafana.org/administration/provisioning/#datasources
   datasources:
     datasources.yaml:
       apiVersion: 1
-      datasources:
+      prune: true
+      deleteDatasources:
+        - name: mybinder.org
+          orgId: 1
+        - name: notebooks.gesis.org
+          orgId: 1
         - name: prometheus
           orgId: 1
+      datasources:
+        - name: GESIS Notebooks Prometheus
+          orgId: 1
           type: prometheus
-          url: https://notebooks.gesis.org/prometheus
+          # We use the Kubernetes Cluster Networking
+          # ref: https://kubernetes.io/docs/concepts/cluster-administration/networking/
+          url: http://binderhub-prometheus-server
           isDefault: true
           editable: false
+
   persistence:
     storageClassName: standard
 
