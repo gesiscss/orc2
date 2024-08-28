@@ -234,7 +234,7 @@ grafana:
     type: NodePort
   extraVolumeMounts:
     - name: dashboard-volume
-      mountPath: /var/lib/grafana/dashboards/default
+      mountPath: /var/lib/grafana/dashboards/notebooks.gesis.org
       readOnly: true
   extraVolumes:
     - name: dashboard-volume
@@ -248,12 +248,16 @@ grafana:
       providers:
       - name: 'default'
         orgId: 1
-        folder: ''
+        folder: 'notebooks.gesis.org'
         type: file
         disableDeletion: true
         editable: false
         options:
-          path: /var/lib/grafana/dashboards/default
+          path: /var/lib/grafana/dashboards/notebooks.gesis.org
+  # dashboards:
+  #   default:
+  #     1860-node-exporter-full:
+  #       file: 1860-node-exporter-full.json
 
 minesweeper:
   enabled: true
