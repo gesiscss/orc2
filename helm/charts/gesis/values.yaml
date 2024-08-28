@@ -238,7 +238,8 @@ grafana:
       readOnly: true
   extraVolumes:
     - name: dashboard-volume
-      configMap: grafana-dashboard-config-map
+      configMap:
+        name: grafana-dashboard-config-map
 
 minesweeper:
   enabled: true
