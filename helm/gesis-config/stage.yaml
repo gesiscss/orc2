@@ -69,10 +69,10 @@ grafana:
     datasources.yaml:
       apiVersion: 1
       datasources:
-        - name: prometheus
+        - name: GESIS Notebooks Prometheus
           orgId: 1
           type: prometheus
-          url: https://notebooks-test.gesis.org/prometheus
+          url: http://binderhub-prometheus-server
           isDefault: true
           editable: false
   persistence:
