@@ -72,15 +72,9 @@ grafana:
     datasources.yaml:
       apiVersion: 1
       prune: true
-      deleteDatasources:
-        - name: mybinder.org
-          orgId: 1
-        - name: notebooks.gesis.org
-          orgId: 1
-        - name: prometheus
-          orgId: 1
       datasources:
-        - name: GESIS Notebooks Prometheus
+        - uid: gesis-notebooks-prometheus
+          name: GESIS Notebooks Prometheus
           orgId: 1
           type: prometheus
           # We use the Kubernetes Cluster Networking
