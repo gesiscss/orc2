@@ -224,9 +224,10 @@ grafana:
       kubernetes.io/tls-acme: 'true'
     enabled: true
   persistence:
+    storageClassName: standard
     accessModes:
     - ReadWriteOnce
-    enabled: true
+    enabled: false
     size: 1Gi
   service:
     nodePort: 30075
@@ -258,6 +259,23 @@ grafana:
   #   default:
   #     1860-node-exporter-full:
   #       file: 1860-node-exporter-full.json
+
+  # Configure Grafana datasources
+  # ref: http://docs.grafana.org/administration/provisioning/#datasources
+  datasources:
+    datasources.yaml:
+      apiVersion: 1
+      prune: true
+      datasources:
+        - uid: gesis-notebooks-prometheus
+          name: GESIS Notebooks Prometheus
+          orgId: 1
+          type: prometheus
+          # We use the Kubernetes Cluster Networking
+          # ref: https://kubernetes.io/docs/concepts/cluster-administration/networking/
+          url: http://binderhub-prometheus-server
+          isDefault: true
+          editable: false
 
 minesweeper:
   enabled: true
