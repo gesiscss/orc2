@@ -17,7 +17,7 @@ binderhub:
       high_quota_specs:
       - ^gesiscss/.*
     KubernetesBuildExecutor:
-      build_image: quay.io/jupyterhub/repo2docker:2024.07.0-14.g125ee3a
+      build_image: quay.io/jupyterhub/repo2docker:2024.07.0-17.gcb5c517
       memory_limit: 3G
       memory_request: 1G
       node_selector:
@@ -201,9 +201,41 @@ etcJupyter:
 eventsArchiver:
   serviceAccountKey: ''
 grafana:
+  dashboardProviders:
+    dashboardproviders.yaml:
+      apiVersion: 1
+      providers:
+      - disableDeletion: true
+        editable: false
+        folder: notebooks.gesis.org
+        name: default
+        options:
+          path: /var/lib/grafana/dashboards/notebooks.gesis.org
+        orgId: 1
+        type: file
+  datasources:
+    datasources.yaml:
+      apiVersion: 1
+      datasources:
+      - editable: false
+        isDefault: true
+        name: GESIS Notebooks Prometheus
+        orgId: 1
+        type: prometheus
+        uid: gesis-notebooks-prometheus
+        url: http://binderhub-prometheus-server
+      prune: true
   deploymentStrategy:
     type: Recreate
   enabled: true
+  extraVolumeMounts:
+  - mountPath: /var/lib/grafana/dashboards/notebooks.gesis.org
+    name: dashboard-volume
+    readOnly: true
+  extraVolumes:
+  - configMap:
+      name: grafana-dashboard-config-map
+    name: dashboard-volume
   grafana.ini:
     auth.anonymous:
       enabled: true
@@ -224,59 +256,15 @@ grafana:
       kubernetes.io/tls-acme: 'true'
     enabled: true
   persistence:
-    storageClassName: standard
     accessModes:
     - ReadWriteOnce
     enabled: false
     size: 1Gi
+    storageClassName: standard
   service:
     nodePort: 30075
     port: 80
     type: NodePort
-  extraVolumeMounts:
-    - name: dashboard-volume
-      mountPath: /var/lib/grafana/dashboards/notebooks.gesis.org
-      readOnly: true
-  extraVolumes:
-    - name: dashboard-volume
-      configMap:
-        name: grafana-dashboard-config-map
-  # Configure grafana dashboard providers
-  # ref: http://docs.grafana.org/administration/provisioning/#dashboards
-  dashboardProviders:
-    dashboardproviders.yaml:
-      apiVersion: 1
-      providers:
-      - name: 'default'
-        orgId: 1
-        folder: 'notebooks.gesis.org'
-        type: file
-        disableDeletion: true
-        editable: false
-        options:
-          path: /var/lib/grafana/dashboards/notebooks.gesis.org
-  # dashboards:
-  #   default:
-  #     1860-node-exporter-full:
-  #       file: 1860-node-exporter-full.json
-
-  # Configure Grafana datasources
-  # ref: http://docs.grafana.org/administration/provisioning/#datasources
-  datasources:
-    datasources.yaml:
-      apiVersion: 1
-      prune: true
-      datasources:
-        - uid: gesis-notebooks-prometheus
-          name: GESIS Notebooks Prometheus
-          orgId: 1
-          type: prometheus
-          # We use the Kubernetes Cluster Networking
-          # ref: https://kubernetes.io/docs/concepts/cluster-administration/networking/
-          url: http://binderhub-prometheus-server
-          isDefault: true
-          editable: false
-
 minesweeper:
   enabled: true
   image: jupyterhub/mybinder.org-minesweeper:2020.12.4-0.dev.git.5080.hf35cc80d
