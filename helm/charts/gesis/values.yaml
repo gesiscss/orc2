@@ -201,6 +201,8 @@ etcJupyter:
 eventsArchiver:
   serviceAccountKey: ''
 grafana:
+  plugins:
+    - yesoreyeram-infinity-datasource
   dashboardProviders:
     dashboardproviders.yaml:
       apiVersion: 1
