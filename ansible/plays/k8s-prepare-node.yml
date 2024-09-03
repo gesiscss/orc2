@@ -49,3 +49,23 @@
       ansible.builtin.file:
         path: /orc2_data/alertmanager
         state: directory
+    - name: Create /harbor/jobservice directory if it does not exist
+      ansible.builtin.file:
+        path: /harbor/jobservice
+        state: directory
+    - name: Create /harbor/registry directory if it does not exist
+      ansible.builtin.file:
+        path: /harbor/registry
+        state: directory
+    - name: Create /harbor/redis directory if it does not exist
+      ansible.builtin.file:
+        path: /harbor/redis
+        state: directory
+    - name: Create /harbor/trivy directory if it does not exist
+      ansible.builtin.file:
+        path: /harbor/trivy
+        state: directory
+    - name: Create /harbor/database directory if it does not exist
+      ansible.builtin.file:
+        path: /harbor/database
+        state: directory
