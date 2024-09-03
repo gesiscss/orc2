@@ -293,3 +293,20 @@ prometheus:
 proxyPatches:
   enabled: true
   nodeSelector: {}
+harbor:
+  expose:
+    type: nodePort
+    tls:
+      enabled: false
+    nodePort:
+      name: harbor
+    persistence:
+      enabled: false
+  affinity:
+    requiredDuringSchedulingRequiredDuringExecution:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: harbor
+          operator: In
+          values:
+          - 'true'

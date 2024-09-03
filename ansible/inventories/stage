@@ -22,6 +22,9 @@ svko-css-backup-node
 svko-k8s-test02
 svko-k8s-test03
 
+[harbor]
+svko-css-backup-node
+
 [binderhub]
 svko-k8s-test02
 
