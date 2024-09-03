@@ -302,4 +302,11 @@ harbor:
       name: harbor
     persistence:
       enabled: false
-    
+  affinity:
+    requiredDuringSchedulingRequiredDuringExecution:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: harbor
+          operator: In
+          values:
+          - 'true'
