@@ -9,7 +9,7 @@ spec:
   accessModes:
   - ReadWriteMany
   persistentVolumeReclaimPolicy: Delete
-  storageClassName: ""
+  storageClassName: standard
   local:
     path: /harbor/jobservice
   nodeAffinity:
@@ -32,7 +32,7 @@ spec:
   accessModes:
   - ReadWriteMany
   persistentVolumeReclaimPolicy: Delete
-  storageClassName: ""
+  storageClassName: standard
   local:
     path: /harbor/registry
   nodeAffinity:
@@ -55,7 +55,7 @@ spec:
   accessModes:
   - ReadWriteMany
   persistentVolumeReclaimPolicy: Delete
-  storageClassName: ""
+  storageClassName: standard
   local:
     path: /harbor/redis
   nodeAffinity:
@@ -78,7 +78,7 @@ spec:
   accessModes:
   - ReadWriteMany
   persistentVolumeReclaimPolicy: Delete
-  storageClassName: ""
+  storageClassName: standard
   local:
     path: /harbor/trivy
   nodeAffinity:
@@ -101,7 +101,7 @@ spec:
   accessModes:
   - ReadWriteMany
   persistentVolumeReclaimPolicy: Delete
-  storageClassName: ""
+  storageClassName: standard
   local:
     path: /harbor/database
   nodeAffinity:
