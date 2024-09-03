@@ -2,6 +2,8 @@ apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: harbor-jobservice
+  labels:
+    harbor: jobservice
 spec:
   capacity:
     storage: 10Gi
@@ -25,6 +27,8 @@ apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: harbor-registry
+  labels:
+   harbor: registry
 spec:
   capacity:
     storage: 10Gi
@@ -48,6 +52,8 @@ apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: harbor-redis
+  labels:
+   harbor: redis
 spec:
   capacity:
     storage: 10Gi
@@ -71,6 +77,8 @@ apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: harbor-trivy
+  labels:
+   harbor: trivy
 spec:
   capacity:
     storage: 10Gi
@@ -94,6 +102,8 @@ apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: harbor-database
+  labels:
+   harbor: database
 spec:
   capacity:
     storage: 10Gi

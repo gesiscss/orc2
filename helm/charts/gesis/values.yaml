@@ -321,7 +321,7 @@ harbor:
       registry:
         # Use the existing PVC which must be created manually before bound,
         # and specify the "subPath" if the PVC is shared with other components
-        existingClaim: ""
+        existingClaim: "harbor-registry"
         # Specify the "storageClass" used to provision the volume. Or the default
         # StorageClass will be used (the default).
         # Set it to "-" to disable dynamic provisioning
@@ -331,7 +331,7 @@ harbor:
         size: 5Gi
       jobservice:
         jobLog:
-          existingClaim: ""
+          existingClaim: "harbor-jobservice"
           storageClass: "standard"
           subPath: ""
           accessMode: ReadWriteMany
@@ -340,7 +340,7 @@ harbor:
       # If external database is used, the following settings for database will
       # be ignored
       database:
-        existingClaim: ""
+        existingClaim: "harbor-database"
         storageClass: "standard"
         subPath: ""
         accessMode: ReadWriteMany
@@ -349,14 +349,14 @@ harbor:
       # If external Redis is used, the following settings for Redis will
       # be ignored
       redis:
-        existingClaim: ""
+        existingClaim: "harbor-redis"
         storageClass: "standard"
         subPath: ""
         accessMode: ReadWriteMany
         size: 1Gi
         annotations: {}
       trivy:
-        existingClaim: ""
+        existingClaim: "harbor-trivy"
         storageClass: "standard"
         subPath: ""
         accessMode: ReadWriteMany
