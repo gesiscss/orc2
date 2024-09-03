@@ -311,7 +311,7 @@ harbor:
           values:
           - 'true'
   persistence:
-    enabled: true
+    enabled: false
     # Setting it to "keep" to avoid removing PVCs during a helm delete
     # operation. Leaving it empty will delete PVCs after the chart deleted
     # (this does not apply for PVCs that are created for internal database
