@@ -18,6 +18,8 @@ svko-ilcm03
 svko-css-app01
 spko-css-app03
 
+[harbor]
+
 [binderhub]
 spko-css-app03
 
