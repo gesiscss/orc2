@@ -362,3 +362,5 @@ harbor:
         accessMode: ReadWriteMany
         size: 5Gi
         annotations: {}
+  trivy:
+    enabled: false
