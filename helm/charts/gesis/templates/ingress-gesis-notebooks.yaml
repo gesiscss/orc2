@@ -17,24 +17,51 @@ spec:
     - host: {{ .Values.url_domain }}
       http:
         paths:
-          - path: /grafana/
+          - path: /grafana
             pathType: Prefix
             backend:
               service:
                 name: {{ .Release.Name }}-grafana
                 port:
-                  number: 80
-          - path: /prometheus/
+                  number: 3000
+          - path: /prometheus
             pathType: Prefix
             backend:
               service:
                 name: {{ .Release.Name }}-prometheus
                 port:
-                  number: 80
+                  number: 9090
+          - path: /binder/jupyter
+            pathType: Prefix
+            backend:
+              service:
+                name: binder
+                port:
+                  number: 8001
+          - path: /jupyter
+            pathType: Prefix
+            backend:
+              service:
+                name: binder
+                port:
+                  number: 8001
+            pathRewrite:
+              nginx.ingress.kubernetes.io/rewrite-target: /binder/jupyter
+              nginx.ingress.kubernetes.io/permanent-redirect: /binder/jupyter
+          - path: /binder
+            pathType: Prefix
+            backend:
+              service:
+                name: binder
+                port:
+                  number: 8585
           - path: /
             pathType: Prefix
             backend:
               service:
                 name: binder
                 port:
-                  number: 80
+                  number: 8585
+            pathRewrite:
+              nginx.ingress.kubernetes.io/rewrite-target: /binder
+              nginx.ingress.kubernetes.io/permanent-redirect: /binder
