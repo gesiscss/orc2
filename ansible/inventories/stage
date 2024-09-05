@@ -22,6 +22,9 @@ svko-css-backup-node
 svko-k8s-test02
 svko-k8s-test03
 
+[ingress]
+svko-css-backup-node
+
 [harbor]
 svko-css-backup-node
 

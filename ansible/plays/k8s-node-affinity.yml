@@ -2,6 +2,15 @@
   hosts:
     - kubernetes_control_panel
   tasks:
+    - name: Add ingress label
+      ansible.builtin.shell: |
+        {% for host in hostvars %}
+        {% if host in groups['ingress'] %}
+        kubectl label nodes {{ host }} ingress=true
+        {% else %}
+        kubectl label nodes {{ host }} ingress-
+        {% endif %}
+        {% endfor %}
     - name: Add harbor label
       ansible.builtin.shell: |
         {% for host in hostvars %}
