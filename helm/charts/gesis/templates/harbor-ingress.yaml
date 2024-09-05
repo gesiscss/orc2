@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: harbor-ingress-nginx-nodeport
+  namespace: {{ .Release.Name }}
+spec:
+  type: NodePort
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+      nodePort: 30080
