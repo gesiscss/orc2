@@ -40,7 +40,7 @@ upstream grafana {
 }
 
 upstream harbor {
-  server 194.95.75.20:30080;
+  server 194.95.75.20:30002;
 }
 
 # HTTP server to redirect notebooks.gesis.org 80 traffic to SSL/HTTPS
