@@ -153,10 +153,10 @@ binderhub:
         enabled: true
         type: offload
       service:
-        nodePorts:
-          http: 30085
-          https: 30082
-        type: NodePort
+        # nodePorts:
+          # http: 30085
+          # https: 30082
+        type: ClusterIP
     scheduling:
       podPriority:
         enabled: true
@@ -222,8 +222,8 @@ binderhub:
       prometheus.io/path: /binder/metrics
       prometheus.io/port: '8585'
       prometheus.io/scrape: 'true'
-    nodePort: 30081
-    type: NodePort
+    # nodePort: 30081
+    type: ClusterIP
 cryptnono:
   enabled: true
   tolerations:
@@ -310,9 +310,9 @@ grafana:
     size: 1Gi
     storageClassName: standard
   service:
-    nodePort: 30075
-    port: 80
-    type: NodePort
+    # nodePort: 30075
+    # port: 80
+    type: ClusterIP
 minesweeper:
   enabled: true
   image: jupyterhub/mybinder.org-minesweeper:2020.12.4-0.dev.git.5080.hf35cc80d
