@@ -12,59 +12,59 @@
         force: true
     - name: Recreate directory
       ansible.builtin.file:
-        state: directory
-        path: /etc/nginx/sites-enabled/
-    - name: Workaround limitation to elevating permissions via passwordless sudo
-      ansible.builtin.lineinfile:
-        path: /etc/sudoers
-        state: present
-        insertafter: '^%sudo'
-        line: "{{ ansible_ssh_user }} ALL=NOPASSWD: /usr/bin/rsync"
-    - name: Sync static files
-      ansible.posix.synchronize:
-        src: ../../nginx/static/
-        dest: /var/www/orc2
-        delete: true
-        dirs: true
-        recursive: true
-    - name: Revert workaround
-      lineinfile:
-        path: /etc/sudoers
         state: absent
-        line: "{{ ansible_user }} ALL=NOPASSWD: /usr/bin/rsync"
-    - name: Change static files ownership, group and permissions
-      ansible.builtin.file:
-        path: /var/www/orc2
-        owner: www-data
-        group: www-data
-        mode: u=rwx,g=rx,o=rx
-        recurse: true
-    - name: Copy configuration files
-      ansible.builtin.copy:
-        src: ../../nginx/sites-available/
-        dest: /etc/nginx/sites-available/
-        owner: www-data
-        group: www-data
-        mode: u=rw,g=r,o=r
-    - name: Create HTTP Basic Authentication for Prometheus
-      community.general.htpasswd:
-        path: /etc/nginx/passwdfile
-        name: gesis
-        password: "{{ PROMETHEUS_PASSWORD }}"
-        owner: www-data
-        group: www-data
-        mode: u=rw,g=r
-    - name: Create a symbolic link for default configuration
-      ansible.builtin.file:
-        src: /etc/nginx/sites-available/orc2_{{ INVENTORY_NAME }}
-        dest: /etc/nginx/sites-enabled/orc2_{{ INVENTORY_NAME }}
-        state: link
-    - name: Create a symbolic link for orc2 configuration
-      ansible.builtin.file:
-        src: /etc/nginx/sites-available/default_{{ INVENTORY_NAME }}
-        dest: /etc/nginx/sites-enabled/default_{{ INVENTORY_NAME }}
-        state: link
+        path: /etc/nginx/sites-enabled/
+    # - name: Workaround limitation to elevating permissions via passwordless sudo
+    #   ansible.builtin.lineinfile:
+    #     path: /etc/sudoers
+    #     state: present
+    #     insertafter: '^%sudo'
+    #     line: "{{ ansible_ssh_user }} ALL=NOPASSWD: /usr/bin/rsync"
+    # - name: Sync static files
+    #   ansible.posix.synchronize:
+    #     src: ../../nginx/static/
+    #     dest: /var/www/orc2
+    #     delete: true
+    #     dirs: true
+    #     recursive: true
+    # - name: Revert workaround
+    #   lineinfile:
+    #     path: /etc/sudoers
+    #     state: absent
+    #     line: "{{ ansible_user }} ALL=NOPASSWD: /usr/bin/rsync"
+    # - name: Change static files ownership, group and permissions
+    #   ansible.builtin.file:
+    #     path: /var/www/orc2
+    #     owner: www-data
+    #     group: www-data
+    #     mode: u=rwx,g=rx,o=rx
+    #     recurse: true
+    # - name: Copy configuration files
+    #   ansible.builtin.copy:
+    #     src: ../../nginx/sites-available/
+    #     dest: /etc/nginx/sites-available/
+    #     owner: www-data
+    #     group: www-data
+    #     mode: u=rw,g=r,o=r
+    # - name: Create HTTP Basic Authentication for Prometheus
+    #   community.general.htpasswd:
+    #     path: /etc/nginx/passwdfile
+    #     name: gesis
+    #     password: "{{ PROMETHEUS_PASSWORD }}"
+    #     owner: www-data
+    #     group: www-data
+    #     mode: u=rw,g=r
+    # - name: Create a symbolic link for default configuration
+    #   ansible.builtin.file:
+    #     src: /etc/nginx/sites-available/orc2_{{ INVENTORY_NAME }}
+    #     dest: /etc/nginx/sites-enabled/orc2_{{ INVENTORY_NAME }}
+    #     state: link
+    # - name: Create a symbolic link for orc2 configuration
+    #   ansible.builtin.file:
+    #     src: /etc/nginx/sites-available/default_{{ INVENTORY_NAME }}
+    #     dest: /etc/nginx/sites-enabled/default_{{ INVENTORY_NAME }}
+    #     state: link
     - name: Reload server
       ansible.builtin.systemd:
-        state: reloaded
+        state: stopped
         name: nginx
