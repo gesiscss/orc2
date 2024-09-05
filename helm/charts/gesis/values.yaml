@@ -1,3 +1,51 @@
+ingress-nginx:
+  enabled: true
+  rbac:
+    create: true
+  defaultBackend:
+    enabled: true
+    minAvailable: 0
+  controller:
+    admissionWebhooks:
+      enabled: false
+    resources:
+      requests:
+        cpu: 100m
+        memory: 150Mi
+      limits:
+        cpu: 800m
+        memory: 500Mi
+    tolerations:
+      - key: "node.kubernetes.io/unschedulable"
+        operator: "Exists"
+        effect: "NoExecute"
+        tolerationSeconds: 30
+    affinity:
+      requiredDuringSchedulingRequiredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: ingress
+            operator: In
+            values:
+            - 'true'
+    replicaCount: 3
+    scope:
+      enabled: true
+    config:
+      # Allow POSTs of upto 64MB, for large notebook support.
+      proxy-body-size: 64m
+    stats:
+      enabled: true
+    metrics:
+      enabled: true
+      service:
+        annotations:
+          prometheus.io/scrape: "true"
+          prometheus.io/port: "10254"
+    service:
+      # Preserve client IPs
+      externalTrafficPolicy: Local
+
 binderhub:
   config:
     BinderHub:
