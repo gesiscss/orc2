@@ -39,6 +39,10 @@ upstream grafana {
   server 194.95.75.20:30075;
 }
 
+upstream harbor {
+  server 194.95.75.20:30080;
+}
+
 # HTTP server to redirect notebooks.gesis.org 80 traffic to SSL/HTTPS
 server {
     listen 80;
@@ -167,4 +171,16 @@ server {
     }
 
     include snippets/_secret.conf;
+}
+
+server {
+    listen 80;
+    listen [::]:80;
+    server_name svko-css-backup-node.gesis.intra;
+    access_log on;
+    
+        location / {
+        proxy_pass http://harbor/;
+        include snippets/headers.conf;
+    }
 }
