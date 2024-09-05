@@ -181,6 +181,5 @@ server {
     
         location / {
         proxy_pass http://harbor/;
-        include snippets/headers.conf;
     }
 }
