@@ -1,5 +1,6 @@
 # Use https://github.com/jupyterhub/mybinder.org-deploy/blob/main/config/prod.yaml as reference
 
+url_domain: notebooks-test.gesis.org
 url: https://notebooks-test.gesis.org/binder/
 
 binderhub:
