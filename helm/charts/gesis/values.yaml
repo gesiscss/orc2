@@ -17,7 +17,7 @@ binderhub:
       high_quota_specs:
       - ^gesiscss/.*
     KubernetesBuildExecutor:
-      build_image: quay.io/jupyterhub/repo2docker:2024.07.0-19.gbf618ef
+      build_image: quay.io/jupyterhub/repo2docker:2024.07.0-26.g4302a97
       memory_limit: 3G
       memory_request: 1G
       node_selector:
@@ -265,6 +265,23 @@ grafana:
     nodePort: 30075
     port: 80
     type: NodePort
+harbor:
+  affinity:
+    requiredDuringSchedulingRequiredDuringExecution:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: harbor
+          operator: In
+          values:
+          - 'true'
+  expose:
+    nodePort:
+      name: harbor
+    persistence:
+      enabled: false
+    tls:
+      enabled: false
+    type: nodePort
 minesweeper:
   enabled: true
   image: jupyterhub/mybinder.org-minesweeper:2020.12.4-0.dev.git.5080.hf35cc80d
@@ -293,20 +310,3 @@ prometheus:
 proxyPatches:
   enabled: true
   nodeSelector: {}
-harbor:
-  expose:
-    type: nodePort
-    tls:
-      enabled: false
-    nodePort:
-      name: harbor
-    persistence:
-      enabled: false
-  affinity:
-    requiredDuringSchedulingRequiredDuringExecution:
-      nodeSelectorTerms:
-      - matchExpressions:
-        - key: harbor
-          operator: In
-          values:
-          - 'true'
