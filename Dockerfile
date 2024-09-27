@@ -16,8 +16,9 @@ ENV TZ=Europe/Berlin
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 RUN apt-get update && \
-apt install -y ansible ansible-lint python3 python3-pip python3-passlib rsync git-crypt && \
+apt install -y python3 python3-pip python3-passlib rsync git-crypt && \
 apt-get clean && \
 rm -rf /var/lib/apt/lists/* && \
+python3 -m pip install --no-cache-dir ansible ansible-lint && \
 ansible-galaxy collection install kubernetes.core && \
 python3 -m pip install --no-cache-dir staticjinja
