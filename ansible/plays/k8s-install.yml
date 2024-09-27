@@ -25,7 +25,7 @@
         mode: '0644'
     - name: Add Kubernetes repository
       ansible.builtin.apt_repository:
-        repo: "deb [signed-by=/etc/apt/keyrings/kubernetes.gpg] https://pkgs.k8s.io/core:/stable:/v1.27/deb/ /"
+        repo: "deb [signed-by=/etc/apt/keyrings/kubernetes.gpg] https://pkgs.k8s.io/core:/stable:/v1.28/deb/ /"
         filename: kubernetes
         state: present
     - name: Add Helm public GPG key
