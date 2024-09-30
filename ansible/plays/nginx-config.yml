@@ -39,7 +39,15 @@
         group: www-data
         mode: u=rwx,g=rx,o=rx
         recurse: true
-    - name: Copy configuration files
+    # TODO Add support to Git crypt
+    # - name: Copy configuration snippets files
+    #   ansible.builtin.copy:
+    #     src: ../../nginx/snippets/
+    #     dest: /etc/nginx/snippets/
+    #     owner: www-data
+    #     group: www-data
+    #     mode: u=rw,g=r,o=r
+    - name: Copy configuration server files
       ansible.builtin.copy:
         src: ../../nginx/sites-available/
         dest: /etc/nginx/sites-available/
