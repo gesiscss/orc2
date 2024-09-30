@@ -65,7 +65,7 @@ Build container with Ansible and git-crypt:
     - docker build --target ansible --no-cache --pull -t docker-private-snapshots.gesis.intra/gesis/ilcm/orc2/ansible:${DOCKER_IMAGE_TAG} .
     - docker push docker-private-snapshots.gesis.intra/gesis/ilcm/orc2/ansible:${DOCKER_IMAGE_TAG}
 
-gesis ansible lint:
+.gesis ansible lint:
   stage: test
   rules:
     - !reference [.manual-web, rules]
