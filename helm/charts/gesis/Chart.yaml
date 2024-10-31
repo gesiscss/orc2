@@ -15,7 +15,7 @@ dependencies:
 - condition: cryptnono.enabled
   name: cryptnono
   repository: https://cryptnono.github.io/cryptnono/
-  version: 0.3.1-0.dev.git.149.h7397c3b
+  version: 0.3.1-0.dev.git.143.hfc89744
 - name: harbor
   repository: https://helm.goharbor.io
   version: 1.15.1
