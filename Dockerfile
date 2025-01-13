@@ -1,8 +1,8 @@
 FROM ubuntu:22.04 as k8s
 RUN apt update && \
 apt install -y curl && \
-curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.27/deb/Release.key --output /etc/apt/trusted.gpg.d/kubernetes.asc && \
-echo "deb [signed-by=/etc/apt/trusted.gpg.d/kubernetes.asc] https://pkgs.k8s.io/core:/stable:/v1.27/deb/ /" > /etc/apt/sources.list.d/kubernetes.list && \ 
+curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.32/deb/Release.key --output /etc/apt/trusted.gpg.d/kubernetes.asc && \
+echo "deb [signed-by=/etc/apt/trusted.gpg.d/kubernetes.asc] https://pkgs.k8s.io/core:/stable:/v1.32/deb/ /" > /etc/apt/sources.list.d/kubernetes.list && \ 
 curl -fsSL https://baltocdn.com/helm/signing.asc --output /etc/apt/trusted.gpg.d/helm.asc && \
 echo "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/helm.asc] https://baltocdn.com/helm/stable/debian/ all main" > /etc/apt/sources.list.d/helm-stable-debian.list && \
 apt update && \
