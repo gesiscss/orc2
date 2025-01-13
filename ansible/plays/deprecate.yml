@@ -7,12 +7,10 @@
       ansible.builtin.file:
         path: /etc/apt/trusted.gpg.d/kubernetes-archive-keyring.gpg
         state: absent
-        update_cache: false
     - name: Remove old Kubernetes public GPG key
       ansible.builtin.file:
         path: /etc/apt/trusted.gpg.d/kubernetes-archive-keyring.asc
         state: absent
-        update_cache: false
     - name: Remove old Kubernetes repository apt.kubernetes.io
       ansible.builtin.apt_repository:
         repo: "deb [signed-by=/etc/apt/trusted.gpg.d/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main"
