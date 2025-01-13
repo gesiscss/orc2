@@ -12,6 +12,6 @@
 - ansible.builtin.import_playbook: plays/k8s-node-affinity.yml
 - ansible.builtin.import_playbook: plays/k8s-install-gitlab-agent.yml
 - ansible.builtin.import_playbook: plays/cron4k8s.yml
-- ansible.builtin.import_playbook: plays/systemd4k8s.yml
+# - ansible.builtin.import_playbook: plays/systemd4k8s.yml
 - ansible.builtin.import_playbook: plays/nginx-install.yml
 - ansible.builtin.import_playbook: plays/nginx-config.yml
