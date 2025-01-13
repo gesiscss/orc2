@@ -2,15 +2,15 @@
   hosts:
     - kubernetes_control_panel
   tasks:
-    - name: Add harbor label
-      ansible.builtin.shell: |
-        {% for host in hostvars %}
-        {% if host in groups['harbor'] %}
-        kubectl label nodes {{ host }} harbor=true
-        {% else %}
-        kubectl label nodes {{ host }} harbor-
-        {% endif %}
-        {% endfor %}
+    # - name: Add harbor label
+    #   ansible.builtin.shell: |
+    #     {% for host in hostvars %}
+    #     {% if host in groups['harbor'] %}
+    #     kubectl label nodes {{ host }} harbor=true
+    #     {% else %}
+    #     kubectl label nodes {{ host }} harbor-
+    #     {% endif %}
+    #     {% endfor %}
     - name: Add hub.jupyter.org/node-purpose label
       ansible.builtin.shell: |
         {% for host in hostvars %}
