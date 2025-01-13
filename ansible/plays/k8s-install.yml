@@ -4,7 +4,7 @@
   tasks:
     - name: Download Kubernetes public GPG key
       ansible.builtin.get_url:
-        url: https://pkgs.k8s.io/core:/stable:/v1.27/deb/Release.key
+        url: https://pkgs.k8s.io/core:/stable:/v1.32/deb/Release.key
         dest: /tmp/kubernetes-archive-keyring.asc
         mode: '0644'
         force: true
@@ -25,7 +25,7 @@
         mode: '0644'
     - name: Add Kubernetes repository
       ansible.builtin.apt_repository:
-        repo: "deb [signed-by=/etc/apt/keyrings/kubernetes.gpg] https://pkgs.k8s.io/core:/stable:/v1.28/deb/ /"
+        repo: "deb [signed-by=/etc/apt/keyrings/kubernetes.gpg] https://pkgs.k8s.io/core:/stable:/v1.32/deb/ /"
         filename: kubernetes
         state: present
     - name: Add Helm public GPG key
@@ -44,7 +44,7 @@
         update_cache: true
         allow_downgrade: true
         pkg:
-          - kubelet=1.28.*
-          - kubeadm=1.28.*
-          - kubectl=1.28.*
+          - kubelet=1.32.*
+          - kubeadm=1.32.*
+          - kubectl=1.32.*
           - helm=3.15.*
