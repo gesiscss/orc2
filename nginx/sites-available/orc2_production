@@ -42,7 +42,7 @@ upstream grafana {
 server {
     listen 80;
     listen [::]:80;
-    server_name gesis.mybinder.org;
+    server_name gesis.mybinder.org mybinder.org;
     access_log off;  # turn off access log
     # Tell all requests about permanently redirected
     return 301 https://notebooks.gesis.org$request_uri;
