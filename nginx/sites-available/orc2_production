@@ -68,7 +68,7 @@ server {
     server_name notebooks.gesis.org mybinder.org;
     access_log off;  # turn off access log
     # Tell all requests to port 80 to be 301 (permanently) redirected to HTTPS
-    return 301 https://$host$request_uri;
+    return 301 https://www.gesis.org/en/services/processing-and-analyzing-data/analyzing-digital-behavioral-data/gesis-methods-hub;
 }
 
 # HTTPS server for notebooks.gesis.org
@@ -158,7 +158,7 @@ server {
         # return 503;
 
         # Redirect to binder deployment
-        return 301 /binder/;
+        return 301 https://www.gesis.org/en/services/processing-and-analyzing-data/analyzing-digital-behavioral-data/gesis-methods-hub;
     }
 
     include snippets/ignore_fonts.conf;
