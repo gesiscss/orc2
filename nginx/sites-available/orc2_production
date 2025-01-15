@@ -158,7 +158,7 @@ server {
         # return 503;
 
         # Redirect to binder deployment
-        return 301 /binder/;
+        return 301 https://www.gesis.org/en/services/processing-and-analyzing-data/analyzing-digital-behavioral-data/gesis-methods-hub;
     }
 
     include snippets/ignore_fonts.conf;
