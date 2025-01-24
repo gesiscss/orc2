@@ -92,11 +92,6 @@ Build container with Ansible and git-crypt:
     - cp $ANSIBLE_SSH_PRIVATE_KEY ~/.ssh/id_ed25519
     - chmod 600 ~/.ssh/id_ed25519
     - echo $ANSIBLE_VAULT > ansible/.ansible-vault-password-file
-    - |
-      python3 pages/staticjinja-gesis-notebooks.py \
-      --${ANSIBLE_INVENTORY} \
-      --srcpath pages/templates \
-      --outpath nginx/static
     - ansible --version
     - |
       ansible-playbook \
@@ -150,11 +145,6 @@ gesis ansible production deploy:
     - cp $ANSIBLE_SSH_PRIVATE_KEY ~/.ssh/id_ed25519
     - chmod 600 ~/.ssh/id_ed25519
     - echo $ANSIBLE_VAULT > ansible/.ansible-vault-password-file
-    - |
-      python3 pages/staticjinja-gesis-notebooks.py \
-      --${ANSIBLE_INVENTORY} \
-      --srcpath pages/templates \
-      --outpath nginx/static
     - ansible --version
     - |
       ansible-playbook \
