@@ -48,10 +48,10 @@ binderhub:
   extraEnv:
     GOOGLE_APPLICATION_CREDENTIALS: /secrets/service-account.json
   extraVolumeMounts:
-  # - mountPath: /etc/binderhub/templates
-  #   name: binder-templates
-  # - mountPath: /etc/binderhub/templates/gesis
-  #   name: binder-templates-gesis
+  - mountPath: /etc/binderhub/templates
+    name: binder-templates
+  - mountPath: /etc/binderhub/templates/gesis
+    name: binder-templates-gesis
   - mountPath: /secrets
     name: secrets
     readOnly: true
