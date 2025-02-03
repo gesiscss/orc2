@@ -3,7 +3,7 @@ appVersion: 1.16.0
 dependencies:
 - name: binderhub
   repository: https://jupyterhub.github.io/helm-chart
-  version: 1.0.0-0.dev.git.3674.h78301d2d
+  version: 1.0.0-0.dev.git.3688.h7031b344
 - condition: prometheus.enabled
   name: prometheus
   repository: https://prometheus-community.github.io/helm-charts
