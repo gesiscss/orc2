@@ -11,8 +11,8 @@ binderhub:
       per_repo_quota_higher: 200
       template_path: /etc/binderhub/templates
       use_registry: true
-    BuildExecutor:
-      memory_limit: 8G
+    # BuildExecutor:
+    #   memory_limit: 8G
     GitHubRepoProvider:
       high_quota_specs:
       - ^gesiscss/.*
