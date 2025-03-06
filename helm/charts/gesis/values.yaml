@@ -11,17 +11,11 @@ binderhub:
       per_repo_quota_higher: 200
       template_path: /etc/binderhub/templates
       use_registry: true
-    # BuildExecutor:
-    #   memory_limit: 8G
     GitHubRepoProvider:
       high_quota_specs:
       - ^gesiscss/.*
     KubernetesBuildExecutor:
-      build_image: quay.io/jupyterhub/repo2docker:2024.07.0-114.g80d186a
-      # --build-memory-limit is no longer supported
-      # Check your build engine documentation to set memory limits. Use `docker buildx create` if using the default builder to create a custom builder with appropriate memory limits
-      # memory_limit: 3G
-      # memory_request: 1G
+      build_image: quay.io/jupyterhub/repo2docker:2024.07.0-123.g17a23c4
       node_selector:
         binderhub: 'true'
         docker_available: 'true'
